@@ -4,7 +4,7 @@ import { BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle,BsSearch, BsJustify}
 
 function Header() {
   return (
-     <header>
+     <header className='header'>
            <div>
               <BsJustify/>
            </div>
