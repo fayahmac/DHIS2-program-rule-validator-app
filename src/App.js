@@ -2,34 +2,27 @@ import { DataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import React from 'react'
 import classes from './App.module.css'
+    import './Sidebar.css'; // Import CSS file for styling
 
-const query = {
-    me: {
-        resource: 'me',
-    },
-}
 
-const MyApp = () => (
-    <div className={classes.container}>
-        <DataQuery query={query}>
-            {({ error, loading, data }) => {
-                if (error) {
-                    return <span>ERROR</span>
-                }
-                if (loading) {
-                    return <span>...</span>
-                }
-                return (
-                    <>
-                        <h1>
-                            {i18n.t('Hello {{name}}', { name: data.me.name })}
-                        </h1>
-                        <h3>{i18n.t('Welcome to DHIS2!')}</h3>
-                    </>
-                )
-            }}
-        </DataQuery>
-    </div>
-)
+    
+    
+    const MyApp = () => {
+      return (
+        <div className="sidebar">
+          <ul>
+            <h1>dashbord</h1>
+            <li>
+            <ul><li><span>dashbord</span></li></ul>
+            <ul><li>dashbord</li></ul>
+            <ul><li>dashbord</li></ul>
+            <ul><li>dashbord</li></ul>
+            <ul><li>dashbord</li></ul>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+    
 
 export default MyApp
