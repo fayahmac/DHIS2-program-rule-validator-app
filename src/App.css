@@ -100,22 +100,6 @@ body {
 
 }
 
-.card:first-child {
-  background-color: #2962ff;
-}
-
-.card:nth-child(2) {
-  background-color:#279b2d ;
-}
-
-.card:nth-child(3) {
-  background-color: #eeba0f;
-}
-
-.card:nth-child(4) {
-  background-color: #d50000;
-}
-
 .card-inner {
   display: flex;
   align-items: center;
@@ -127,7 +111,6 @@ body {
 }
 
 /* End Main  */
-
 
 /* Medium <= 992px */
   
