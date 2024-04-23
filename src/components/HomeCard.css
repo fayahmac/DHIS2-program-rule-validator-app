@@ -46,8 +46,8 @@
     line-height: 1px;
     font-size: 20px;
   }
-  /* cards which inside the validation card */
-  .cardvie {
+  /* cards which inside the program rule Management card */
+  .cardlist {
     width: 17rem;
     border: 1px solid #ccc;
     padding: 5px;
@@ -75,5 +75,125 @@
   .plus-button:hover {
     background-color: #0056b3; 
   }
-  
-  
+   /* cards which inside the  notifications  */
+   .cardlist0 {
+    width: 17rem;
+    padding: 5px;
+    padding-bottom: 10px;
+    background-color: orange;
+    height: 2.1rem;
+  }
+ 
+  .plus-button0 {
+    background-color: #fff;
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; 
+    margin-left: 87%;
+  }
+  .icon-plus{
+    color: #0056b3;
+  }
+  .plus-button:hover {
+    background-color: #0056b3; 
+  }
+  /* cards which inside the Rule validation  */
+  .cardlist1 {
+    width: 15rem;
+    border: 1px solid #ccc;
+    padding: 5px;
+    padding-bottom: 10px;
+    background-color: white;
+    height: 2.1rem;
+  }
+ 
+  .plus-button1 {
+    background-color: #fff;
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; 
+    margin-left: 87%;
+  }
+  .icon-plus{
+    color: #0056b3;
+  }
+  .plus-button:hover {
+    background-color: #0056b3; 
+  }
+    /* cards which inside the configuration and triubleshooting engine card */
+    .cardlist2 {
+      width: 37rem;
+      border: 1px solid #ccc;
+      padding: 5px;
+      padding-bottom: 10px;
+      background-color: white;
+      height: 2.3rem;
+    }
+   
+    .plus-button2 {
+      background-color: #fff;
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%; 
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px; 
+      margin-left: 86%;
+    }
+    .icon-plus3{
+      color: #0056b3;
+    }
+    .plus-button:hover {
+      background-color: #0056b3; 
+    }
+        /* cards which inside the user manager card */
+        .cardlist3a {
+          width: 13rem;
+          padding: 5px;
+          padding-bottom: 10px;
+          background-color: gray;
+          height: 1.5rem;
+          margin-left: 20%;
+        }
+        .cardlist3 {
+          width: 13rem;
+          padding: 5px;
+          padding-bottom: 10px;
+          background-color: white;
+          height: 1.5rem;
+          margin-left: 20%;
+        }
+        .plus-button3 {
+          background-color: #fff;
+          width: 40px; 
+          height: 40px; 
+          border-radius: 50%; 
+          border: none;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 24px; 
+          margin-left: 86%;
+        }
+        .icon-plus3{
+          color: #0056b3;
+        }
+        .plus-button:hover {
+          background-color: #0056b3; 
+        }

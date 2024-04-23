@@ -8,38 +8,61 @@ function HomeCard() {
     <div className="cardview">
       <div className="row">
         <div className="card blue">
-            <h3><BsFillArchiveFill className='icon'/> Program Rules Management</h3> 
-            <div className="cardvie">
-            </div>
-            <div className="cardvie">
-            </div>
-            <div className="cardvie">
-            </div>
-            <button className='plus-button' >
-                   <FiPlus className='icon-plus'/>
-            </button>
+                <h3><BsFillArchiveFill className='icon'/> Program Rules Management</h3> 
+                <div className="cardlist">
+                </div>
+                <div className="cardlist">
+                </div>
+                <div className="cardlist">
+                </div>
+                <button className='plus-button' >
+                      <FiPlus className='icon-plus'/>
+                </button>
         </div>
         <div className="card green">
-        <div>
-        <h3><BsListCheck className='icon'/> Rule Validator</h3> 
-        </div>
+               <h3><BsListCheck className='icon'/> Rule Validator</h3> 
+                <div className="cardlist1">
+                </div>
+                <div className="cardlist1">
+                </div>
+                <button className='plus-button1' >
+                      <FiPlus className='icon-plus'/>
+              </button>
         </div>
         <div className="card orange">
-        <div>
-        <h3><BsFillBellFill className='icon'/> Notifications</h3> 
-        </div>
+            <h3><BsFillBellFill className='icon'/> Notifications</h3> 
+            <div className="cardlist0">
+            </div>
+            <div className="cardlist0">
+            </div>
+            <button className='plus-button1' >
+            <FiPlus className='icon-plus'/>
+           </button>
         </div>
       </div>
       <div className="row">
         <div className="card red big">
-        <div>
-        <h3><BsFillGearFill className='icon'/> Configuration and Troubleshooting Engine</h3> 
-        </div>
+            <h3><BsFillGearFill className='icon'/> Configuration and Troubleshooting Engine</h3> 
+                  <div className="cardlist2">
+                  </div>
+                  <div className="cardlist2">
+                  </div>
+              <button className='plus-button2' >
+                    <FiPlus className='icon-plus'/>
+              </button>
         </div>
         <div className="card gray">
-        <div>
-        <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
-        </div>
+                <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
+                <div className="cardlist3">
+                </div>
+                <div className="cardlist3a">
+                </div>
+                <div className="cardlist3">
+                </div>
+                <div className="cardlist3a">
+                </div>
+                <div className="cardlist3">
+                </div>
         </div>
       </div>
     </div>
