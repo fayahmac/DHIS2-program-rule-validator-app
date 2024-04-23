@@ -1,15 +1,23 @@
 import React from 'react';
 import './HomeCard.css'; 
 import {  BsFillArchiveFill, BsFillBellFill, BsFillGearFill, BsFillPeopleFill, BsListCheck } from 'react-icons/bs';
+import { FiPlus } from 'react-icons/fi';
 
 function HomeCard() {
   return (
     <div className="cardview">
       <div className="row">
         <div className="card blue">
-        <div>
-        <h3><BsFillArchiveFill className='icon'/> Program Rules Management</h3> 
-        </div>
+            <h3><BsFillArchiveFill className='icon'/> Program Rules Management</h3> 
+            <div className="cardvie">
+            </div>
+            <div className="cardvie">
+            </div>
+            <div className="cardvie">
+            </div>
+            <button className='plus-button' >
+                   <FiPlus className='icon-plus'/>
+            </button>
         </div>
         <div className="card green">
         <div>

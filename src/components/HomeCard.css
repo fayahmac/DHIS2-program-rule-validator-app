@@ -46,3 +46,34 @@
     line-height: 1px;
     font-size: 20px;
   }
+  /* cards which inside the validation card */
+  .cardvie {
+    width: 17rem;
+    border: 1px solid #ccc;
+    padding: 5px;
+    padding-bottom: 10px;
+    background-color: white;
+    height: 1.5rem;
+  }
+ 
+  .plus-button {
+    background-color: #fff;
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; 
+    margin-left: 86%;
+  }
+  .icon-plus{
+    color: #0056b3;
+  }
+  .plus-button:hover {
+    background-color: #0056b3; 
+  }
+  
+  
