@@ -1,7 +1,7 @@
 .sidebar {
     width: 20%;
     height: 80%;
-    margin: 10px;
+    margin: 8px;
     background-color: #f0f0f0;
     padding: 20px;
     border-bottom: 1px solid #336eb1;
@@ -12,19 +12,19 @@
   
   .sidebar ul {
     list-style-type: none;
-    padding: 0;
+    padding: 0px;
     
 
   }
   .sidebar h1 {
-    font-size: 25px;
+    font-size: 18px;
     margin-bottom: 50px;
-    margin-left: 100px;
+    text-align: center; 
   }
   
   .sidebar li ul {
     
-    height: 90px;
+    height: 80px;
     margin-top: 10px;
     margin-bottom: 10px;
     cursor: pointer;
@@ -34,9 +34,9 @@
     border-right: 1px solid #336eb1;
   }
   .sidebar li ul li{
-    font-size: 25px;
+    font-size: 20px;
     margin-top: 25px;
-    margin-left: 100px;
+    text-align: center;
   }
   .sidebar li ul li:hover {
     color: #007bff;
