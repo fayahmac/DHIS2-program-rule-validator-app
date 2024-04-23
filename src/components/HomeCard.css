@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin: 25px;
   }
   
   .row {
@@ -13,8 +13,8 @@
   }
   
   .card {
-    width: 200px;
-    height: 150px;
+    width: 300px;
+    height: 200px;
     margin: 0 10px;
   }
   
@@ -39,6 +39,6 @@
   }
   
   .big {
-    width: 420px;
+    width: 615px;
   }
   
