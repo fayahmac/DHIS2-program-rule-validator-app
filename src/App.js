@@ -2,6 +2,7 @@ import { DataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import React from 'react'
 import classes from './App.module.css'
+import Setting from './componets/Setting'
 
 const query = {
     me: {
@@ -21,10 +22,7 @@ const MyApp = () => (
                 }
                 return (
                     <>
-                        <h1>
-                            {i18n.t('Hello {{name}}', { name: data.me.name })}
-                        </h1>
-                        <h3>{i18n.t('Welcome to DHIS2!')}</h3>
+                                               <Setting/>
                     </>
                 )
             }}
