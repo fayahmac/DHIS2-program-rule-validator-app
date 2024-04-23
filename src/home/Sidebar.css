@@ -19,7 +19,8 @@
   .sidebar h1 {
     font-size: 18px;
     margin-bottom: 50px;
-    text-align: center; 
+    text-align: center;
+   
   }
   
   .sidebar li ul {
@@ -36,6 +37,7 @@
   .sidebar li ul li{
     font-size: 20px;
     margin-top: 25px;
+    text-decoration: none; 
     
   }
   .valid{
