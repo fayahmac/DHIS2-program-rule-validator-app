@@ -1,26 +1,16 @@
 import React from 'react'
-import {BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill}from 'react-icons/bs'
+import {BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill, BsListCheck}from 'react-icons/bs'
+import { FaPlus } from 'react-icons/fa'
+import Dashboard from './HomeCard'
 
 function Home() {
   return (
+    // home container
     <main className='main-container'>
          <div className='main-title'>
           <h3>DASHBOARD OVERVIEW</h3>
           </div>
-             <div className='main-cards'>
-                 <div className='card'>
-                     <BsFillArchiveFill className='icon'/>
-                     <h3>Program Rule Management</h3>
-                 </div>
-                 <div className='card'>
-                     <BsFillArchiveFill className='icon'/>
-                     <h3>Rule Validator</h3>
-                 </div>
-                 <div className='card'>
-                     <BsFillArchiveFill className='icon'/>
-                     <h3>Notifications</h3>
-                 </div>
-              </div> 
+          <Dashboard/>
     </main>
   )
 }
