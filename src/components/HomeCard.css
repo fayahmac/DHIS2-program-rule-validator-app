@@ -114,7 +114,7 @@
   }
  
   .plus-button1 {
-    background-color: #fff;
+    background-color:orange;
     width: 40px; 
     height: 40px; 
     border-radius: 50%; 
@@ -196,4 +196,17 @@
         }
         .plus-button:hover {
           background-color: #0056b3; 
+        }
+        .qoute{
+          margin-left: 90%;
+          color: green;
+        }
+        .exclaim{
+          margin-left: 90%;
+          color: red;
+        }
+        .chechs{
+          color: black;
+          line-height: 1px;
+          font-size: 20px;
         }
