@@ -17,7 +17,7 @@ import classes from './App.module.css'
             
             <h1>DHIS2 PROGRAM VALIDATOR</h1>
             <li>
-            <ul><li><BsFillArchiveFill/><span>PROGRAM RULES</span></li></ul>
+            <ul><BsFillArchiveFill/><li><span>PROGRAM RULES</span></li></ul>
             <ul><BsFillArchiveFill/><li>VALIDATE RULES</li></ul>
             <ul><li>CONFIGURATION ENGINE</li></ul>
             <ul><li>NOTIFICATION</li></ul>
