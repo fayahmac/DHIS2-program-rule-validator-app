@@ -3,6 +3,9 @@ import i18n from '@dhis2/d2-i18n'
 import React from 'react'
 import classes from './App.module.css'
 import Setting from './componets/Setting'
+import SettingIcon from './componets/settingIcon'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 
 const query = {
     me: {
@@ -22,7 +25,9 @@ const MyApp = () => (
                 }
                 return (
                     <>
-                                               <Setting/>
+                    <Setting/>
+                    <SettingIcon/>
+                    
                     </>
                 )
             }}
