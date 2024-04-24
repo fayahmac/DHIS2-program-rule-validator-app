@@ -27,7 +27,7 @@ body {
   cursor: pointer;
 }
 
-.grid-container {
+/* .grid-container {
   display: grid;
   grid-template-columns: 260px 1fr 1fr 1fr;
   grid-template-rows: 0.2fr 3fr;
@@ -35,7 +35,7 @@ body {
     'sidebar header header header'
     'sidebar main main main';
   height: 100vh;
-}
+} */
 
 /* Header  */
 .header {
@@ -58,6 +58,8 @@ body {
 /* Main  */  
 .main-container {
   grid-area: main;
+  /* Adjust flex-direction to column to stack cards vertically */
+  flex-direction: column;
   overflow-y: auto;
   padding: 20px 20px;
   color: rgba(255, 255, 255, 0.95);
@@ -108,47 +110,4 @@ body {
 
 .card-inner > .card_icon {
   font-size: 25px;
-}
-
-/* End Main  */
-
-/* Medium <= 992px */
-  
-@media screen and (max-width: 992px) {
-  .grid-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.2fr 3fr;
-    grid-template-areas:
-      'header'
-      'main';
-  }
- .menu-icon {
-    display: inline;
-  }
-
-}
-/* Small <= 768px */
-  
-@media screen and (max-width: 768px) {
-  .main-cards {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 0;
-  }
-}
-
-/* Extra Small <= 576px */
-
-@media screen and (max-width: 576px) {
-  .hedaer-left {
-    display: none;
-  }
-} 
-/* bg cards  */
-.charts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-top: 60px;
-  height: 300px;
 }
