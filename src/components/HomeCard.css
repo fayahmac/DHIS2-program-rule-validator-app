@@ -17,6 +17,7 @@
   width: 300px;
   height: 200px;
   margin: 0 10px 20px 10px; /* Added margin-bottom for spacing between cards */
+  transition: transform 0.3s; /* Add transition for smooth animation */
 }
 
 .blue {
@@ -58,11 +59,12 @@
 .cardlist3a {
   width: calc(100% - 20px); /* Adjust the width of inner cards to fit within the parent card */
   border: 1px solid #ccc;
-  padding: 5px;
-  padding-bottom: 10px;
+  padding: 4px;
+  padding-bottom: 8px;
   background-color: white;
-  height: 2rem;
-  margin: 5px auto; /* Center inner cards horizontally */
+  color: black;
+  height: 1.8rem;
+  margin: 2px auto; /* Center inner cards horizontally */
 }
 
 .plus-button,
