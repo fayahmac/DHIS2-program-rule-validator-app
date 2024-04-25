@@ -11,11 +11,6 @@ function Header() {
            <div>
                <BsSearch/>
            </div>
-           <div>
-             <BsFillBellFill/>
-             <BsFillEnvelopeFill/>
-             <BsPersonCircle/>
-           </div>
      </header>
   )
 }
