@@ -1,7 +1,6 @@
 import { DataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
     import './Sidebar.css'; // Import CSS file for styling
     import {BsFillArchiveFill, BsFillGearFill, BsListCheck, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill, BsTools}from 'react-icons/bs'
@@ -10,7 +9,7 @@ import { Link } from 'react-router-dom';
      from 'recharts';
 
   
-    const Home = () => {
+    const Sidebar = () => {
       return (
             <div className="sidebar">
               <ul>
@@ -33,4 +32,4 @@ import { Link } from 'react-router-dom';
       }
     
 
-export default Home
+export default Sidebar
