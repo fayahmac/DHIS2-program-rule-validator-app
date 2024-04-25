@@ -1,0 +1,54 @@
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .user-table th, .user-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .user-table th {
+    background-color: #f2f2f2;
+  }
+
+    /* centralising manageuser header */
+  /* .header {
+    text-align: center; */
+  /* } */
+
+            /* adding plus sign on add button */
+              .add-button {
+                /*  button styles */
+                background-color: #4c7aaf; /* Green background */
+                border: none;
+                color: white; /* White text */
+                padding: 10px 20px; /* Padding */
+                text-align: center; /* Center text */
+                text-decoration: none; /* Remove underline */
+                display: inline-block; /* Display as a block */
+                font-size: 16px; /* Font size */
+                margin: 2px 2px; /* Margin */
+                cursor: pointer; /* Pointer cursor */
+                border-radius: 12px; /* Rounded corners */
+                position: relative; /* Position relative for pseudo-element positioning */
+              }
+              
+              .add-button::after {
+                content: '+'; /* Plus sign */
+                position: absolute; /* Position absolutely */
+                right: 10px; /* Adjust the distance from the right */
+                top: 50%; /* Position vertically in the middle */
+                transform: translateY(-50%); /* Adjust vertical alignment */
+              }
+                       /* color header */
+              .user-manager-header {
+                color: rgb(0, 140, 255); 
+                text-align: center;
+                }
+              
+                /* color for header text */
+                .table-header {
+                    color: rgb(0, 153, 255); /* Change color as desired */
+                  }
