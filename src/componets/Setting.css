@@ -1,13 +1,74 @@
+/* Setting.css */
+
 .settings-container {
-    position:fixed;
-    top: 50px;
-    left: 900px;
-    background-color: #fff;
-    padding: 80px;
-    border: 2px;
-  
+  width: 100vw; 
+  height: 100vh; 
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.settings-container.light {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.settings-container.dark {
+  background-color: #333;
+  color: #f9f9f9;
+}
+
+.settings-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.settings-container label {
+  font-size: 18px;
+}
+
+.settings-container select {
+  font-size: 16px;
+  padding: 8px 12px;
+  margin-left: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.settings-container label,
+.settings-container input[type="checkbox"] {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.settings-container input[type="checkbox"] {
+  margin-left: 10px;
+}
+
+.settings-container br {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .settings-container {
+    padding: 10px;
   }
   
+  .settings-container label {
+    font-size: 16px;
+  }
   
+  .settings-container select {
+    font-size: 14px;
+  }
   
-  
+  .settings-container br {
+    display: block;
+  }
+}

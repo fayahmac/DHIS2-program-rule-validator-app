@@ -4,16 +4,17 @@ import './Setting.css';
 
 
 function Setting () {
+
     const [theme, setTheme] = useState('light');
+    
 
     const handleThemeChange = (e) => {
-        setTheme(e.target.value);
+        const selectedTheme = e.target.value;
+        setTheme(selectedTheme);
     };
-    const toggleTheme = ()=>{
-        setTheme(prevTheme=>prevTheme==='light'? 'dark': 'light');
-    };
+
     return(
-        <div className="settings-container">
+        <div className={`settings-container ${theme}`}>
             <h2> Settings</h2>
             <div>
 
@@ -21,21 +22,25 @@ function Setting () {
            
                 <label>
                     Theme:
-                    <select value={theme} onChange={handleThemeChange}>
+                    
+                                  
+                     <select value={theme} onChange={handleThemeChange}>
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
+                    
+                  </select>
                    
 
-                    </select>
-                    
-                </label>
+                 </label>
+                <br/>
+                <br/>
+                <label> Security settings  </label>
+                <br/>
+                <br/>
+                <label>General management </label> 
                 
-        
                 </div>
-             
-               
-
-           
+            
         </div>
     )
 }

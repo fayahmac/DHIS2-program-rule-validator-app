@@ -26,7 +26,7 @@ const MyApp = () => (
                 return (
                     <>
                     <Setting/>
-                    <SettingIcon/>
+                    {/* <SettingIcon/> */}
                     
                     </>
                 )
