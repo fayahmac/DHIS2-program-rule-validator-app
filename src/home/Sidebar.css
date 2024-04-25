@@ -49,4 +49,32 @@
   .sidebar li ul li:hover {
     color: #007bff;
   }
-  
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 100%; /* Adjust width for smaller screens */
+    height: auto; /* Adjust height for smaller screens */
+    margin: 0;
+    padding: 10px;
+  }
+
+  .sidebar h1 {
+    font-size: 16px; /* Adjust font size for smaller screens */
+    margin-bottom: 10px; /* Adjust margin for smaller screens */
+  }
+
+  .sidebar li ul {
+    height: 40px; /* Adjust height for smaller screens */
+    margin-top: 5px; /* Adjust margin for smaller screens */
+    margin-bottom: 5px; /* Adjust margin for smaller screens */
+  }
+
+  .sidebar li ul li {
+    font-size: 14px; /* Adjust font size for smaller screens */
+    margin-top: 10px; /* Adjust margin for smaller screens */
+  }
+
+  .valid {
+    margin-right: 10px; /* Adjust margin for smaller screens */
+  }
+}
