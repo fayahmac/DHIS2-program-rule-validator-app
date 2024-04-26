@@ -18,6 +18,6 @@
     "@dhis2/app-runtime": "^3.10.2",
     "react-icons": "^5.0.1",
     "react-router-dom": "^6.23.0",
-    "recharts": "^2.12.3"
+    "recharts": "^2.12.6"
   }
 }

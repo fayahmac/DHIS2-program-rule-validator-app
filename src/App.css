@@ -128,8 +128,9 @@ body {
 /* Main  */  
 .main-container {
   grid-area: main;
+  height: 95%;
   overflow-y: auto;
-  padding: 20px 20px;
+  padding: 15px 15px;
   color: rgba(255, 255, 255, 0.95);
 }
 
@@ -137,6 +138,7 @@ body {
   display: flex;
   justify-content: space-between;
   color: black;
+ 
 }
 
 .card-inner {
@@ -149,16 +151,7 @@ body {
   font-size: 25px;
 }
 
-.charts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 10px;
-  width:-300px;
- 
-}
-
 /* End Main  */
-
 
 /* Medium <= 992px */
   
@@ -187,11 +180,6 @@ body {
   
 @media screen and (max-width: 768px) {
   .main-cards {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 0;
-  }
-  .charts {
     grid-template-columns: 1fr;
     gap: 10px;
     margin-bottom: 0;
@@ -240,7 +228,7 @@ body {
   font-size: 24px;
   margin-left: calc(100% - 60px); /* Adjust the position of plus buttons */
 }
-/* djjjjjjjjj */
+/* card view */
 .cardview {
   display: flex;
   flex-direction: column;
@@ -255,7 +243,6 @@ body {
   justify-content: center;
   margin-bottom: 20px;
 }
-
 .card {
   width: 275px;
   height: 200px;
@@ -276,79 +263,63 @@ body {
   background-color: orange;
 }
 
+/* Your existing CSS styles */
+
+/* New CSS for second row card colors */
 .red {
   background-color: red;
-  
+}
+
+.pink {
+  background-color: #2962ff; /* This color is different from the second CSS snippet, please adjust as needed */
 }
 
 .gray {
   background-color: gray;
 }
 
-.big {
-  width: 615px;
+/* End of your existing CSS */
+
+@media screen and (max-width: 992px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.2fr 3fr;
+    grid-template-areas:
+      'header'
+      'main';
+  }
+
+  #sidebar {
+    display: none;
+  }
+
+  .menu-icon {
+    display: inline;
+  }
+
+  .sidebar-title > span {
+    display: inline;
+  }
 }
 
-.icon {
-  vertical-align: middle;
-  line-height: 1px;
-  font-size: 20px;
+@media screen and (max-width: 768px) {
+  .main-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 0;
+  }
+
+  .charts {
+    grid-template-columns: 1fr;
+    margin-top: 30px;
+  }
 }
 
-/* Cards inner */
-.cardlist,
-.cardlist0,
-.cardlist1,
-.cardlist2,
-.cardlist3,
-.cardlist3a {
-  width: calc(100% - 20px); /* Adjust the width of inner cards to fit within the parent card */
-  border: 1px solid #ccc;
-  padding: 4px;
-  padding-bottom: 8px;
-  background-color: white;
-  color: black;
-  height: 1.8rem;
-  margin: 2px auto; /* Center inner cards horizontally */
-}
+@media screen and (max-width: 576px) {
+  .header-left {
+    display: none;
+  }
 
-.plus-button,
-.plus-button0,
-.plus-button1,
-.plus-button2,
-.plus-button3 {
-  background-color: #fff;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  margin-left: calc(100% - 60px); /* Adjust the position of plus buttons */
-}
-.qoute{
-  margin-left: 90%;
-  color: green;
-}
-.exclaim{
-  margin-left: 80%;
-  display: flex;
-  color: red;
-}
-
-.icon-plus {
-  color: #0056b3;
-}
-
-.plus-button:hover {
-  background-color: #0056b3;
-}
-
-
-@media (max-width: 576px) {
   .plus-button,
   .plus-button0,
   .plus-button1,

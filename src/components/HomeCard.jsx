@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
-import { BsFillArchiveFill, BsListCheck, BsFillBellFill, BsFillGearFill, BsFillPeopleFill, BsTools } from 'react-icons/bs';
+import { BsFillArchiveFill, BsListCheck, BsFillBellFill, BsTools, BsGear, BsFillPeopleFill } from 'react-icons/bs';
 import { FiPlus } from 'react-icons/fi';
-import { FaCheckDouble, FaCut, FaExchangeAlt, FaExclamation, FaGlobe, FaHandPointRight } from 'react-icons/fa';
+import { FaAd, FaCheckDouble, FaCut, FaExchangeAlt, FaExclamation, FaGlobe, FaHandPointRight } from 'react-icons/fa';
 import './HomeCard.css'; 
 import { Link } from 'react-router-dom';
 
@@ -40,84 +40,93 @@ const HomeCard = () => {
         return <span>No program Rules found</span>;
     }
 
-     
-   return (
-    <main className='main-container'>
-        <div className='main-title'>
-           <h3>DASHBOARD OVERVIEW</h3>
-        </div>
-        <div className="cardview">
-        <div className="row">
-            <div className="card blue">
-            <h3><BsFillArchiveFill className='icon'/> Program Rules Management</h3> 
-            <Link to="/program-rules" style={{ textDecoration: 'none' }}>
-                {programRules.map(programRule => (
-                    <div key={programRule.id} className="cardlist">
-                        {programRule.displayName}
+    return (
+        <main className='main-container'>
+            <div className='main-title'>
+                <h3>DASHBOARD OVERVIEW</h3>
+            </div>
+            <div className="cardview">
+                {/* First row */}
+                <div className="row">
+                    <div className="card blue">
+                        <h3><BsFillArchiveFill className='icon'/> Program Rules Manager</h3> 
+                        <Link to="/program-rules" style={{ textDecoration: 'none' }}>
+                            {programRules.map(programRule => (
+                                <div key={programRule.id} className="cardlist">
+                                    {programRule.displayName}
+                                </div>
+                            ))}
+                            <button className='plus-button'>
+                                <FiPlus className='icon-plus'/>
+                            </button>
+                        </Link>
                     </div>
-                ))}
-                <button className='plus-button'>
-                    <FiPlus className='icon-plus'/>
-                </button>
-            </Link>
-            </div>
-            <div className="card green">
-                <h3><BsListCheck className='icon'/> Rule Validator</h3> 
-                <Link to="/validate-rules"style={{ textDecoration: 'none' }}>
-                <div className="cardlist1">
-                    {totalProgramRules} Available Program Rules<FaCheckDouble className='qoute'/>
+                    <div className="card green">
+                        <h3><BsListCheck className='icon'/> Rule Validator</h3> 
+                        <Link to="/validate-rules" style={{ textDecoration: 'none' }}>
+                            <div className="cardlist1">
+                                {totalProgramRules} Available Program Rules<FaCheckDouble className='qoute'/>
+                            </div>
+                            <div className="cardlist1">
+                                <FaExclamation className='exclaim'/>
+                            </div>
+                            <button className='plus-button'>
+                                <FaCut className='icon-plus'/>
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="card orange">
+                        <h3><BsFillBellFill className='icon'/> Notifications</h3> 
+                        <Link to="/notification" style={{ textDecoration: 'none' }}>
+                            <div className="cardlist0">
+                            </div>
+                            <div className="cardlist0">
+                            </div>
+                            <button className='plus-button'>
+                                <FaHandPointRight className='icon-plus'/>
+                            </button>
+                        </Link>
+                    </div>
                 </div>
-                <div className="cardlist1">
-                    <FaExclamation className='exclaim'/>
+                {/* Second row */}
+                <div className="row">
+                    <div className="card red">
+                        <h3><BsTools className='icon'/> Configuration Engine</h3> 
+                        <Link to="/program-rules" style={{ textDecoration: 'none' }}>
+                        <div className="cardlist0">
+                        <BsListCheck className='icon'/> Program Rule validation
+                        </div>
+                        <div className="cardlist0">
+                        <FaGlobe className='icon'/> Language
+                        </div>
+                            <button className='plus-button'>
+                                <FaExchangeAlt className='icon-plus'/>
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="card pink">
+                        <h3><BsGear className='icon'/> Settings</h3> 
+                        <Link to="/validate-rules" style={{ textDecoration: 'none' }}>
+                            <button className='plus-button'>
+                                <FaAd className='icon-plus'/>
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="card gray">
+                        <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
+                        <Link to="/notification" style={{ textDecoration: 'none' }}>
+                            <div className="cardlist0">
+                            </div>
+                            <div className="cardlist0">
+                            </div>
+                            <div className="cardlist0">
+                            </div>
+                        </Link>
+                    </div>
                 </div>
-                <button className='plus-button'>
-                    <FaCut className='icon-plus'/>
-                </button>
-                </Link>
             </div>
-            <div className="card orange">
-                <h3><BsFillBellFill className='icon'/> Notifications</h3> 
-                <Link to="/notification"style={{ textDecoration: 'none' }} >
-                <div className="cardlist0">
-                </div>
-                <div className="cardlist0">
-                </div>
-                <button className='plus-button'>
-                    <FaHandPointRight className='icon-plus'/>
-                </button>
-                </Link>
-            </div>
-        </div>
-       <div className='charts'>
-            <div className="card red big">
-                <h3 className='h3c'><BsTools className='icon'/> Configuration and Troubleshooting Engine</h3> 
-                <Link to="/configuration-engine" style={{ textDecoration: 'none' }}>
-                <div className="cardlist2">
-                    <BsListCheck className='chechs'/> 
-                </div>
-                <div className="cardlist2">
-                    <FaGlobe className='chechs'/> 
-                </div>
-                <button className='plus-button'>
-                    <FaExchangeAlt className='icon-plus'/>
-                </button>
-                </Link>
-            </div>
-            <div className="card gray">
-            <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
-            <Link to="/user"style={{ textDecoration: 'none' }} >
-            <div className="cardlist3">
-            </div>
-            <div className="cardlist3a">
-            </div>
-            <div className="cardlist3">
-            </div>
-            </Link>
-        </div>
-         </div>
-         </div>
-    </main>
-  )
+        </main>
+    );
 }
 
-export default HomeCard
+export default HomeCard;
