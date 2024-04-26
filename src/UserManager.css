@@ -1,3 +1,10 @@
+/*component background color*/
+.user-manager-container {
+  background-color: rgb(255, 255, 255); /* Change background color to white */
+}
+
+
+
 .user-table {
     width: 100%;
     border-collapse: collapse;
@@ -51,4 +58,23 @@
                 /* color for header text */
                 .table-header {
                     color: rgb(0, 153, 255); /* Change color as desired */
+                  }
+
+
+                  .search-container {
+                    background-color: rgb(229, 229, 231); /* Change color as desired */
+                    color: white; /* Text color */
+                    border: none; /* Remove border */
+                    padding: 10px 30px; /* Padding */
+                    cursor: pointer; /* Add cursor on hover */
+                    }
+
+                  .search-button {
+                    margin-left: 0px; /* Adjust margin as needed */
+                    background-color: rgb(155, 7, 130); /* Change color as desired */
+                    color: white; /* Text color */
+                    border: none; /* Remove border */
+                    padding: 5px 5px; /* Padding */
+                    cursor: pointer; /* Add cursor on hover */
+                    margin-bottom: 0px; 
                   }

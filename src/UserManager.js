@@ -45,18 +45,43 @@ const UserManager = () => {
       setNewUser({ ...newUser, [name]: value });
     };
   
+      // search and find users
+  const [searchTerm, setSearchTerm] = useState('');
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearch = () => {
+    // Perform search logic here
+    // For example, filter users based on search term
+    const filteredUsers = users.filter(user =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    // Update users state with filtered users
+    // For example:
+    // setUsers(filteredUsers);
+    console.log(filteredUsers);
+  };
+
+
+
+
  
   return (
-    <div>
+    <div className="user-manager-container">
       <h1 class="header" className="user-manager-header">Manage users</h1>
-      <div>
+      <div className="search-container">
+        <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search users..." />
+        <button className="search-button"  onClick={handleSearch}>&#128269; Search</button>
+        </div>
+        <div>
         <input type="text" name="name" value={newUser.name} onChange={handleChange} placeholder="Name" />
         <input type="email" name="email" value={newUser.email} onChange={handleChange} placeholder="Email" />
         <input type="text" name="status" value={newUser.status} onChange={handleChange} placeholder="Status" />
         <button className="add-button" onClick={addUser}>{editingIndex !== -1 ? 'Update' : 'New'}</button>
       </div>
-
-      <table className="user-table"> {/* Apply CSS class to table */}
+              <table className="user-table"> {/* Apply CSS class to table */}
         <thead>
           <tr>
             <th className="table-header">Name</th>
