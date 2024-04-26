@@ -262,24 +262,19 @@ body {
 .orange {
   background-color: orange;
 }
-
-/* Your existing CSS styles */
-
-/* New CSS for second row card colors */
 .red {
   background-color: red;
 }
 
 .pink {
-  background-color: #2962ff; /* This color is different from the second CSS snippet, please adjust as needed */
+  background-color: #2962ff; 
 }
 
 .gray {
   background-color: gray;
 }
 
-/* End of your existing CSS */
-
+/* media query on rendering in small screen */
 @media screen and (max-width: 992px) {
   .grid-container {
     grid-template-columns: 1fr;
@@ -325,6 +320,47 @@ body {
   .plus-button1,
   .plus-button2,
   .plus-button3 {
-    margin-left: calc(100% - 50px); /* Adjust the position of plus buttons for smaller screens */
+    margin-left: calc(100% - 50px); 
+  }
+}
+
+/* media query on rendering in small screen Large >= 1600px */
+@media screen and (min-width: 1600px) {
+  .grid-container {
+    grid-template-columns: 260px 1fr 1fr 1fr;
+  }
+
+  .main-cards {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  /* Enlarge outer cards */
+  .card {
+    width: 450px;
+    height: 340px;
+  }
+
+  /* Enlarge inner cards */
+  .cardlist,
+  .cardlist0,
+  .cardlist1,
+  .cardlist2,
+  .cardlist3,
+  .cardlist3a {
+    height: 3.5rem;
+    padding: 10px;
+    padding-bottom: 20px;
+    
+  }
+
+  /* Enlarge plus buttons */
+  .plus-button,
+  .plus-button0,
+  .plus-button1,
+  .plus-button2,
+  .plus-button3 {
+    width: 65px;
+    height: 65px;
+    font-size: 40px;
+    margin-left: calc(100% - 70px);
   }
 }

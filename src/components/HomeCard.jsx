@@ -65,7 +65,7 @@ const HomeCard = () => {
                         <h3><BsListCheck className='icon'/> Rule Validator</h3> 
                         <Link to="/validate-rules" style={{ textDecoration: 'none' }}>
                             <div className="cardlist1">
-                                {totalProgramRules} Available Program Rules<FaCheckDouble className='qoute'/>
+                                {totalProgramRules} Available Program Rules <FaCheckDouble className='qoute'/>
                             </div>
                             <div className="cardlist1">
                                 <FaExclamation className='exclaim'/>
