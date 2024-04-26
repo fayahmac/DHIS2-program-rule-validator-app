@@ -99,8 +99,8 @@ const HomeCard = () => {
                     </Link>
                 </div>
                 <div className="card gray">
-                <Link to="/user"style={{ textDecoration: 'none' }} >
                     <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
+                    <Link to="/user"style={{ textDecoration: 'none' }} >
                     <div className="cardlist3">
                     </div>
                     <div className="cardlist3a">
