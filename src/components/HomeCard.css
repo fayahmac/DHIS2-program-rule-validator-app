@@ -89,7 +89,8 @@
   color: green;
 }
 .exclaim{
-  margin-left: 90%;
+  margin-left: 80%;
+  display: flex;
   color: red;
 }
 
