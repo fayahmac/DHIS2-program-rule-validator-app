@@ -1,82 +1,60 @@
-.sidebar {
-    grid-area: sidebar;
-    width: 250px;
-    height: 70%;
-    margin: 8px;
-    color: #000;
-    padding: 20px;
-    border-bottom: 2px solid #2f8ffc;
-    border-left: 2px solid #2f8ffc;
-    border-top: 2px solid #2f8ffc;
-    border-right: 2px solid #2f8ffc;
-    overflow-y: auto;
-    transition: all 0.5s;
-    -webkit-transition: all 0.5s;
-  }
-
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0px;
-
-  }
-  .sidebar h1 {
-    font-size: 18px;
-    margin-bottom: 50px;
-    text-align: center;
-   
-  }
-  
-  .sidebar li ul {
-    
-    height: 80px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    border-bottom: 2px solid #2f8ffc;
-    border-left: 2px solid #2f8ffc;
-    border-top: 2px solid #2f8ffc;
-    border-right: 2px solid #2f8ffc;
-  }
-  .sidebar li ul li{
-    margin-top: 25px;
-    text-decoration: none; 
-    
-  }
-  .valid{
-    margin-right: 5px;
-    margin-left: 25px;
-    size:0cm;
-  }
-
-  .sidebar li ul li:hover {
-    color: #007bff;
-  }
-/* Media query for smaller screens */
-@media screen and (max-width: 768px) {
-  .sidebar {
-    width: 100%; /* Adjust width for smaller screens */
-    height: auto; /* Adjust height for smaller screens */
-    margin: 0;
-    padding: 10px;
-  }
-
-  .sidebar h1 {
-    font-size: 16px; /* Adjust font size for smaller screens */
-    margin-bottom: 10px; /* Adjust margin for smaller screens */
-  }
-
-  .sidebar li ul {
-    height: 40px; /* Adjust height for smaller screens */
-    margin-top: 5px; /* Adjust margin for smaller screens */
-    margin-bottom: 5px; /* Adjust margin for smaller screens */
-  }
-
-  .sidebar li ul li {
-    font-size: 14px; /* Adjust font size for smaller screens */
-    margin-top: 10px; /* Adjust margin for smaller screens */
-  }
-
-  .valid {
-    margin-right: 10px; /* Adjust margin for smaller screens */
-  }
+/* Sidebar  */
+#sidebar {
+  grid-area: sidebar;
+  height: 100%;
+  background-color: #263043;
+  overflow-y: auto;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
 }
+
+.sidebar-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px 0px 30px;
+  margin-bottom: 30px;
+}
+
+.sidebar-title > span {
+  display: none;
+}
+
+.sidebar-brand {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sidebar-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.sidebar-list-item {
+  padding: 20px 20px 20px 20px;
+  font-size: 18px;
+}
+
+.sidebar-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+.sidebar-list-item > a {
+  text-decoration: none;
+  color: #9e9ea4;
+}
+
+.sidebar-responsive {
+  display: inline !important;
+  position: absolute;
+  /*
+    we want the z-index of the sidebar higher so that
+    the charts are not showing over the sidebar 
+    on small screens
+  */
+  z-index: 12 !important;
+}
+
+/* End Sidebar  */
