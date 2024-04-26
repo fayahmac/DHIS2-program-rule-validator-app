@@ -103,18 +103,18 @@ const HomeCard = () => {
                 </button>
                 </Link>
             </div>
+            <div className="card gray">
+            <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
+            <Link to="/user"style={{ textDecoration: 'none' }} >
+            <div className="cardlist3">
+            </div>
+            <div className="cardlist3a">
+            </div>
+            <div className="cardlist3">
+            </div>
+            </Link>
+        </div>
          </div>
-         <div className="card gray">
-         <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
-         <Link to="/user"style={{ textDecoration: 'none' }} >
-         <div className="cardlist3">
-         </div>
-         <div className="cardlist3a">
-         </div>
-         <div className="cardlist3">
-         </div>
-         </Link>
-     </div>
          </div>
     </main>
   )
