@@ -1,6 +1,9 @@
 /*component background color*/
 .user-manager-container {
   background-color: rgb(255, 255, 255); /* Change background color to white */
+    /* Set a fixed height and allow scrolling */
+    height: 400px; /* Adjust as needed */
+    overflow-y: auto;
 }
 
 
@@ -78,3 +81,46 @@
                     cursor: pointer; /* Add cursor on hover */
                     margin-bottom: 0px; 
                   }
+
+
+              
+                  .user-list-container {
+                    /* Set a fixed height for the user list container */
+                    max-height: calc(100% - 100px); /* Adjust as needed, considering other components' heights */
+                    overflow-y: auto; /* Allow scrolling */
+                  }
+
+
+
+                    /* decirating users, roles and rule buttons */
+                  .button-group {
+                    margin-bottom: 20px; /* Add some margin below buttons */
+                  }
+                  
+                  .action-button {
+                    /* Button styles */
+                    background-color: #007bff; /* Blue background */
+                    color: white; /* White text */
+                    border: none; /* Remove border */
+                    padding: 10px 20px; /* Padding */
+                    margin-right: 10px; /* Margin between buttons */
+                    cursor: pointer; /* Add cursor on hover */
+                    border-radius: 5px; /* Rounded corners */
+                  }
+                  
+                  .action-button:last-child {
+                    margin-right: 0; /* Remove margin for the last button */
+                  }
+
+
+                 /* decoratinng role button */
+                    .add-role-button {
+                      /* Button styles */
+                      background-color: #28a745; /* Green background */
+                      color: white; /* White text */
+                      border: none; /* Remove border */
+                      padding: 10px 20px; /* Padding */
+                      margin-top: 10px; /* Margin top */
+                      cursor: pointer; /* Add cursor on hover */
+                      border-radius: 5px; /* Rounded corners */
+                    }

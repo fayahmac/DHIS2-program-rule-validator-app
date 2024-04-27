@@ -1,7 +1,66 @@
 import React, { useState } from 'react';
 import './UserManager.css'; // Import CSS file
 
+
+
 const UserManager = () => {
+
+
+  const handleUsersClick = () => {
+    // Handle click for "Users" button
+    console.log("Users button clicked");
+  };
+
+
+
+  const handleRolesClick = () => {
+    // Handle click for "Roles" button
+    console.log("Roles button clicked");
+  };
+
+  const handleRulesClick = () => {
+    // Handle click for "Rules" button
+    console.log("Rules button clicked");
+  };
+
+                  // creating new plus button
+                  const [showAddButton, setShowAddButton] = useState(false);
+
+                  const handleAddButtonClick = () => {
+                    setShowAddButton(!showAddButton); // Toggle the state when the button is clicked
+                  };
+
+                  const handleConfirmAdd = () => {
+                    // Logic to handle the "Add" action
+                    console.log("Add action confirmed");
+                  };
+
+
+
+    // eventhandler for new user or role add buttons
+  const [showAddUser, setShowAddUser] = useState(false);
+  const [showAddRole, setShowAddRole] = useState(false);
+
+
+  const handleAddUserClick = () => {
+    setShowAddUser(true);
+    setShowAddRole(false);
+  };
+
+  const handleAddRoleClick = () => {
+    setShowAddRole(true);
+    setShowAddUser(false);
+  };
+
+  // const handleConfirmAddUser = () => {
+  //   // Handle logic for adding new user
+  // };
+
+  // const handleConfirmAddRole = () => {
+  //   // Handle logic for adding new role
+  // };
+
+
   // Defining state variables
   const [users, setUsers] = useState([  { id: 1, name: '', email: '', status: '' },
   { id: 2, name: '', email: '', status: '' }
@@ -71,16 +130,45 @@ const UserManager = () => {
   return (
     <div className="user-manager-container">
       <h1 class="header" className="user-manager-header">Manage users</h1>
+
+
+        {/* add new plus contianer */}
+        <button className="add-button" onClick={handleAddButtonClick}>New</button>
+     
+
+      {/* users, rules and roles buttons container */}
+      <div className="button-group">
+        <button className="action-button" onClick={handleUsersClick}>Users</button>
+        <button className="action-button" onClick={handleRolesClick}>Roles</button>
+        <button className="action-button" onClick={handleRulesClick}>Rules</button>
+      </div>
+
+      {/* dispalying addtion info on new user add button container */}
+      <div className="button-group">
+        <button className="action-button" onClick={handleAddUserClick}>Add New User</button>  
+        <button className="action-button" onClick={handleAddRoleClick}>Add New Role</button>                   
+      </div>
+      
+     
+
+
+
+          {/* search buttons container */}
       <div className="search-container">
         <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search users..." />
         <button className="search-button"  onClick={handleSearch}>&#128269; Search</button>
         </div>
+
+        {/* entry of newusers or edit usrs container */}
         <div>
         <input type="text" name="name" value={newUser.name} onChange={handleChange} placeholder="Name" />
         <input type="email" name="email" value={newUser.email} onChange={handleChange} placeholder="Email" />
         <input type="text" name="status" value={newUser.status} onChange={handleChange} placeholder="Status" />
         <button className="add-button" onClick={addUser}>{editingIndex !== -1 ? 'Update' : 'New'}</button>
       </div>
+
+        {/* users table date container */}
+        <div className="user-list-container">
               <table className="user-table"> {/* Apply CSS class to table */}
         <thead>
           <tr>
@@ -104,6 +192,7 @@ const UserManager = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
