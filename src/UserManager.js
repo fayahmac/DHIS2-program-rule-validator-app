@@ -3,10 +3,6 @@ import './UserManager.css'; // Import CSS file
 import AddNewUserContainer from './AddNewUserContainer'; // Import the AddNewUserContainer component
 import AddNewRoleContainer from './AddNewRoleContainer'; // Import the AddNewRoleContainer component
 
-
-
-
-
 const UserManager = () => {
 
   const [showAddUserContainer, setShowAddUserContainer] = useState(false);
@@ -21,8 +17,7 @@ const UserManager = () => {
   const [showAddRoleContainer, setShowAddRoleContainer] = useState(false);
 
   
- 
-  const handleRolesClick = () => {
+   const handleRolesClick = () => {
     // Handle click for "Roles" button
     console.log("Roles button clicked");
   };
@@ -43,7 +38,6 @@ const UserManager = () => {
                     // Logic to handle the "Add" action
                     console.log("Add action confirmed");
                   };
-
 
 
     // eventhandler for new user or role add buttons
@@ -71,7 +65,6 @@ const UserManager = () => {
     setShowAddRoleContainer(false);
   };
 
-
   // const handleConfirmAddUser = () => {
   //   // Handle logic for adding new user
   // };
@@ -79,7 +72,6 @@ const UserManager = () => {
   // const handleConfirmAddRole = () => {
   //   // Handle logic for adding new role
   // };
-
 
   // Defining state variables
   const [users, setUsers] = useState([  { id: 1, name: '', email: '', status: '', role:'' },
@@ -143,10 +135,6 @@ const UserManager = () => {
     console.log(filteredUsers);
   };
 
-
-
-
- 
   return (
     <div className="user-manager-container">
       <h1 class="header" className="user-manager-header">Manage users</h1>
@@ -155,7 +143,7 @@ const UserManager = () => {
         {/* add new plus contianer */}
         <div>
         {/* <button className="add-button" onClick={handleAddButtonClick}>New</button> */}
-        <button className="add-button" onClick={handleAddUserClick}>New</button>
+        {/* <button className="add-button" onClick={handleAddUserClick}>New</button> */}
                       {/* {showAddUserContainer && <AddNewUserContainer />} */}
         </div>     
 
@@ -164,21 +152,13 @@ const UserManager = () => {
         <button className="action-button" onClick={handleUsersClick}>Users</button>
         <button className="action-button" onClick={handleRolesClick}>Roles</button>
         <button className="action-button" onClick={handleRulesClick}>Rules</button>
-      </div>
-
-      {/* dispalying addtion info on new user add button container */}
-      <div className="button-group">
-        <button className="action-button" onClick={handleAddUserClick}>Add New User</button>  
+        <button className="action-button" onClick={handleAddUserClick}>New User</button>  
                 {showAddUserContainer && <AddNewUserContainer onClose={handleCloseAddUser}/>}
-        <button className="action-button" onClick={handleAddRoleClick}>Add New Role</button>  
-                   {showAddRoleContainer && <AddNewRoleContainer onClose={handleCloseAddRole} />}               
+        <button className="action-button" onClick={handleAddRoleClick}>New Role</button>  
+                   {showAddRoleContainer && <AddNewRoleContainer onClose={handleCloseAddRole} />}
       </div>
-      
-     
 
-
-
-          {/* search buttons container */}
+               {/* search buttons container */}
       <div className="search-container">
         <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search users..." />
         <button className="search-button"  onClick={handleSearch}>&#128269; Search</button>
@@ -226,6 +206,5 @@ const UserManager = () => {
 };
 
  
-
 
 export default UserManager;

@@ -7,7 +7,6 @@
 }
 
 
-
 .user-table {
     width: 100%;
     border-collapse: collapse;
@@ -67,6 +66,7 @@
                   .search-container {
                     background-color: rgb(229, 229, 231); /* Change color as desired */
                     color: white; /* Text color */
+                    margin-left: 0px; /* Adjust margin as needed */
                     border: none; /* Remove border */
                     padding: 10px 30px; /* Padding */
                     cursor: pointer; /* Add cursor on hover */
@@ -82,8 +82,7 @@
                     margin-bottom: 0px; 
                   }
 
-
-              
+             
                   .user-list-container {
                     /* Set a fixed height for the user list container */
                     max-height: calc(100% - 100px); /* Adjust as needed, considering other components' heights */
@@ -91,19 +90,23 @@
                   }
 
 
-
                     /* decirating users, roles and rule buttons */
                   .button-group {
                     margin-bottom: 20px; /* Add some margin below buttons */
+                    display: flex; /* Use Flexbox */
+                    justify-content: left; /* Horizontally center the buttons */
+                    margin-right: 10px; 
                   }
                   
+
                   .action-button {
                     /* Button styles */
                     background-color: #007bff; /* Blue background */
                     color: white; /* White text */
                     border: none; /* Remove border */
-                    padding: 10px 20px; /* Padding */
+                    padding: 10px 40px; /* Padding */
                     margin-right: 10px; /* Margin between buttons */
+                    margin: 0 5px; /* Add some margin between buttons */
                     cursor: pointer; /* Add cursor on hover */
                     border-radius: 5px; /* Rounded corners */
                   }
@@ -121,6 +124,10 @@
                       border: none; /* Remove border */
                       padding: 10px 20px; /* Padding */
                       margin-top: 10px; /* Margin top */
+                      margin: 0 5px; /* Add some margin between buttons */
                       cursor: pointer; /* Add cursor on hover */
                       border-radius: 5px; /* Rounded corners */
                     }
+
+
+          
