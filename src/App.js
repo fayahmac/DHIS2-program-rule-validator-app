@@ -24,7 +24,7 @@ function App() {
               <Route path="/user">
                 {/* Component for User */}
               </Route>
-              <Route path="/Home">
+              <Route path="/settings">
                 {/* Component for Settings */}
               </Route>
         </Routes>

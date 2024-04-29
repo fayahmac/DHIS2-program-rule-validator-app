@@ -92,7 +92,7 @@ const HomeCard = () => {
                 <div className="row">
                     <div className="card red">
                         <h3><BsTools className='icon'/> Configuration Engine</h3> 
-                        <Link to="/program-rules" style={{ textDecoration: 'none' }}>
+                        <Link to="/configuration-engine" style={{ textDecoration: 'none' }}>
                         <div className="cardlist0">
                         <BsListCheck className='icon'/> Program Rule validation
                         </div>
@@ -106,7 +106,7 @@ const HomeCard = () => {
                     </div>
                     <div className="card pink">
                         <h3><BsGear className='icon'/> Settings</h3> 
-                        <Link to="/validate-rules" style={{ textDecoration: 'none' }}>
+                        <Link to="/settings" style={{ textDecoration: 'none' }}>
                             <button className='plus-button'>
                                 <FaAd className='icon-plus'/>
                             </button>
@@ -114,7 +114,7 @@ const HomeCard = () => {
                     </div>
                     <div className="card gray">
                         <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
-                        <Link to="/notification" style={{ textDecoration: 'none' }}>
+                        <Link to="/user" style={{ textDecoration: 'none' }}>
                             <div className="cardlist0">
                             </div>
                             <div className="cardlist0">
