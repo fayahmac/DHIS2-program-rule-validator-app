@@ -137,7 +137,7 @@ const UserManager = () => {
 
   return (
     <div className="user-manager-container">
-      <h1 class="header" className="user-manager-header">Manage users</h1>
+      <h1 class="header" className="user-manager-header">User profiles</h1>
 
       
         {/* add new plus contianer */}
