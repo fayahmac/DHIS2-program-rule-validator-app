@@ -40,6 +40,10 @@ function Setting () {
                 <label>General management </label> 
                 
                 </div>
+                <div className="dhis2-icon">
+               
+                <i className="fab fa-dhis2"></i>
+            </div>
             
         </div>
     )

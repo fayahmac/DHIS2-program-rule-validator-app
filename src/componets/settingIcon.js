@@ -9,8 +9,9 @@ class SettingIcon extends React.Component {
         <div>
 
             {/* <Link to={"/Setting"}> */}
+            {/* <h1> Settings</h1> */}
           
-          <FontAwesomeIcon icon={faCog} size="2x" style={{position: 'absolute', top:'49px', left:'15px', color:'Highlight'}} />
+          <FontAwesomeIcon icon={faCog} size="2x" style={{position: 'absolute', top:'49px', left:'15px', color:'Highlight', }} />
           {/* </Link> */}
 
           
