@@ -1,0 +1,46 @@
+/* ProgramRuleValidator.css */
+
+.program-rule-validator {
+    background-color: #f9f9f9; /* dhis2 white */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adding a subtle shadow */
+  }
+  
+  .program-rule-validator h2 {
+    color: #1e1c1c; /* dhis2 black */
+
+  }
+  
+  .program-rule-list {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0;
+  }
+  
+  .program-rule {
+    background-color: #ffffff; /* dhis2 white */
+    border: 1px solid #dddddd; /* Adding a border around each program rule */
+    border-radius: 4px;
+    margin-bottom: 10px; /* Spacing between program rules */
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .program-rule button {
+    background-color: #0072c6; /* dhis2 blue */
+    color: #ffffff;
+    border: none;
+    padding: 8px 20px; /* Padding adjusted */
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Media queries for responsiveness */
+  @media screen and (max-width: 768px) {
+    .program-rule-validator {
+      padding: 10px;
+    }
+  }
+  

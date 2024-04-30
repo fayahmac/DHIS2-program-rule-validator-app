@@ -1,4 +1,5 @@
 import React from 'react';
+import './ProgramRuleValidator.css'; // Import CSS file
 
 const ProgramRuleValidator = () => {
   const programRules = [
@@ -14,29 +15,22 @@ const ProgramRuleValidator = () => {
   };
 
   return (
-    // table view of the program rules
-    <div>
+    //table view of the prgram rules to be validated
+    <div className="program-rule-validator">
       <h2>Program Rule Validator</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Program Rule Name</th>
-            <th>Validate</th>
-          </tr>
-        </thead>
-        <tbody>
-          {programRules.map(rule => (
-            <tr key={rule.id}>
-            <td>{rule.name}</td>
-              <td>
-                <button onClick={() => handleValidateClick(rule.id)}>
-                  Validate
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Search bar space goes here */}
+      <div className="search-bar-space"></div>
+      <h3>Program Rules</h3>
+      <ul className="program-rule-list">
+        {programRules.map(rule => (
+          <li key={rule.id} className="program-rule">
+            <span>{rule.name}</span>
+            <button onClick={() => handleValidateClick(rule.id)}>
+              Validate
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
