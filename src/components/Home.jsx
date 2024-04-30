@@ -10,6 +10,7 @@ function Home() {
          <div className='main-title'>
           <h3>DASHBOARD OVERVIEW</h3>
           </div>
+          {/* rendering the homecard component */}
           <Dashboard/>
     </main>
   )

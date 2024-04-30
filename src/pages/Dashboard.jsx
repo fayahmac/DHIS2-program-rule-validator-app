@@ -15,7 +15,7 @@ function Dashboard() {
     //grid rendering of the components on the dashboard view
    <div className='grid-container'>
      <Header OpenSidebar={OpenSidebar}/>
-     {/* opening and closing sidebar function called*/}
+     {/* opening and closing sidebar function called here*/}
      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
      <Home/>      
    </div>

@@ -7,8 +7,10 @@ import ProgramRuleValidator from './pages/ProgramRuleValidator'
 
 function App() {
   return (
+    //react router dom functionaliity
   <BrowserRouter>
          <Routes>
+         {/* routing and rendering the home page component the dashboard view */}
               <Route path="/" element={<Dashboard/>} />
               <Route path="/program-rules">
               </Route>

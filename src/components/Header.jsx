@@ -4,10 +4,13 @@ import { BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle,BsSearch, BsJustify}
 
 function Header({OpenSidebar}) {
   return (
+    //header container 
     <header className='header'>
          <div className='menu-icon'>
+         {/* open and closing sidebar effect in small and big screen view */}
              <BsJustify className='icon' onClick={OpenSidebar}/>
          </div>
+         {/* header contents and icons */}
          <div className='header-left'>
              <BsSearch className='icon'/>         
          </div>
