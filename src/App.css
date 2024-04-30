@@ -1,7 +1,10 @@
 /* Define the base styles */
 .container{
     display: flex;
+   
+    
 }
+
 body {
     margin: 0;
     padding: 0;
@@ -71,6 +74,7 @@ body {
   .card {
     padding: 15px;
     border-radius: 5px;
+    
   }
   
   /* Styles for circle button */
