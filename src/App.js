@@ -2,6 +2,7 @@ import React from 'react'
 import './App.css'
 import Dashboard from './pages/Dashboard'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import ProgramRuleValidator from './pages/ProgramRuleValidator'
 
 
 function App() {
@@ -10,9 +11,8 @@ function App() {
          <Routes>
               <Route path="/" element={<Dashboard/>} />
               <Route path="/program-rules">
-                {/* Component for Program Rules */}
               </Route>
-              <Route path="/validate-rules">
+              <Route path="/validate-rules" element={<ProgramRuleValidator/>}>
                 {/* Component for Validate Rules */}
               </Route>
               <Route path="/configuration-engine">

@@ -7,6 +7,7 @@ import './HomeCard.css';
 import { Link } from 'react-router-dom';
 
 const programRulesQuery = {
+    // the parameter graphQl to fetch program rules from dhis2 instances by Id
     programRules: {
         resource: 'programRules',
         params: {
@@ -16,11 +17,13 @@ const programRulesQuery = {
 };
 
 const HomeCard = () => {
+    // fetching program rules from the instance using useDataQuery provided by dhis2 app-runtime
     const [programRules, setProgramRules] = useState([]);
     const [totalProgramRules, setTotalProgramRules] = useState(0);
     const { loading, error, data } = useDataQuery(programRulesQuery);
 
     useEffect(() => {
+        //function to catch errors in fetching program rules, counting all rules available and filter the first 3 program rules before displaying them 
         if (!loading && !error && data.programRules && Array.isArray(data.programRules.programRules)) {
             const limitedProgramRules = data.programRules.programRules.slice(0, 3);
             setProgramRules(limitedProgramRules);
@@ -41,16 +44,18 @@ const HomeCard = () => {
     }
 
     return (
+        // main cards container
         <main className='main-container'>
             <div className='main-title'>
                 <h3>DASHBOARD OVERVIEW</h3>
             </div>
             <div className="cardview">
-                {/* First row */}
+                {/* First row of the cards*/}
                 <div className="row">
                     <div className="card blue">
                         <h3><BsFillArchiveFill className='icon'/> Program Rules Manager</h3> 
                         <Link to="/program-rules" style={{ textDecoration: 'none' }}>
+                        {/* displaying fetcheng program rule data on the card*/}
                             {programRules.map(programRule => (
                                 <div key={programRule.id} className="cardlist">
                                     {programRule.displayName}
@@ -65,6 +70,7 @@ const HomeCard = () => {
                         <h3><BsListCheck className='icon'/> Rule Validator</h3> 
                         <Link to="/validate-rules" style={{ textDecoration: 'none' }}>
                             <div className="cardlist1">
+                            {/* displaying fetcheng program rule count in the card*/}
                                 {totalProgramRules} Available Program Rules <FaCheckDouble className='qoute'/>
                             </div>
                             <div className="cardlist1">
@@ -88,7 +94,7 @@ const HomeCard = () => {
                         </Link>
                     </div>
                 </div>
-                {/* Second row */}
+                {/* Second row cards*/}
                 <div className="row">
                     <div className="card red">
                         <h3><BsTools className='icon'/> Configuration Engine</h3> 
