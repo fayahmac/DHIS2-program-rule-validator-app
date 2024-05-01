@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
-import React, { useState } from 'react';
 
 const UserProfile = () => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -36,62 +35,25 @@ const UserProfile = () => {
         return <div>Error: {error.message}</div>;
     }
 
-    
-        const [userData, setUserData] = useState({
-            name: 'John Doe',
-            email: 'john@example.com',
-            status: 'Active',
-            // Add more user data fields as needed
-        });
-    
-        const handleChange = (e) => {
-            const { name, value } = e.target;
-            setUserData(prevUserData => ({
-                ...prevUserData,
-                [name]: value
-            }));
-        };
-    
-
 
 
     return (
         <div>
-            <h2>User ggggProfile</h2>
+            <h1>User Profile</h1>
             {currentUser && (
                 <div>
-                    <p>Name: {currentUser.displayName}</p>
+                    <p>Name: {currentUser.displayName}</p>                   <p>UserName: {currentUser.displayUserName}</p>
                     <p>Email: {currentUser.email}</p>
-                    <p>Status: {currentUser.status}</p>
+                    <p>AcoountStatus: {currentUser.status}</p>
+                    <p>OrganisationUnit: {currentUser.organisationUnit}</p>
+                    <p>UserGroup: {currentUser.userGroup}</p>
+                    <p>Roles: {currentUser.roles}</p>
+                    <p>Preferences: {currentUser.preference}</p>
                 </div>
             )}
-
-<div>
-                <label>Name:</label>
-                <input type="text" name="name" value={userData.name} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Email:</label>
-                <input type="email" name="email" value={userData.email} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Status:</label>
-                <select name="status" value={userData.status} onChange={handleChange}>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
-            </div>
-            {/* Add more user data fields as needed */}
-            <button onClick={() => console.log(userData)}>Save</button>
-
-
-
-
-
-
-
         </div>
     );
 };
+
 
 export default UserProfile;
