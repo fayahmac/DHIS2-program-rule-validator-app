@@ -1,0 +1,18 @@
+.user-profile-container {
+    margin: 20px;
+    color: #c7cdff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.user-profile-table {
+    width: 100%;
+    background-color: white;
+}
+
+.user-profile-label {
+    color: #0d23e9;
+    font-weight: bold;
+}

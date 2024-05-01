@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
+import './UserProfile.css'; // Import CSS file for styling
 
 const UserProfile = () => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -38,18 +39,19 @@ const UserProfile = () => {
 
 
     return (
-        <div>
+        <div className="user-profile-container">
             <h1>User Profile</h1>
             {currentUser && (
-                <div>
-                    <p>Name: {currentUser.displayName}</p>                   <p>UserName: {currentUser.displayUserName}</p>
-                    <p>Email: {currentUser.email}</p>
-                    <p>AcoountStatus: {currentUser.status}</p>
-                    <p>OrganisationUnit: {currentUser.organisationUnit}</p>
-                    <p>UserGroup: {currentUser.userGroup}</p>
-                    <p>Roles: {currentUser.roles}</p>
-                    <p>Preferences: {currentUser.preference}</p>
-                </div>
+                <div><table className="user-profile-table">
+                    <p className="user-profile-label">Name: {currentUser.displayName}</p>                   
+                    <p className="user-profile-label">User Name: {currentUser.displayUserName}</p>
+                    <p className="user-profile-label">Email: {currentUser.email}</p>
+                    <p className="user-profile-label">Acoount Status: {currentUser.status}</p>
+                    <p className="user-profile-label">Organisation Unit: {currentUser.organisationUnit}</p>
+                    <p className="user-profile-label">User Group: {currentUser.userGroup}</p>
+                    <p className="user-profile-label">Roles: {currentUser.roles}</p>
+                    <p className="user-profile-label">Preferences: {currentUser.preference}</p>
+                </table></div>
             )}
         </div>
     );
