@@ -23,9 +23,48 @@ const ProgramRuleValidator = () => {
     }
   }, [data]);
 
-  const handleValidateClick = (id) => {
-    // Handle validation logic here
-    console.log(`Validating program rule with ID ${id}`);
+  const fetchDataForProgramRuleEvaluation = async () => {
+    // Fetch relevant data for evaluating conditions (e.g., data elements, attribute values)
+    // You can customize this function to fetch the necessary data using useDataQuery or any other method
+    // For simplicity, let's assume we're fetching static data here
+    return {
+      dataElement1: 'value1',
+      dataElement2: 'value2',
+    };
+  };
+
+  const evaluateConditions = (conditions, data) => {
+    // Evaluate conditions for the rule based on the fetched data
+    // For simplicity, let's assume all conditions are met if data elements have non-empty values
+    return conditions.every(condition => {
+      return data[condition.dataElement] !== '';
+    });
+  };
+
+  const executeActions = (actions) => {
+    // Execute actions associated with the program rule
+    // You can implement the logic to execute actions here
+  };
+
+  const handleValidateClick = async (rule) => {
+    try {
+      // Fetch relevant data for evaluating conditions
+      const fetchedData = await fetchDataForProgramRuleEvaluation();
+
+      // Evaluate conditions for the rule based on the fetched data
+      const conditionsMet = evaluateConditions(rule.condition, fetchedData);
+
+      // Display validation result
+      if (conditionsMet) {
+        executeActions(rule.action);
+        alert(`Program rule "${rule.displayName}" is valid!`);
+      } else {
+        alert(`Program rule "${rule.displayName}" is not valid!`);
+      }
+    } catch (error) {
+      console.error('Error occurred during program rule validation:', error);
+      alert('An error occurred during program rule validation. Please try again later.');
+    }
   };
 
   return (
@@ -45,7 +84,7 @@ const ProgramRuleValidator = () => {
           {programRules.map(rule => (
             <li key={rule.id} className="program-rule">
               <span>{rule.displayName}</span>
-              <button onClick={() => handleValidateClick(rule.id)}>
+              <button onClick={() => handleValidateClick(rule)}>
                 Validate
               </button>
             </li>
