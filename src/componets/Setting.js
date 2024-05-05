@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import './Setting.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 
 
@@ -21,10 +23,9 @@ function Setting () {
        
            
                 <label>
-                    Theme:
+                    Theme :
                     
-                                  
-                     <select value={theme} onChange={handleThemeChange}>
+                    <select value={theme} onChange={handleThemeChange}>
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
                     
@@ -34,16 +35,13 @@ function Setting () {
                  </label>
                 <br/>
                 <br/>
-                <label> Security settings  </label>
+                {/* <label> Security settings  </label>
                 <br/>
                 <br/>
                 <label>General management </label> 
-                
+                 */}
                 </div>
-                <div className="dhis2-icon">
-               
-                <i className="fab fa-dhis2"></i>
-            </div>
+                
             
         </div>
     )

@@ -4,7 +4,6 @@ import React from 'react'
 import classes from './App.module.css'
 import Setting from './componets/Setting'
 import SettingIcon from './componets/settingIcon'
-import SecuritySettings from './Pages/SecuritySettings'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -26,9 +25,9 @@ const MyApp = () => (
                 }
                 return (
                     <>
-                    <SecuritySettings/>
-                    {/* <Setting/>
-                    <SettingIcon/> */}
+                  
+                    <Setting/>
+                    <SettingIcon/>
                     
                     </>
                 )
