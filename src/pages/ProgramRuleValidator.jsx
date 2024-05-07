@@ -8,7 +8,7 @@ const ProgramRuleValidator = () => {
     programRules: {
       resource: 'programRules',
       params: {
-        fields: ['id', 'displayName', 'condition', 'action'],
+        fields: ['id', 'displayName', 'program', 'condition', 'action'],
       },
     },
   };
@@ -23,47 +23,42 @@ const ProgramRuleValidator = () => {
     }
   }, [data]);
 
-  const fetchDataForProgramRuleEvaluation = async () => {
-    // Fetch relevant data for evaluating conditions (e.g., data elements, attribute values)
-    // You can customize this function to fetch the necessary data using useDataQuery or any other method
-    // For simplicity, let's assume we're fetching static data here
-    return {
-      dataElement1: 'value1',
-      dataElement2: 'value2',
-    };
+  const validateProgramRule = (rule) => {
+    let isValid = true;
+    let errorMessage = '';
+
+    // Check if program is assigned to the rule
+    if (!rule.program) {
+      isValid = false;
+      errorMessage += 'Program rule must be assigned to a program.\n';
+    }
+
+    // Check if conditions are set
+    if (!rule.condition || rule.condition.length === 0) {
+      isValid = false;
+      errorMessage += 'Program rule must have conditions set.\n';
+    }
+
+    // Check if condition variables conform to data elements in the progra
+
+    // Check if program rule actions are defined
+    if (!rule.action || rule.action.length === 0) {
+      isValid = false;
+      errorMessage += 'Program rule must have defined program rule actions.\n';
+    }
+
+    return { isValid, errorMessage };
   };
 
-  const evaluateConditions = (conditions, data) => {
-    // Evaluate conditions for the rule based on the fetched data
-    // For simplicity, let's assume all conditions are met if data elements have non-empty values
-    return conditions.every(condition => {
-      return data[condition.dataElement] !== '';
-    });
-  };
 
-  const executeActions = (actions) => {
-    // Execute actions associated with the program rule
-    // You can implement the logic to execute actions here
-  };
+  const handleValidateClick = (rule) => {
+    const { isValid, errorMessage } = validateProgramRule(rule);
 
-  const handleValidateClick = async (rule) => {
-    try {
-      // Fetch relevant data for evaluating conditions
-      const fetchedData = await fetchDataForProgramRuleEvaluation();
-
-      // Evaluate conditions for the rule based on the fetched data
-      const conditionsMet = evaluateConditions(rule.condition, fetchedData);
-
-      // Display validation result
-      if (conditionsMet) {
-        executeActions(rule.action);
-        alert(`Program rule "${rule.displayName}" is valid!`);
-      } else {
-        alert(`Program rule "${rule.displayName}" is not valid!`);
-      }
-    } catch (error) {
-      console.error('Error occurred during program rule validation:', error);
-      alert('An error occurred during program rule validation. Please try again later.');
+    // Display validation result
+    if (isValid) {
+      alert(`Program rule "${rule.displayName}" is valid!`);
+    } else {
+      alert(`Program rule "${rule.displayName}" is not valid:\n${errorMessage}`);
     }
   };
 
