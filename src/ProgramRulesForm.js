@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useDataQuery } from '@dhis2/app-runtime'
 import './ProgramRulesForm.css'; // Import CSS file for styling
 
 const ProgramRulesForm = () => {
@@ -12,26 +13,23 @@ const ProgramRulesForm = () => {
         action: ''
     });
 
-    const [programs, setPrograms] = useState([]); // State to store programs fetched from DHIS2
+    const { loading, error, data } = useDataQuery({
+        results: {
+            resource: 'programs',
+            params: {
+                
+                fields: ['id', 'displayName'],
+            },
+        },
+    });
 
     useEffect(() => {
-        // Function to fetch programs from DHIS2 instance
-        const fetchPrograms = async () => {
-            try {
-                const response = await axios.get('https://play.dhis2.org/2.39.5/api/programs', {
-                    auth: {
-                        username: 'admin',
-                        password: 'district'
-                    }
-                });
-                setPrograms(response.data.programs); // Set programs in state
-            } catch (error) {
-                console.error('Error fetching programs:', error);
-            }
-        };
+        if (!loading && !error) {
+            setPrograms(data.results.programs);
+        }
+    }, [loading, error, data]);
 
-        fetchPrograms(); // Call the fetchPrograms function when component mounts
-    }, []); // Empty dependency array ensures useEffect runs only once
+    const [programs, setPrograms] = useState([]); // State to store programs fetched from DHIS2
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -66,7 +64,7 @@ const ProgramRulesForm = () => {
                     <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
                         <option value="">Select Program</option>
                         {programs.map(program => (
-                            <option key={program.id} value={program.id}>{program.name}</option>
+                            <option key={program.id} value={program.id}>{program.displayName}</option>
                         ))}
                     </select>
                 </div>
@@ -93,8 +91,8 @@ const ProgramRulesForm = () => {
                     <input className="form-input" type="text" name="action" value={programRule.action} onChange={handleChange} placeholder="Action" />
                 </div >
                 <div className="form-button">
-                <button className="form-buttonsave" type="submit">Save</button>
-                <button className="form-buttoncancel" type="button">Cancel</button>
+                    <button className="form-buttonsave" type="submit">Save</button>
+                    <button className="form-buttoncancel" type="button">Cancel</button>
                 </div>
             </div>
         </form>
