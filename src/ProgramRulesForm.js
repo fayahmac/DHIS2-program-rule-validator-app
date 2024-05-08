@@ -60,7 +60,9 @@ const ProgramRulesForm = () => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-container">
-                <h4>Enter program rule details</h4>
+                {/* circle button added here */}
+             
+                <h4 class = 'section1'><span class="circle">1</span> Enter program rule details</h4>
                 <div className="form-group">
                     <label>Program(*)</label>
                     <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
@@ -82,14 +84,16 @@ const ProgramRulesForm = () => {
                     <label>Description</label>
                     <input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
                 </div>
-                <h4>Enter program rule expression</h4>
+               
+                <h4 class = 'section1'><span class="circle">2</span> Enter program rule expression</h4>
                 <div className="form-group">
                     <label>Condition</label>
                     <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" />
                     <p>&nbsp;&nbsp;+ &nbsp;&nbsp; - &nbsp;&nbsp; * &nbsp;&nbsp; / &nbsp;&nbsp; % &nbsp;&nbsp; &lt; &nbsp;&nbsp; &gt;= &nbsp;&nbsp; &lt;= &nbsp;&nbsp; == &nbsp;&nbsp; != &nbsp;&nbsp;NOT &nbsp;&nbsp;AND &nbsp; OR</p>
                 </div>
                 <div className="form-group">
-                    <h4>Define program rule action</h4>
+          
+                    <h4 class = 'section1'><span class="circle">3</span> Define program rule action</h4>
                     <input className="form-input" type="text" name="action" value={programRule.action} onChange={handleChange} placeholder="Action" />
                 </div >
                 <div className="form-button">
