@@ -1,75 +1,66 @@
-// ProgramRule.js
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-import React, { useState } from 'react';
-import './ProgramRule.css'; // Import the CSS file
+function TroubleshootingRepository({ d2, resourceManager }) {
+  const [programRulesMap, setProgramRulesMap] = useState({});
 
-const ProgramRule = () => {
-  const [name, setName] = useState('');
-  const [condition, setCondition] = useState('');
-  const [action, setAction] = useState('');
-  const [description, setDescription] = useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const programRules = await getProgramRules();
+        const validatedRules = await validateProgramRules(programRules);
+        setProgramRulesMap(validatedRules);
+      } catch (error) {
+        console.error('Error fetching program rules:', error);
+      }
+    };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', { name, condition, action, description });
-    // Reset form fields
-    setName('');
-    setCondition('');
-    setAction('');
-    setDescription('');
+    fetchData();
+  }, []);
+
+  const getProgramRules = async () => {
+    try {
+      const response = await d2.programModule().programRules().withProgramRuleActions().blockingGet();
+      return response.data.map(rule => ({ program: rule.program(), rule: rule.toRuleEngineObject() }));
+    } catch (error) {
+      throw new Error('Failed to fetch program rules');
+    }
+  };
+
+  const validateProgramRules = async programRules => {
+    try {
+      const validatedRules = {};
+      for (const { program, rule } of programRules) {
+        const valueMap = await getRuleVariableMap(program?.uid());
+        const ruleValidationItem = await processRule(rule, valueMap);
+        if (ruleValidationItem.hasError()) {
+          if (program in validatedRules) {
+            validatedRules[program].push(ruleValidationItem);
+          } else {
+            validatedRules[program] = [ruleValidationItem];
+          }
+        }
+      }
+      return validatedRules;
+    } catch (error) {
+      throw new Error('Failed to validate program rules');
+    }
+  };
+
+  const getRuleVariableMap = async programUid => {
+    // Implement logic to fetch rule variable map from DHIS2
+    // Example: axios.get(`/api/programRuleVariables?programUid=${programUid}`)
+  };
+
+  const processRule = async (rule, valueMap) => {
+    // Implement logic to process rule condition and actions
   };
 
   return (
-    <div className="form-container">
-      <form className="program-rule-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name" className="form-label">Name:</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            className="form-input"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="condition" className="form-label">Condition:</label>
-          <input
-            type="text"
-            id="condition"
-            value={condition}
-            onChange={(event) => setCondition(event.target.value)}
-            className="form-input"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="action" className="form-label">Action:</label>
-          <input
-            type="text"
-            id="action"
-            value={action}
-            onChange={(event) => setAction(event.target.value)}
-            className="form-input"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="description" className="form-label">Description:</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            className="form-input"
-            required
-          />
-        </div>
-        <button type="submit" className="submit-button">Submit</button>
-      </form>
+    <div>
+      {/* Render program rules map */}
     </div>
   );
-};
+}
 
-export default ProgramRule;
+export default TroubleshootingRepository;

@@ -1,0 +1,70 @@
+/* ProgramRulesForm.css */
+
+.form-container {
+    max-width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fdfcfc;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-input {
+    background-color:  #fdfcfc;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #ccc; /* Add bottom border */
+    padding: 8px;
+    font-size: 16px;
+    outline: none; /* Remove default focus outline */
+  }
+  
+  .form-input::placeholder {
+    color: #aaa; /* Placeholder text color */
+  }
+  
+  .form-button {
+    display: flex;
+    padding: 20px;
+    border: none;
+    cursor: pointer;
+    margin-left: 60%;
+  }
+  .form-buttonsave {
+    width: 20%;
+    margin: 20px;
+    margin-left: 200px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .form-buttoncancel {
+    width: 20%;
+    margin: 20px;
+    padding: 10px;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .form-condition {
+    background-color:  #9c9898;
+    width: 100%;
+    padding-top: 4px;
+    border: none;
+    padding-bottom: 100px;
+    font-size: 16px;
+    outline: none; /* Remove default focus outline */
+  }
+  

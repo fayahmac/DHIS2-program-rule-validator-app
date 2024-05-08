@@ -8,13 +8,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Homeee from './components/Homeee'
 import Header from './components/Header'
 import ProgramRule from './programRules/ProgramRule'
+import ProgramRulesForm from './ProgramRulesForm'
 
     const MyApp = () => {
       return (
         
       
        <div>
-        <ProgramRule/>
+        <ProgramRulesForm/>
        </div>
      
       );
