@@ -3,7 +3,7 @@ import './App.css'
 import Dashboard from './pages/Dashboard'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ProgramRuleValidator from './pages/ProgramRuleValidator'
-import ProgramRulesForm from './ProgramRulesForm';
+import ProgramRulesForm from './pages/ProgramRulesForm';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
           <Routes>
           {/* routing and rendering the home page component the dashboard view */}
                <Route path="/" element={<Dashboard/>} />
-               <Route path="/program-rules">
+               <Route path="/program-rules" element={<ProgramRulesForm/>}>
                </Route>
                <Route path="/validate-rules" element={<ProgramRuleValidator/>}>
                  {/* Component for Validate Rules */}
