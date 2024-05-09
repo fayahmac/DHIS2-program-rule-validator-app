@@ -86,16 +86,26 @@ const ProgramRulesForm = () => {
                     
                     <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" />
                     <div className='form-option'>
-                    <option value="">Built in function</option> 
-                    <option value="">Variables</option> 
-                    <option value="">Function</option> 
+                        
+                        <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
+    <option value="" style={{ textDecoration: 'none' }}>Built-in function</option>
+</select>
+
+<select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
+    <option value="" style={{ textDecoration: 'none' }}>Variables</option>
+</select> 
+<select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
+    <option value="" style={{ textDecoration: 'none' }}>Functions</option>
+</select> 
                     </div>
                   </div>
                     <p>&nbsp;&nbsp;+ &nbsp;&nbsp; - &nbsp;&nbsp; * &nbsp;&nbsp; / &nbsp;&nbsp; % &nbsp;&nbsp; &lt; &nbsp;&nbsp; &gt;= &nbsp;&nbsp; &lt;= &nbsp;&nbsp; == &nbsp;&nbsp; != &nbsp;&nbsp;NOT &nbsp;&nbsp;AND &nbsp; OR</p>
                 
                 <div className="form-group">
                     <h4>Define program rule action</h4>
-                    <input className="form-input" type="text" name="action" value={programRule.action} onChange={handleChange} placeholder="Action" />
+                    <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
+                        <option value="">Action</option>                        
+                    </select>
                 </div >
                 <div className="form-button">
                     <button className="form-buttonsave" type="submit">Save</button>
