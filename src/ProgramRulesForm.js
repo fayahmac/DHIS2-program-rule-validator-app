@@ -81,11 +81,18 @@ const ProgramRulesForm = () => {
                     <input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
                 </div>
                 <h4>Enter program rule expression</h4>
-                <div className="form-group">
-                    <label>Condition</label>
+                <label>Condition</label>
+                <div className="form-g">
+                    
                     <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" />
+                    <div className='form-option'>
+                    <option value="">Built in function</option> 
+                    <option value="">Variables</option> 
+                    <option value="">Function</option> 
+                    </div>
+                  </div>
                     <p>&nbsp;&nbsp;+ &nbsp;&nbsp; - &nbsp;&nbsp; * &nbsp;&nbsp; / &nbsp;&nbsp; % &nbsp;&nbsp; &lt; &nbsp;&nbsp; &gt;= &nbsp;&nbsp; &lt;= &nbsp;&nbsp; == &nbsp;&nbsp; != &nbsp;&nbsp;NOT &nbsp;&nbsp;AND &nbsp; OR</p>
-                </div>
+                
                 <div className="form-group">
                     <h4>Define program rule action</h4>
                     <input className="form-input" type="text" name="action" value={programRule.action} onChange={handleChange} placeholder="Action" />
