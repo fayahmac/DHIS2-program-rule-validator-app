@@ -163,7 +163,7 @@ const ProgramRuleValidator = () => {
           ))}
         </ul>
       )}
-      <button><Link to="/" style={{ textDecoration: 'none' }}>HOME</Link></button>
+      <button className='buttonn'><Link to="/" style={{ textDecoration: 'none' }}>HOME</Link></button>
     </div>
   );
 };

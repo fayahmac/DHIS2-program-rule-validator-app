@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ProgramRuleValidator from './pages/ProgramRuleValidator'
 import ProgramRulesForm from './pages/ProgramRulesForm'
+import TroubleshootingEngine from './pages/TroubleshootingEngine'
 
 
 
@@ -20,7 +21,7 @@ function App() {
                <Route path="/validate-rules" element={<ProgramRuleValidator/>}>
                  {/* Component for Validate Rules */}
                </Route>
-               <Route path="/configuration-engine">
+               <Route path="/configuration-engine" element={<TroubleshootingEngine/>}>
                  {/* Component for Configuration Engine */}
                </Route>
                <Route path="/notification">

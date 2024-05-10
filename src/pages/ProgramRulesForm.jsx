@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRulesForm.css'; // Import CSS file for styling
 
@@ -112,7 +113,7 @@ const ProgramRulesForm = () => {
                 </div>
                 <div className="form-button">
                     <button className="form-buttonsave" type="submit">Save</button>
-                    <button className="form-buttoncancel" type="button">Cancel</button>
+                    <button className="form-buttoncancel" type="button"><Link to="/" style={{ textDecoration: 'none' }}>Cancel</Link></button>
                 </div>
             </div>
         </form>

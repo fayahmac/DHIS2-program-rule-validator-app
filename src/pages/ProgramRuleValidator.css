@@ -43,4 +43,17 @@
       padding: 10px;
     }
   }
-  
+  /* Add styles for the return button */
+.buttonn {
+  margin-left: 90%; /* Push the button to the right */
+  padding: 10px 20px; /* Add padding to the button */
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add border radius */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.buttonn:hover {
+  background-color: #0056b3; /* Darken background color on hover */
+}
