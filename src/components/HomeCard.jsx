@@ -89,10 +89,6 @@ const HomeCard = () => {
                     <div className="card orange">
                         <h3><BsFillBellFill className='icon'/> Notifications</h3> 
                         <Link to="/notification" style={{ textDecoration: 'none' }}>
-                            <div className="cardlist0">
-                            </div>
-                            <div className="cardlist0">
-                            </div>
                         {/*button on the notification card*/}
                             <button className='plus-button'>
                                 <FaHandPointRight className='icon-plus'/>
