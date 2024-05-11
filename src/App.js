@@ -9,12 +9,14 @@ import Homeee from './components/Homeee'
 import Header from './components/Header'
 import ProgramRule from './programRules/ProgramRule'
 import ProgramRulesForm from './ProgramRulesForm'
+import NewProgramRule from './NewProgramRule'
 
     const MyApp = () => {
       return (
         
       
        <div>
+        {/* <NewProgramRule/> */}
         <ProgramRulesForm/>
        </div>
      
