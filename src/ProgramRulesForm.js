@@ -40,9 +40,16 @@ const ProgramRulesForm = () => {
 
     const handleSave = async () => {
         try {
-            // Perform mutation to save data
-            await mutate(programRule);
-            console.log('Program created successfully');
+            // Make a POST request to the DHIS2 API endpoint to save the data
+            const response = await axios.post('http://localhost:8080/2.39.5/api/programs', programRule, {
+                auth: {
+                    username: 'admin',
+                    password: 'district'
+                }
+            });
+            
+            console.log('Program created successfully:', response.data);
+            
             // Reset form fields or perform other actions as needed
             setProgramRule({
                 program: '',
@@ -52,6 +59,7 @@ const ProgramRulesForm = () => {
                 condition: '',
                 action: ''
             });
+            
             // Display success message
             alert('Data submitted successfully!');
         } catch (error) {
