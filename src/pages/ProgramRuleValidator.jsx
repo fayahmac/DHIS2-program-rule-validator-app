@@ -58,7 +58,7 @@ const ProgramRuleValidator = () => {
     return variables;
   };
 //validation logic
-  const validateProgramRule = async (rule) => {
+  const validateProgramRule = async (rule,evaluationContext, enrollmentStatus) => {
     let isValid = true;
     let errorMessage = '';
 //validate]ing the program rule by checking if its attached to program 
@@ -84,7 +84,14 @@ const ProgramRuleValidator = () => {
         }
       });
     }
-
+  
+      // Check enrollment status
+      if (!enrollmentStatus || !enrollmentStatus.stage || enrollmentStatus.program !== rule.program) {
+        isValid = false;
+        errorMessage += 'Program rule is not applicable to the current program stage.\n';
+        return { isValid, errorMessage };
+      }
+       
     if (!rule.action || rule.action.length === 0) {
       isValid = false;
       errorMessage += 'Program rule must have at least one defined program rule action.\n';

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BsListCheck } from 'react-icons/bs';
+import { Link} from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
 import './TroubleshootingEngine.css'; // Import CSS file for styling
 
@@ -35,7 +36,7 @@ const TroubleshootingEngine = () => {
                     <BsListCheck className='iconn'/>
                     <div className="validation-content">
                         <h2>Program Rule Validation</h2>
-                        <p>A simple one-sentence description of what it does.</p>
+                        <p>This action will check all the rules configured and display bad configuratuons if any</p>
                     </div>
                 </div>
             </div>
@@ -67,6 +68,7 @@ const TroubleshootingEngine = () => {
                     </div>
                 </div>
             ))}
+            <button className='buttonn'><Link to="/" style={{ textDecoration: 'none' }}>HOME</Link></button>
         </div>
     );
 };

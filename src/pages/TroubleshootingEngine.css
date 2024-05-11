@@ -52,7 +52,7 @@
     cursor: pointer; /* Add pointer cursor for clickable heading */
     font-size: 20px;
     padding: 10px;
-    color: #000;
+    color: #1f1e1e;
     margin: 0;
 }
 
@@ -62,7 +62,7 @@
 
 .condition-details h4{
     margin-bottom: 20px;
-    color: #000;
+    color: #1f1e1e;
 }
 /* Add styles for the return button */
 .buttonn {
