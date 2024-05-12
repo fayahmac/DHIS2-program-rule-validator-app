@@ -149,7 +149,7 @@ const ProgramRuleValidator = () => {
  //ui div remderrimh
   return (
     <div className="program-rule-validator">
-      <h2>Program Rule Validator</h2>
+      <h2>PROGRAM RULE VALIDATOR</h2>
       <div className="search-bar-space"></div>
       <h3>Program Rules</h3>
       {loading ? (

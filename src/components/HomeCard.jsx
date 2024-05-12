@@ -85,57 +85,22 @@ const HomeCard = () => {
                             </button>
                         </Link>
                     </div>
-                    {/* home final card in the row and its inside card with routing link */}
-                    <div className="card orange">
-                        <h3><BsFillBellFill className='icon'/> Notifications</h3> 
-                        <Link to="/notification" style={{ textDecoration: 'none' }}>
-                        {/*button on the notification card*/}
-                            <button className='plus-button'>
-                                <FaHandPointRight className='icon-plus'/>
-                            </button>
-                        </Link>
-                    </div>
-                </div>
-                {/* Second row cards*/}
-                <div className="row">
-                {/* home first card in the second row and its inside card with routing link */}
                     <div className="card red">
-                        <h3><BsTools className='icon'/> Configuration Engine</h3> 
-                        <Link to="/configuration-engine" style={{ textDecoration: 'none' }}>
-                        {/* card displaying the inside the main card of configuration engine */}
-                        <div className="cardlist0">
-                        <BsListCheck className='icon'/> Program Rule validation
-                        </div>
-                        <div className="cardlist0">
-                        <FaGlobe className='icon'/> Language
-                        </div>
-                        {/* button inside the configuration engine */}
-                            <button className='plus-button'>
-                                <FaExchangeAlt className='icon-plus'/>
-                            </button>
-                        </Link>
+                    <h3><BsTools className='icon'/> Configuration Engine</h3> 
+                    <Link to="/configuration-engine" style={{ textDecoration: 'none' }}>
+                    {/* card displaying the inside the main card of configuration engine */}
+                    <div className="cardlist0">
+                    <BsListCheck className='icon'/> Program Rule validation
                     </div>
-                    {/* home second card in the second row and its routing link */}
-                    <div className="card pink">
-                        <h3><BsGear className='icon'/> Settings</h3> 
-                        <Link to="/settings" style={{ textDecoration: 'none' }}>
-                            <button className='plus-button'>
-                                <FaAd className='icon-plus'/>
-                            </button>
-                        </Link>
+                    <div className="cardlist0">
+                    <FaGlobe className='icon'/> Language
                     </div>
-                    {/* home final card in the second row and its inside card with routing link */}
-                    <div className="card gray">
-                        <h3><BsFillPeopleFill className='icon'/> User Manager</h3> 
-                        <Link to="/user" style={{ textDecoration: 'none' }}>
-                            <div className="cardlist0">
-                            </div>
-                            <div className="cardlist0">
-                            </div>
-                            <div className="cardlist0">
-                            </div>
-                        </Link>
-                    </div>
+                    {/* button inside the configuration engine */}
+                        <button className='plus-button'>
+                            <FaExchangeAlt className='icon-plus'/>
+                        </button>
+                    </Link>
+                </div>
                 </div>
             </div>
         </main>

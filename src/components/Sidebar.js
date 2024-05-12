@@ -33,21 +33,6 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                 <Link to="/configuration-engine" style={{ textDecoration: 'none' }}>
                 <BsTools className='icon'/>CONFIGURATION</Link>
             </li>
-            <li className='sidebar-list-item'>
-             {/* sidebar fourth listeditem and its routing link */}
-                <Link to="/notification"style={{ textDecoration: 'none' }} >
-                <BsFillBellFill className='icon'/>NOTIFICATION</Link>
-            </li>
-            <li className='sidebar-list-item'>
-             {/* sidebar fifth listeditem and its routing link */}
-                <Link to="/user"style={{ textDecoration: 'none' }} >
-                <BsPeopleFill className='icon'/>USER</Link>
-            </li>
-            <li className='sidebar-list-item'>
-             {/* sidebar finallisteditem and its routing link */}
-                <Link to="/settings"style={{ textDecoration: 'none' }} >
-                <BsFillGearFill className='icon'/>SETTINGS</Link>
-           </li>
         </ul>
     </aside>
   )

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRulesForm.css'; // Import CSS file for styling
 
@@ -39,24 +38,37 @@ const ProgramRulesForm = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSave = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/2.39.5/api/programRules', programRule, {
+            // Make a POST request to the DHIS2 API endpoint to save the data
+            const response = await axios.post('http://localhost:8080/2.39.5/api/programs', programRule, {
                 auth: {
                     username: 'admin',
                     password: 'district'
                 }
             });
-            console.log('Program rule created:', response.data);
+            
+            console.log('Program created successfully:', response.data);
+            
             // Reset form fields or perform other actions as needed
+            setProgramRule({
+                program: '',
+                name: '',
+                priority: '',
+                description: '',
+                condition: '',
+                action: ''
+            });
+            
+            // Display success message
+            alert('Data submitted successfully!');
         } catch (error) {
-            console.error('Error creating program rule:', error);
+            console.error('Error creating program:', error);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form>
             <div className="form-container">
                 <h4>Enter program rule details</h4>
                 <div className="form-group">
@@ -111,9 +123,13 @@ const ProgramRulesForm = () => {
                         <option value="Make field mandatory">Make field mandatory</option>
                     </select>
                 </div>
+                <div className="form-button"></div>
+                {/* Other form inputs */}
                 <div className="form-button">
-                    <button className="form-buttonsave" type="submit">Save</button>
-                    <button className="form-buttoncancel" type="button"><Link to="/" style={{ textDecoration: 'none' }}>Cancel</Link></button>
+                    <button className="form-buttonsave" onClick={handleSave} disabled={loading}>
+                        {loading ? 'Saving...' : 'Save'}
+                    </button>
+                    <button className="form-buttoncancel" type="button">Cancel</button>
                 </div>
             </div>
         </form>
