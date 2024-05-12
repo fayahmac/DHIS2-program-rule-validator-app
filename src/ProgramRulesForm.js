@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useDataQuery } from '@dhis2/app-runtime';
+import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRulesForm.css'; // Import CSS file for styling
 
 const ProgramRulesForm = () => {
@@ -13,7 +13,7 @@ const ProgramRulesForm = () => {
         action: ''
     });
 
-    const { loading, error, data } = useDataQuery({
+    const { loading, error, data, refetch } = useDataQuery({
         results: {
             resource: 'programs',
             params: {
@@ -38,34 +38,46 @@ const ProgramRulesForm = () => {
         }));
     };
 
-    const handleSave = async () => {
+    const myMutation = {
+        resource: 'programs',
+        type: 'create',
+        data: {
+            name: 'A new Program',
+            shortName: 'A new Program',
+            programType: 'WITH_REGISTRATION',
+        },
+    };
+
+    const [mutate, {  }] = useDataMutation(myMutation);
+
+    const onClick = async (refetch) => {
         try {
-            // Make a POST request to the DHIS2 API endpoint to save the data
-            const response = await axios.post('http://localhost:8080/2.39.5/api/programs', programRule, {
-                auth: {
-                    username: 'admin',
-                    password: 'district'
-                }
-            });
-            
-            console.log('Program created successfully:', response.data);
-            
-            // Reset form fields or perform other actions as needed
-            setProgramRule({
-                program: '',
-                name: '',
-                priority: '',
-                description: '',
-                condition: '',
-                action: ''
-            });
-            
-            // Display success message
-            alert('Data submitted successfully!');
+            await mutate();
+            refetch();
+            console.log('Program created successfully');
         } catch (error) {
             console.error('Error creating program:', error);
         }
     };
+
+    // const handleSave = async () => {
+    //     try {
+    //         await mutate();
+    //         refetch();
+    //         console.log('Program created successfully');
+    //         setProgramRule({
+    //             program: '',
+    //             name: '',
+    //             priority: '',
+    //             description: '',
+    //             condition: '',
+    //             action: ''
+    //         });
+    //         alert('Data submitted successfully!');
+    //     } catch (error) {
+    //         console.error('Error creating program:', error);
+    //     }
+     
 
     return (
         <form>
@@ -123,12 +135,13 @@ const ProgramRulesForm = () => {
                         <option value="Make field mandatory">Make field mandatory</option>
                     </select>
                 </div>
-                <div className="form-button"></div>
-                {/* Other form inputs */}
                 <div className="form-button">
-                    <button className="form-buttonsave" onClick={handleSave} disabled={loading}>
-                        {loading ? 'Saving...' : 'Save'}
-                    </button>
+                    {/* <button className="form-buttonsave" onClick={h} disabled={mutationLoading}>
+                        {mutationLoading ? 'Saving...' : 'Save'}
+                    </button> */}
+                       <button className="form-buttonsave" onClick={() => onClick(refetch)} disabled={loading} >
+                     Save
+        </button>
                     <button className="form-buttoncancel" type="button">Cancel</button>
                 </div>
             </div>
