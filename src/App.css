@@ -42,7 +42,7 @@ body {
 /* Header  */
 .header {
   grid-area: header;
-  background-color: blue;
+  background-color: #1d5283;
   color: white;
   height: 60px;
   display: flex;
@@ -63,8 +63,8 @@ body {
   height: 100%;
   background-color: white;
   overflow-y: auto;
-  border: 2px solid blue;
-  border-color: #2962ff;
+  border: 2px solid #1d5283;
+  border-color: #1d5283;
   transition: all 0.5s;
   -webkit-transition: all 0.5s;
 }
@@ -97,7 +97,7 @@ body {
 .sidebar-list-item {
   padding: 20px 20px 20px 20px;
   font-size: 18px;
-  border: 1.5px solid blue;
+  border: 1.5px solid #1d5283;
   border-radius: 5px;
   margin: 5px;
   
@@ -254,26 +254,26 @@ body {
 }
 
 .blue {
-  background-color: blue;
+  background-color: #1d5283;
 }
 
 .green {
-  background-color: green;
+  background-color: #1d5283;
 }
 
 .orange {
-  background-color: orange;
+  background-color: #1d5283;
 }
 .red {
-  background-color: red;
+  background-color: #1d5283;
 }
 
 .pink {
-  background-color: #2962ff; 
+  background-color: #1d5283;
 }
 
 .gray {
-  background-color: gray;
+  background-color: #1d5283;
 }
 
 /* media query on rendering in small screen */

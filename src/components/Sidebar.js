@@ -10,7 +10,8 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
     <aside id='sidebar' className={openSidebarToggle ? "sidebar-responsive":""}>
         <div className='sidebar-title'>
             <div className='sidebar-brand'>
-                <BsAppIndicator className='icon'/> DHIS2 PROGRAM RULE VALIDATOR
+            <Link to="/" style={{ textDecoration: 'none' }}>
+                <BsAppIndicator className='icon'/> DHIS2 PROGRAM RULE VALIDATOR</Link>
             </div>
             {/* an invisible icon for opening and closing sidebar in small screen view */}
             <span className='icon close_icon' onClick={OpenSidebar}>X</span>
