@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
+import { useDataMutation } from '@dhis2/app-runtime'
+import { useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRulesForm.css'; // Import CSS file for styling
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const ProgramRulesForm = () => {
+    const [selectedFunction, setSelectedFunction] = useState('');
     const [programRule, setProgramRule] = useState({
         program: '',
         name: '',
@@ -13,7 +16,7 @@ const ProgramRulesForm = () => {
         action: ''
     });
 
-    const { loading, error, data, refetch } = useDataQuery({
+    const { loading, error, data } = useDataQuery({
         results: {
             resource: 'programs',
             params: {
@@ -32,12 +35,26 @@ const ProgramRulesForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setProgramRule(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+        if (name === 'condition') {
+            setProgramRule(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        } else if (name === 'function') {
+            setSelectedFunction(value);
+            setProgramRule(prevState => ({
+                ...prevState,
+                condition: value // Set the selected function as the condition
+            }));
+        } else {
+            setProgramRule(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        }
     };
 
+    // Define the mutation to create a new program
     const myMutation = {
         resource: 'programs',
         type: 'create',
@@ -46,43 +63,33 @@ const ProgramRulesForm = () => {
             shortName: 'A new Program',
             programType: 'WITH_REGISTRATION',
         },
-    };
+    }
 
-    const [mutate, {  }] = useDataMutation(myMutation);
+    // Use the useDataMutation hook to perform the mutation
+    const [mutate, { loading: mutationLoading }] = useDataMutation(myMutation);
 
-    const onClick = async (refetch) => {
+    const handleSubmit = async (event) => {
+        event.preventDefault(); // Prevent the default form submit behavior
+
         try {
-            await mutate();
-            refetch();
-            console.log('Program created successfully');
+            // Perform the mutation to save the program rule
+            await mutate(programRule);
+            console.log('Program rule saved successfully');
+            // Optionally, reset the form or provide feedback to the user
+            // setProgramRule({ program: '', name: '', priority: '', description: '', condition: '', action: '' });
+            // alert('Program rule saved successfully!');
         } catch (error) {
-            console.error('Error creating program:', error);
+            console.error('Error saving program rule:', error);
+            // Optionally, provide feedback to the user
+            // alert('Failed to save program rule');
         }
     };
 
-    // const handleSave = async () => {
-    //     try {
-    //         await mutate();
-    //         refetch();
-    //         console.log('Program created successfully');
-    //         setProgramRule({
-    //             program: '',
-    //             name: '',
-    //             priority: '',
-    //             description: '',
-    //             condition: '',
-    //             action: ''
-    //         });
-    //         alert('Data submitted successfully!');
-    //     } catch (error) {
-    //         console.error('Error creating program:', error);
-    //     }
-     
-
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="form-container">
-                <h4>Enter program rule details</h4>
+                {/* Existing form fields */}
+                <h4 class='section1'><span class="circle">1</span> Enter program rule details</h4>
                 <div className="form-group">
                     <label>Program(*)</label>
                     <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
@@ -104,29 +111,40 @@ const ProgramRulesForm = () => {
                     <label>Description</label>
                     <input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
                 </div>
-                <h4>Enter program rule expression</h4>
+                <h4 class='section1'><span class="circle">2</span> Enter program rule expression</h4>
                 <label>Condition</label>
                 <div className="form-g">
-                    
+
                     <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" />
                     <div className='form-option'>
-                                        
-                        <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
-                            <option value="" style={{ textDecoration: 'none' }}>Built-in function</option>
+
+                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>
+                            <option value="">Built-in Function</option>
+                            <option value="V{current_date}">V {'{current_date}'}</option>
+                            <option value="V{event_date}">V {'{event_date}'}</option>
+                            <option value="V{due_date}">V {'{due_date}'}</option>
+                            <option value="V{event_count}">V {'{event_count}'}</option>
+                            <option value="V{enrollment_date}">V {'{enrollment_date}'}</option>
+                            <option value="V{incident_date}">V {'{incident_date}'}</option>
+                            <option value="V{enrollment_id}">V {'{enrollment_id}'}</option>
+                            <option value="V{enveronment}">V {'{enveronment}'}</option>  
+                            <option value="V{event_id}">V {'{event_id}'}</option>
+                            <option value="V{orgunit_code}">V {'{orgunit_code}'}</option>
+                            <option value="V{program_stage_name}">V {'{program_stage_name}'}</option>
+                            <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
                         </select>
 
                         <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
                             <option value="" style={{ textDecoration: 'none' }}>Variables</option>
-                        </select> 
+                        </select>
                         <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
                             <option value="" style={{ textDecoration: 'none' }}>Functions</option>
-                        </select> 
+                        </select>
                     </div>
                 </div>
                 <p>&nbsp;&nbsp;+ &nbsp;&nbsp; - &nbsp;&nbsp; * &nbsp;&nbsp; / &nbsp;&nbsp; % &nbsp;&nbsp; &lt; &nbsp;&nbsp; &gt;= &nbsp;&nbsp; &lt;= &nbsp;&nbsp; == &nbsp;&nbsp; != &nbsp;&nbsp;NOT &nbsp;&nbsp;AND &nbsp; OR</p>
-                
                 <div className="form-group">
-                    <h4>Define program rule action</h4>
+                    <h4 class='section1'><span class="circle">3</span> Define program rule action</h4>
                     <select className="form-input" name="action" value={programRule.action} onChange={handleChange} placeholder="Action">
                         <option value="">Select Action</option>
                         <option value="Show warning message">Show warning message</option>
@@ -135,13 +153,13 @@ const ProgramRulesForm = () => {
                         <option value="Make field mandatory">Make field mandatory</option>
                     </select>
                 </div>
+                {/* Other form inputs */}
                 <div className="form-button">
-                    {/* <button className="form-buttonsave" onClick={h} disabled={mutationLoading}>
-                        {mutationLoading ? 'Saving...' : 'Save'}
-                    </button> */}
-                       <button className="form-buttonsave" onClick={() => onClick(refetch)} disabled={loading} >
-                     Save
-        </button>
+                    {/* Use Link component to navigate to '/new-program' */}
+                    <button className="form-buttonsave" disabled={loading || mutationLoading} style={{ textDecoration: 'none' }}>
+
+                        <Link to="/new-program" style={{ textDecoration: 'none' }}>{loading || mutationLoading ? 'Saving...' : 'Save'} </Link>
+                    </button>
                     <button className="form-buttoncancel" type="button">Cancel</button>
                 </div>
             </div>

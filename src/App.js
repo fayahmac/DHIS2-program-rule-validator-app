@@ -11,17 +11,17 @@ import ProgramRule from './programRules/ProgramRule'
 import ProgramRulesForm from './ProgramRulesForm'
 import NewProgramRule from './NewProgramRule'
 
-    const MyApp = () => {
-      return (
-        
-      
-       <div>
-        {/* <NewProgramRule/> */}
-        <ProgramRulesForm/>
-       </div>
-     
-      );
-    }
+const MyApp = () => {
+  return (
+    <BrowserRouter>
+    <ProgramRulesForm/>
+      <Routes>
+        <Route path="/program-rules" element={<ProgramRulesForm />} />
+      </Routes>
+    
+    </BrowserRouter>
+  );
+}
     
 
 export default MyApp
