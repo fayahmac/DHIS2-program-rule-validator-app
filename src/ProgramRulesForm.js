@@ -4,6 +4,7 @@ import { useDataMutation } from '@dhis2/app-runtime'
 import { useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRulesForm.css'; // Import CSS file for styling
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import ConditionCheck from './ConditionChecker';
 
 const ProgramRulesForm = () => {
     const [selectedFunction, setSelectedFunction] = useState('');
@@ -115,7 +116,8 @@ const ProgramRulesForm = () => {
                 <label>Condition</label>
                 <div className="form-g">
 
-                    <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" />
+                    {/* <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" /> */}
+                    <ConditionCheck/>
                     <div className='form-option'>
 
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>

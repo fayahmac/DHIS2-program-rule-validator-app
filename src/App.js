@@ -10,9 +10,13 @@ import Header from './components/Header'
 import ProgramRule from './programRules/ProgramRule'
 import ProgramRulesForm from './ProgramRulesForm'
 import NewProgramRule from './NewProgramRule'
+import ConditionCheck from './ConditionChecker'
 
 const MyApp = () => {
   return (
+    // <div>
+    //   <ConditionCheck/>
+    // </div>
     <BrowserRouter>
     <ProgramRulesForm/>
       <Routes>
