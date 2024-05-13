@@ -34,24 +34,58 @@ const ProgramRulesForm = () => {
 
     const [programs, setPrograms] = useState([]); // State to store programs fetched from DHIS2
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const [condition, setCondition] = useState('');
+    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
+    // const [selectedFunction, setSelectedFunction] = useState('');
+
+    useEffect(() => {
+        // Trigger syntax check whenever the condition state changes
+        checkSyntax();
+    }, [condition]);
+
+    const checkSyntax = () => {
+        if (condition.trim() === '') {
+            setIsSyntaxCorrect(3); // Expression is empty
+        } else {
+            const regex = /(\{.*?\})|(\(.*?\))|([=><])|(\w+)/g;
+            const matches = condition.match(regex);
+
+            if (matches) {
+                let isCorrect = true;
+                for (let match of matches) {
+                    // Check if the match is not one of the specified patterns
+                    if (!/^(\{.*?\})|(\(.*?\))|([=><])|(\w+)$/.test(match)) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+                setIsSyntaxCorrect(isCorrect ? 2 : 1); // Set syntax correctness based on the check
+            } else {
+                setIsSyntaxCorrect(1); // Syntax is incorrect
+            }
+        }
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         if (name === 'condition') {
-            setProgramRule(prevState => ({
-                ...prevState,
-                [name]: value
-            }));
+            setCondition(value);
         } else if (name === 'function') {
             setSelectedFunction(value);
-            setProgramRule(prevState => ({
-                ...prevState,
-                condition: value // Set the selected function as the condition
-            }));
-        } else {
-            setProgramRule(prevState => ({
-                ...prevState,
-                [name]: value
-            }));
+            setCondition(value); // Set the selected function as the condition
+        }
+    };
+
+    const getSyntaxMessage = () => {
+        switch (isSyntaxCorrect) {
+            case 1:
+                return "Syntax is incorrect!";
+            case 2:
+                return "Syntax is correct!";
+            case 3:
+                return "Expression is empty";
+            default:
+                return "";
         }
     };
 
@@ -117,7 +151,15 @@ const ProgramRulesForm = () => {
                 <div className="form-g">
 
                     {/* <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" /> */}
-                    <ConditionCheck/>
+                
+            <textarea className="form-condition"
+                value={condition}
+                onChange={handleChange} // Trigger syntax check on change
+                placeholder="Enter condition here"
+                name="condition"
+            />
+            
+         
                     <div className='form-option'>
 
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>
@@ -141,39 +183,44 @@ const ProgramRulesForm = () => {
                         </select>
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>
                             <option value="">Function</option>
-                            <option value="d2:ceil {'(<number>)'}">d2:ceil {'(<number>)'}</option>
-                            <option value="d2:floor {'(<number>)'}">d2:floor {'(<number>)'}</option>
-                            <option value="d2:round {'(<number>)'}">d2:round {'(<number>)'}</option>
-                            <option value="d2:modulus {'(<number>,<number>)'}">d2:modulus {'(<number>,<number>)'}</option>
-                            <option value="d2:zing {'(<number>)'}">d2:zing {'(<number>)'}</option>
-                            <option value="d2:oizp {'(<number>)'}">d2:oizp {'(<number>)'}</option>
-                            <option value="d2:concatenate {'(<object>,<object>)'}">d2:concatenate {'(<object>,<object>)'}</option>
-                            <option value="d2:daysBetween {'(<date>,<date>)'}">d2:daysBetween {'(<date>,<date>)'}</option>  
-                            <option value="d2:weeksBetween {'(date>,<date>)'}">d2:weeksBetween {'(date>,<date>)'}</option>
-                            <option value="d2:monthBetween {'(date>,<date>)'}">d2:monthBetween {'(date>,<date>)'}</option>
-                            <option value="d2:yearsBetween {'(date>,<date>)'}">d2:yearsBetween {'(date>,<date>)'}</option>
-                            <option value="d2:addDays {'(date>,<number>)'}">d2:addDays {'(date>,<number>)'}</option>
-                            <option value="d2:count {'(<sourcefield>)'}">d2:count {'(<sourcefield>)'}</option>  
-                            <option value="d2:countIfValue {'(<sourcefield>,<text>)'}">d2:countIfValue {'(<sourcefield>,<text>)'}</option>
-                            <option value="d2:countIfZeroPos {'(<sourcefield>)'}">d2:countIfZeroPos {'(<sourcefield>)'}</option>
-                            <option value="d2:hasValue {'(<sourcefield>)'}">d2:hasValue {'(<sourcefield>)'}</option>
-                            <option value="d2:zpvc {'(<object>,<object>)'}">d2:zpvc {'(<object>,<object>)'}</option>
-                            <option value="d2:validatePatterns {'(<text>,<regex)'}">d2:validatePatterns {'(<text>,<regex)'}</option>
-                            <option value="d2:left {'(<text>,<number>)'}">d2:left {'(<text>,<number>)'}</option>
-                            <option value="d2:right {'(<text>,<number>)'}">d2:right {'(<text>,<number>)'}</option>
-                            <option value="d2:substring {'(<text>,<number>,<number>)'}">d2:substring {'(<text>,<number>,<number>)'}</option>  
-                            <option value="d2:split {'(<text>,<text>,<number>)'}">d2:split {'(<text>,<text>,<number>)'}</option>
-                            <option value="d2:length {'(<text>)'}">d2:length {'(<text>)'}</option>
-                            <option value="d2:inOrgUnitGroup{'( <orgunit_group_code> )'}">d2:inOrgUnitGroup{'( <orgunit_group_code> )'}</option>
-                            <option value="d2:hasUserRole{'( <user_role> )'}">d2:hasUserRole{'( <user_role> )'}</option>
-                            <option value="d2:zScoreWFA{'( <ageInMonth>, <weight>, <gender> )'}">d2:zScoreWFA{'( <ageInMonth>, <weight>, <gender> )'}</option>  
-                            <option value="d2:zScoreHFA{'( <ageInMonth>, <height>, <gender> )'}">d2:zScoreHFA{'( <ageInMonth>, <height>, <gender> )'}</option>
-                            <option value="d2:zScoreWFH{'( <height>, <weight>, <gender> )'}">d2:zScoreWFH{'( <height>, <weight>, <gender> )'}</option>
-                            <option value="d2:extractDataMatrixValue{'( <key>, <value>)'}">d2:extractDataMatrixValue{'( <key>, <value>)'}</option>
+                            <option value="d2:ceil (<number>)">d2:ceil {'(<number>)'}</option>
+                            <option value="d2:floor (<number>)">d2:floor {'(<number>)'}</option>
+                            <option value="d2:round (<number>)">d2:round {'(<number>)'}</option>
+                            <option value="d2:modulus (<number>,<number>)">d2:modulus {'(<number>,<number>)'}</option>
+                            <option value="d2:zing (<number>)">d2:zing {'(<number>)'}</option>
+                            <option value="d2:oizp (<number>)">d2:oizp {'(<number>)'}</option>
+                            <option value="d2:concatenate (<object>,<object>)">d2:concatenate {'(<object>,<object>)'}</option>
+                            <option value="d2:daysBetween (<date>,<date>)">d2:daysBetween {'(<date>,<date>)'}</option>  
+                            <option value="d2:weeksBetween (date>,<date>)">d2:weeksBetween {'(date>,<date>)'}</option>
+                            <option value="d2:monthBetween (date>,<date>)">d2:monthBetween {'(date>,<date>)'}</option>
+                            <option value="d2:yearsBetween (date>,<date>)">d2:yearsBetween {'(date>,<date>)'}</option>
+                            <option value="d2:addDays (date>,<number>)">d2:addDays {'(date>,<number>)'}</option>
+                            <option value="d2:count (<sourcefield>)">d2:count {'(<sourcefield>)'}</option>  
+                            <option value="d2:countIfValue (<sourcefield>,<text>)">d2:countIfValue {'(<sourcefield>,<text>)'}</option>
+                            <option value="d2:countIfZeroPos (<sourcefield>)">d2:countIfZeroPos {'(<sourcefield>)'}</option>
+                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
+                            <option value="d2:zpvc (<object>,<object>)">d2:zpvc {'(<object>,<object>)'}</option>
+                            <option value="d2:validatePatterns (<text>,<regex)">d2:validatePatterns {'(<text>,<regex)'}</option>
+                            <option value="d2:left (<text>,<number>)">d2:left {'(<text>,<number>)'}</option>
+                            <option value="d2:right (<text>,<number>)">d2:right {'(<text>,<number>)'}</option>
+                            <option value="d2:substring (<text>,<number>,<number>)">d2:substring {'(<text>,<number>,<number>)'}</option>  
+                            <option value="d2:split (<text>,<text>,<number>)">d2:split {'(<text>,<text>,<number>)'}</option>
+                            <option value="d2:length (<text>)">d2:length {'(<text>)'}</option>
+                            <option value="d2:inOrgUnitGroup( <orgunit_group_code> )">d2:inOrgUnitGroup{'( <orgunit_group_code> )'}</option>
+                            <option value="d2:hasUserRole( <user_role> )">d2:hasUserRole{'( <user_role> )'}</option>
+                            <option value="d2:zScoreWFA( <ageInMonth>, <weight>, <gender> )">d2:zScoreWFA{'( <ageInMonth>, <weight>, <gender> )'}</option>  
+                            <option value="d2:zScoreHFA( <ageInMonth>, <height>, <gender> )">d2:zScoreHFA{'( <ageInMonth>, <height>, <gender> )'}</option>
+                            <option value="d2:zScoreWFH( <height>, <weight>, <gender> )">d2:zScoreWFH{'( <height>, <weight>, <gender> )'}</option>
+                            <option value="d2:extractDataMatrixValue( <key>, <value>)">d2:extractDataMatrixValue{'( <key>, <value>)'}</option>
                         </select>
                     </div>
                 </div>
                 <p>&nbsp;&nbsp;+ &nbsp;&nbsp; - &nbsp;&nbsp; * &nbsp;&nbsp; / &nbsp;&nbsp; % &nbsp;&nbsp; &lt; &nbsp;&nbsp; &gt;= &nbsp;&nbsp; &lt;= &nbsp;&nbsp; == &nbsp;&nbsp; != &nbsp;&nbsp;NOT &nbsp;&nbsp;AND &nbsp; OR</p>
+                {isSyntaxCorrect !== null && (
+                <div>
+                    <p>{getSyntaxMessage()}</p>
+                </div>
+            )}
                 <div className="form-group">
                     <h4 class='section1'><span class="circle">3</span> Define program rule action</h4>
                     <select className="form-input" name="action" value={programRule.action} onChange={handleChange} placeholder="Action">

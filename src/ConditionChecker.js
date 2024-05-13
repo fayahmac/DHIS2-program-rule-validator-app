@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const ConditionChecker = () => {
     const [condition, setCondition] = useState('');
     const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
+    const [selectedFunction, setSelectedFunction] = useState('');
 
     useEffect(() => {
         // Trigger syntax check whenever the condition state changes
@@ -24,8 +25,13 @@ const ConditionChecker = () => {
     };
 
     const handleChange = (event) => {
-        const { value } = event.target;
-        setCondition(value);
+        const { name, value } = event.target;
+        if (name === 'condition') {
+            setCondition(value);
+        } else if (name === 'function') {
+            setSelectedFunction(value);
+            setCondition(value); // Set the selected function as the condition
+        }
     };
 
     const getSyntaxMessage = () => {
@@ -43,11 +49,11 @@ const ConditionChecker = () => {
 
     return (
         <div>
-            <h2>Check Condition Syntax</h2>
             <textarea
                 value={condition}
                 onChange={handleChange} // Trigger syntax check on change
                 placeholder="Enter condition here"
+                name="condition"
             />
             {isSyntaxCorrect !== null && (
                 <div>
