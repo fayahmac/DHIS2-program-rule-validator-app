@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useDataMutation } from '@dhis2/app-runtime'
-import { useDataQuery } from '@dhis2/app-runtime';
-import './ProgramRulesForm.css'; // Import CSS file for styling
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import ConditionCheck from './ConditionChecker';
+import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
+import { Link } from 'react-router-dom';
+import './ProgramRulesForm.css';
 
 const ProgramRulesForm = () => {
     const [selectedFunction, setSelectedFunction] = useState('');
@@ -14,12 +11,23 @@ const ProgramRulesForm = () => {
         priority: '',
         description: '',
         condition: '',
-        action: ''
+        actionType: '',
+        actionData: ''
     });
+    const [condition, setCondition] = useState('');
+    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
+    const [programs, setPrograms] = useState([]);
+    const [variables, setVariables] = useState([]);
 
     const { loading, error, data } = useDataQuery({
-        results: {
+        programs: {
             resource: 'programs',
+            params: {
+                fields: ['id', 'displayName'],
+            },
+        },
+        variables: {
+            resource: 'dataElements', // Assuming variables are data elements, adjust as needed
             params: {
                 fields: ['id', 'displayName'],
             },
@@ -27,19 +35,13 @@ const ProgramRulesForm = () => {
     });
 
     useEffect(() => {
-        if (!loading && !error) {
-            setPrograms(data.results.programs);
+        if (!loading && !error && data) {
+            setPrograms(data.programs.programs);
+            setVariables(data.variables.dataElements); // Adjust based on actual API response structure
         }
     }, [loading, error, data]);
 
-    const [programs, setPrograms] = useState([]); // State to store programs fetched from DHIS2
-
-    const [condition, setCondition] = useState('');
-    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
-    // const [selectedFunction, setSelectedFunction] = useState('');
-
     useEffect(() => {
-        // Trigger syntax check whenever the condition state changes
         checkSyntax();
     }, [condition]);
 
@@ -53,7 +55,6 @@ const ProgramRulesForm = () => {
             if (matches) {
                 let isCorrect = true;
                 for (let match of matches) {
-                    // Check if the match is not one of the specified patterns
                     if (!/^(\{.*?\})|(\(.*?\))|([=><])|(\w+)$/.test(match)) {
                         isCorrect = false;
                         break;
@@ -70,9 +71,21 @@ const ProgramRulesForm = () => {
         const { name, value } = event.target;
         if (name === 'condition') {
             setCondition(value);
+            setProgramRule({ ...programRule, condition: value });
         } else if (name === 'function') {
             setSelectedFunction(value);
-            setCondition(value); // Set the selected function as the condition
+            if (value) {
+                setCondition(prevCondition => prevCondition + value);
+                setProgramRule({ ...programRule, condition: condition + value });
+            }
+        } else if (name === 'variable') {
+            if (value) {
+                const variableSyntax = `{${value}}`;
+                setCondition(prevCondition => prevCondition + variableSyntax);
+                setProgramRule({ ...programRule, condition: condition + variableSyntax });
+            }
+        } else {
+            setProgramRule({ ...programRule, [name]: value });
         }
     };
 
@@ -89,42 +102,60 @@ const ProgramRulesForm = () => {
         }
     };
 
-    // Define the mutation to create a new program
     const myMutation = {
-        resource: 'programs',
+        resource: 'programRules',
         type: 'create',
-        data: {
-            name: 'A new Program',
-            shortName: 'A new Program',
-            programType: 'WITH_REGISTRATION',
-        },
-    }
+        data: ({ program, name, priority, description, condition, actionType, actionData }) => ({
+            program,
+            name,
+            priority,
+            description,
+            condition,
+            programRuleActions: [
+                {
+                    programRuleActionType: actionType,
+                    data: actionData,
+                    content: name,
+                    location: 'feedback',
+                }
+            ],
+        }),
+    };
 
-    // Use the useDataMutation hook to perform the mutation
+
+    const handleOperatorClick = (operator) => {
+        // Insert the operator at the cursor position in the textarea
+        const textarea = document.querySelector('.form-condition');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const newValue = condition.slice(0, start) + operator + condition.slice(end);
+        handleChange({ target: { name: 'condition', value: newValue } });
+      };
+
+    const operators = ['+', '-', '*', '/', '%', '<', '>=', '<=', '==', '!=', 'NOT', 'AND', 'OR'];
     const [mutate, { loading: mutationLoading }] = useDataMutation(myMutation);
 
     const handleSubmit = async (event) => {
-        event.preventDefault(); // Prevent the default form submit behavior
+        event.preventDefault();
+        if (isSyntaxCorrect !== 2) {
+            alert('Please fix the syntax errors in the condition.');
+            return;
+        }
 
         try {
-            // Perform the mutation to save the program rule
             await mutate(programRule);
             console.log('Program rule saved successfully');
-            // Optionally, reset the form or provide feedback to the user
-            // setProgramRule({ program: '', name: '', priority: '', description: '', condition: '', action: '' });
-            // alert('Program rule saved successfully!');
+            alert('Program rule saved successfully!');
         } catch (error) {
             console.error('Error saving program rule:', error);
-            // Optionally, provide feedback to the user
-            // alert('Failed to save program rule');
+            alert('Failed to save program rule');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-container">
-                {/* Existing form fields */}
-                <h4 class='section1'><span class="circle">1</span> Enter program rule details</h4>
+                <h4 className='section1'><span className="circle">1</span> Enter program rule details</h4>
                 <div className="form-group">
                     <label>Program(*)</label>
                     <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
@@ -146,22 +177,16 @@ const ProgramRulesForm = () => {
                     <label>Description</label>
                     <input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
                 </div>
-                <h4 class='section1'><span class="circle">2</span> Enter program rule expression</h4>
+                <h4 className='section1'><span className="circle">2</span> Enter program rule expression</h4>
                 <label>Condition</label>
                 <div className="form-g">
-
-                    {/* <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" /> */}
-                
-            <textarea className="form-condition"
-                value={condition}
-                onChange={handleChange} // Trigger syntax check on change
-                placeholder="Enter condition here"
-                name="condition"
-            />
-            
-         
+                    <textarea className="form-condition"
+                        value={condition}
+                        onChange={handleChange}
+                        placeholder="Enter condition here"
+                        name="condition"
+                    />
                     <div className='form-option'>
-
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>
                             <option value="">Built-in Function</option>
                             <option value="V{current_date}">V {'{current_date}'}</option>
@@ -171,15 +196,17 @@ const ProgramRulesForm = () => {
                             <option value="V{enrollment_date}">V {'{enrollment_date}'}</option>
                             <option value="V{incident_date}">V {'{incident_date}'}</option>
                             <option value="V{enrollment_id}">V {'{enrollment_id}'}</option>
-                            <option value="V{enveronment}">V {'{enveronment}'}</option>  
+                            <option value="V{environment}">V {'{environment}'}</option>  
                             <option value="V{event_id}">V {'{event_id}'}</option>
                             <option value="V{orgunit_code}">V {'{orgunit_code}'}</option>
                             <option value="V{program_stage_name}">V {'{program_stage_name}'}</option>
                             <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
                         </select>
-
-                        <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
-                            <option value="" style={{ textDecoration: 'none' }}>Variables</option>
+                        <select className="form-input" name="variable" onChange={handleChange} placeholder="Variable">
+                            <option value="">Select Variable</option>
+                            {variables.map(variable => (
+                                <option key={variable.id} value={variable.id}>{variable.displayName}</option>
+                            ))}
                         </select>
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>
                             <option value="">Function</option>
@@ -192,11 +219,12 @@ const ProgramRulesForm = () => {
                             <option value="d2:concatenate (<object>,<object>)">d2:concatenate {'(<object>,<object>)'}</option>
                             <option value="d2:daysBetween (<date>,<date>)">d2:daysBetween {'(<date>,<date>)'}</option>  
                             <option value="d2:weeksBetween (date>,<date>)">d2:weeksBetween {'(date>,<date>)'}</option>
-                            <option value="d2:monthBetween (date>,<date>)">d2:monthBetween {'(date>,<date>)'}</option>
-                            <option value="d2:yearsBetween (date>,<date>)">d2:yearsBetween {'(date>,<date>)'}</option>
-                            <option value="d2:addDays (date>,<number>)">d2:addDays {'(date>,<number>)'}</option>
-                            <option value="d2:count (<sourcefield>)">d2:count {'(<sourcefield>)'}</option>  
-                            <option value="d2:countIfValue (<sourcefield>,<text>)">d2:countIfValue {'(<sourcefield>,<text>)'}</option>
+                            <option value="d2:monthsBetween (<date>,<date>)">d2:monthsBetween {'(<date>,<date>)'}</option>
+                            <option value="d2:yearsBetween (<date>,<date>)">d2:yearsBetween {'(<date>,<date>)'}</option>
+                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
+                            <option value="d2:validatePattern (<text>,<regex>)">d2:validatePattern {'(<text>,<regex>)'}</option>
+                            <option value="d2:addDays (<date>,<number>)">d2:addDays {'(<date>,<number>)'}</option>
+                            <option value="d2:countIfValue (<sourcefield>, <value>)">d2:countIfValue {'(<sourcefield>, <value>)'}</option>
                             <option value="d2:countIfZeroPos (<sourcefield>)">d2:countIfZeroPos {'(<sourcefield>)'}</option>
                             <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
                             <option value="d2:zpvc (<object>,<object>)">d2:zpvc {'(<object>,<object>)'}</option>
@@ -215,28 +243,34 @@ const ProgramRulesForm = () => {
                         </select>
                     </div>
                 </div>
-                <p>&nbsp;&nbsp;+ &nbsp;&nbsp; - &nbsp;&nbsp; * &nbsp;&nbsp; / &nbsp;&nbsp; % &nbsp;&nbsp; &lt; &nbsp;&nbsp; &gt;= &nbsp;&nbsp; &lt;= &nbsp;&nbsp; == &nbsp;&nbsp; != &nbsp;&nbsp;NOT &nbsp;&nbsp;AND &nbsp; OR</p>
-                {isSyntaxCorrect !== null && (
-                <div>
-                    <p>{getSyntaxMessage()}</p>
-                </div>
-            )}
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}>
+          {operators.map((operator) => (
+            <span
+              key={operator}
+              onClick={() => handleOperatorClick(operator)}
+              style={{ padding: '5px 10px', cursor: 'pointer', fontSize:'26px', borderRadius: '4px' }}
+            >
+              {operator}
+            </span>
+          ))}
+        </div>
+                <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
                 <div className="form-group">
-                    <h4 class='section1'><span class="circle">3</span> Define program rule action</h4>
-                    <select className="form-input" name="action" value={programRule.action} onChange={handleChange} placeholder="Action">
+                    <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action">
                         <option value="">Select Action</option>
-                        <option value="Show warning message">Show warning message</option>
-                        <option value="Show error message">Show error message</option>
-                        <option value="Hide field">Hide field</option>
-                        <option value="Make field mandatory">Make field mandatory</option>
+                        <option value="SHOWWARNING">Show warning message</option>
+                        <option value="SHOWERROR">Show error message</option>
+                        <option value="HIDEFIELD">Hide field</option>
+                        <option value="MANDATORYFIELD">Make field mandatory</option>
                     </select>
                 </div>
-                {/* Other form inputs */}
+                <div className="form-group">
+                    <label>Action Data</label>
+                    <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
+                </div>
                 <div className="form-button">
-                    {/* Use Link component to navigate to '/new-program' */}
-                    <button className="form-buttonsave" disabled={loading || mutationLoading} style={{ textDecoration: 'none' }}>
-
-                        <Link to="/new-program" style={{ textDecoration: 'none' }}>{loading || mutationLoading ? 'Saving...' : 'Save'} </Link>
+                    <button className="form-buttonsave" type="submit" disabled={loading || mutationLoading} style={{ textDecoration: 'none' }}>
+                        {loading || mutationLoading ? 'Saving...' : 'Save'}
                     </button>
                     <button className="form-buttoncancel" type="button">Cancel</button>
                 </div>
