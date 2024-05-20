@@ -132,7 +132,21 @@ const ProgramRulesForm = () => {
         handleChange({ target: { name: 'condition', value: newValue } });
       };
 
-    const operators = ['+', '-', '*', '/', '%', '<', '>=', '<=', '==', '!=', 'NOT', 'AND', 'OR'];
+      const operatorMapping = {
+        '+': '+',
+        '-': '-',
+        '*': '*',
+        '/': '/',
+        '%': '%',
+        '<': '<',
+        '>=': '>=',
+        '<=': '<=',
+        '==': '==',
+        '!=': '!=',
+        'NOT': '!',
+        'AND': '&&',
+        'OR': '||'
+      };
     const [mutate, { loading: mutationLoading }] = useDataMutation(myMutation);
 
     const handleSubmit = async (event) => {
@@ -244,16 +258,17 @@ const ProgramRulesForm = () => {
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}>
-          {operators.map((operator) => (
+          {Object.keys(operatorMapping).map((displayLabel) => (
             <span
-              key={operator}
-              onClick={() => handleOperatorClick(operator)}
-              style={{ padding: '5px 10px', cursor: 'pointer', fontSize:'26px', borderRadius: '4px' }}
+              key={displayLabel}
+              onClick={() => handleOperatorClick(operatorMapping[displayLabel])}
+              style={{ padding: '5px 10px', cursor: 'pointer', fontSize:'21px', borderRadius: '4px' }}
             >
-              {operator}
+              {displayLabel}
             </span>
           ))}
         </div>
+      
                 <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
                 <div className="form-group">
                     <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action">
