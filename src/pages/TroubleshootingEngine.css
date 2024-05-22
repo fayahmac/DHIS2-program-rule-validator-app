@@ -46,6 +46,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
     margin-bottom: 3px; /* Reduce bottom margin to decrease gap between cards */
     text-align: left;
+    color: #000;
 }
 
 .failed-rule h3 {
@@ -69,7 +70,7 @@
 .buttonn {
     margin-left: 90%; /* Push the button to the right */
     padding: 10px 20px; /* Add padding to the button */
-    background-color: #007bff; /* Button background color */
+    background-color: #1d5283; /* Button background color */
     color: #fff; /* Button text color */
     border: none; /* Remove button border */
     border-radius: 5px; /* Add border radius */

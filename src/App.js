@@ -24,7 +24,7 @@ function App() {
                <Route path="/configuration-engine" element={<TroubleshootingEngine/>}>
                  {/* Component for Configuration Engine */}
                </Route>
-               <Route path="/notification">
+               <Route path="/notification" >
                  {/* Component for Notification */}
                </Route>
                <Route path="/user">

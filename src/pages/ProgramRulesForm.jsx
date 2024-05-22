@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useDataQuery } from '@dhis2/app-runtime';
-import './ProgramRulesForm.css'; // Import CSS file for styling
+import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
+import { Link } from 'react-router-dom';
+import './ProgramRulesForm.css';
 
 const ProgramRulesForm = () => {
+    const [selectedFunction, setSelectedFunction] = useState('');
     const [programRule, setProgramRule] = useState({
         program: '',
         name: '',
         priority: '',
         description: '',
         condition: '',
-        action: ''
+        actionType: '',
+        actionData: ''
     });
+    const [condition, setCondition] = useState('');
+    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
+    const [programs, setPrograms] = useState([]);
+    const [variables, setVariables] = useState([]);
 
     const { loading, error, data } = useDataQuery({
-        results: {
+        programs: {
             resource: 'programs',
+            params: {
+                fields: ['id', 'displayName'],
+            },
+        },
+        variables: {
+            resource: 'dataElements', // Assuming variables are data elements, adjust as needed
             params: {
                 fields: ['id', 'displayName'],
             },
@@ -23,54 +35,141 @@ const ProgramRulesForm = () => {
     });
 
     useEffect(() => {
-        if (!loading && !error) {
-            setPrograms(data.results.programs);
+        if (!loading && !error && data) {
+            setPrograms(data.programs.programs);
+            setVariables(data.variables.dataElements); // Adjust based on actual API response structure
         }
     }, [loading, error, data]);
 
-    const [programs, setPrograms] = useState([]); // State to store programs fetched from DHIS2
+    useEffect(() => {
+        checkSyntax();
+    }, [condition]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProgramRule(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+    const checkSyntax = () => {
+        if (condition.trim() === '') {
+            setIsSyntaxCorrect(3); // Expression is empty
+        } else {
+            const regex = /(\{.*?\})|(\(.*?\))|([=><])|(\w+)/g;
+            const matches = condition.match(regex);
+
+            if (matches) {
+                let isCorrect = true;
+                for (let match of matches) {
+                    if (!/^(\{.*?\})|(\(.*?\))|([=><])|(\w+)$/.test(match)) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+                setIsSyntaxCorrect(isCorrect ? 2 : 1); // Set syntax correctness based on the check
+            } else {
+                setIsSyntaxCorrect(1); // Syntax is incorrect
+            }
+        }
     };
 
-    const handleSave = async () => {
-        try {
-            // Make a POST request to the DHIS2 API endpoint to save the data
-            const response = await axios.post('http://localhost:8080/2.39.5/api/programs', programRule, {
-                auth: {
-                    username: 'admin',
-                    password: 'district'
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        if (name === 'condition') {
+            setCondition(value);
+            setProgramRule({ ...programRule, condition: value });
+        } else if (name === 'function') {
+            setSelectedFunction(value);
+            if (value) {
+                setCondition(prevCondition => prevCondition + value);
+                setProgramRule({ ...programRule, condition: condition + value });
+            }
+        } else if (name === 'variable') {
+            if (value) {
+                const variableSyntax = `{${value}}`;
+                setCondition(prevCondition => prevCondition + variableSyntax);
+                setProgramRule({ ...programRule, condition: condition + variableSyntax });
+            }
+        } else {
+            setProgramRule({ ...programRule, [name]: value });
+        }
+    };
+
+    const getSyntaxMessage = () => {
+        switch (isSyntaxCorrect) {
+            case 1:
+                return "Syntax is incorrect!";
+            case 2:
+                return "Syntax is correct!";
+            case 3:
+                return "Expression is empty";
+            default:
+                return "";
+        }
+    };
+
+    const myMutation = {
+        resource: 'programRules',
+        type: 'create',
+        data: ({ program, name, priority, description, condition, actionType, actionData }) => ({
+            program,
+            name,
+            priority,
+            description,
+            condition,
+            programRuleActions: [
+                {
+                    programRuleActionType: actionType,
+                    data: actionData,
+                    content: name,
+                    location: 'feedback',
                 }
-            });
-            
-            console.log('Program created successfully:', response.data);
-            
-            // Reset form fields or perform other actions as needed
-            setProgramRule({
-                program: '',
-                name: '',
-                priority: '',
-                description: '',
-                condition: '',
-                action: ''
-            });
-            
-            // Display success message
-            alert('Data submitted successfully!');
+            ],
+        }),
+    };
+
+
+    const handleOperatorClick = (operator) => {
+        // Insert the operator at the cursor position in the textarea
+        const textarea = document.querySelector('.form-condition');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const newValue = condition.slice(0, start) + operator + condition.slice(end);
+        handleChange({ target: { name: 'condition', value: newValue } });
+      };
+
+      const operatorMapping = {
+        '+': '+',
+        '-': '-',
+        '*': '*',
+        '/': '/',
+        '%': '%',
+        '<': '<',
+        '>=': '>=',
+        '<=': '<=',
+        '==': '==',
+        '!=': '!=',
+        'NOT': '!',
+        'AND': '&&',
+        'OR': '||'
+      };
+    const [mutate, { loading: mutationLoading }] = useDataMutation(myMutation);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (isSyntaxCorrect !== 2) {
+            alert('Please fix the syntax errors in the condition.');
+            return;
+        }
+
+        try {
+            await mutate(programRule);
+            console.log('Program rule saved successfully');
+            alert('Program rule saved successfully!');
         } catch (error) {
-            console.error('Error creating program:', error);
+            console.error('Error saving program rule:', error);
+            alert('Failed to save program rule');
         }
     };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="form-container">
-                <h4>Enter program rule details</h4>
+                <h4 className='section1'><span className="circle">1</span> Enter program rule details</h4>
                 <div className="form-group">
                     <label>Program(*)</label>
                     <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
@@ -92,42 +191,101 @@ const ProgramRulesForm = () => {
                     <label>Description</label>
                     <input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
                 </div>
-                <h4>Enter program rule expression</h4>
+                <h4 className='section1'><span className="circle">2</span> Enter program rule expression</h4>
                 <label>Condition</label>
                 <div className="form-g">
-                    
-                    <input className="form-condition" type="text" name="condition" value={programRule.condition} onChange={handleChange} placeholder="Condition" />
+                    <textarea className="form-condition"
+                        value={condition}
+                        onChange={handleChange}
+                        placeholder="Enter condition here"
+                        name="condition"
+                    />
                     <div className='form-option'>
-                                        
-                        <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
-                            <option value="" style={{ textDecoration: 'none' }}>Built-in function</option>
+                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>
+                            <option value="">Built-in Function</option>
+                            <option value="V{current_date}">V {'{current_date}'}</option>
+                            <option value="V{event_date}">V {'{event_date}'}</option>
+                            <option value="V{due_date}">V {'{due_date}'}</option>
+                            <option value="V{event_count}">V {'{event_count}'}</option>
+                            <option value="V{enrollment_date}">V {'{enrollment_date}'}</option>
+                            <option value="V{incident_date}">V {'{incident_date}'}</option>
+                            <option value="V{enrollment_id}">V {'{enrollment_id}'}</option>
+                            <option value="V{environment}">V {'{environment}'}</option>  
+                            <option value="V{event_id}">V {'{event_id}'}</option>
+                            <option value="V{orgunit_code}">V {'{orgunit_code}'}</option>
+                            <option value="V{program_stage_name}">V {'{program_stage_name}'}</option>
+                            <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
                         </select>
-
-                        <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
-                            <option value="" style={{ textDecoration: 'none' }}>Variables</option>
-                        </select> 
-                        <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
-                            <option value="" style={{ textDecoration: 'none' }}>Functions</option>
-                        </select> 
+                        <select className="form-input" name="variable" onChange={handleChange} placeholder="Variable">
+                            <option value="">Select Variable</option>
+                            {variables.map(variable => (
+                                <option key={variable.id} value={variable.id}>{variable.displayName}</option>
+                            ))}
+                        </select>
+                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange}>
+                            <option value="">Function</option>
+                            <option value="d2:ceil (<number>)">d2:ceil {'(<number>)'}</option>
+                            <option value="d2:floor (<number>)">d2:floor {'(<number>)'}</option>
+                            <option value="d2:round (<number>)">d2:round {'(<number>)'}</option>
+                            <option value="d2:modulus (<number>,<number>)">d2:modulus {'(<number>,<number>)'}</option>
+                            <option value="d2:zing (<number>)">d2:zing {'(<number>)'}</option>
+                            <option value="d2:oizp (<number>)">d2:oizp {'(<number>)'}</option>
+                            <option value="d2:concatenate (<object>,<object>)">d2:concatenate {'(<object>,<object>)'}</option>
+                            <option value="d2:daysBetween (<date>,<date>)">d2:daysBetween {'(<date>,<date>)'}</option>  
+                            <option value="d2:weeksBetween (date>,<date>)">d2:weeksBetween {'(date>,<date>)'}</option>
+                            <option value="d2:monthsBetween (<date>,<date>)">d2:monthsBetween {'(<date>,<date>)'}</option>
+                            <option value="d2:yearsBetween (<date>,<date>)">d2:yearsBetween {'(<date>,<date>)'}</option>
+                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
+                            <option value="d2:validatePattern (<text>,<regex>)">d2:validatePattern {'(<text>,<regex>)'}</option>
+                            <option value="d2:addDays (<date>,<number>)">d2:addDays {'(<date>,<number>)'}</option>
+                            <option value="d2:countIfValue (<sourcefield>, <value>)">d2:countIfValue {'(<sourcefield>, <value>)'}</option>
+                            <option value="d2:countIfZeroPos (<sourcefield>)">d2:countIfZeroPos {'(<sourcefield>)'}</option>
+                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
+                            <option value="d2:zpvc (<object>,<object>)">d2:zpvc {'(<object>,<object>)'}</option>
+                            <option value="d2:validatePatterns (<text>,<regex)">d2:validatePatterns {'(<text>,<regex)'}</option>
+                            <option value="d2:left (<text>,<number>)">d2:left {'(<text>,<number>)'}</option>
+                            <option value="d2:right (<text>,<number>)">d2:right {'(<text>,<number>)'}</option>
+                            <option value="d2:substring (<text>,<number>,<number>)">d2:substring {'(<text>,<number>,<number>)'}</option>  
+                            <option value="d2:split (<text>,<text>,<number>)">d2:split {'(<text>,<text>,<number>)'}</option>
+                            <option value="d2:length (<text>)">d2:length {'(<text>)'}</option>
+                            <option value="d2:inOrgUnitGroup( <orgunit_group_code> )">d2:inOrgUnitGroup{'( <orgunit_group_code> )'}</option>
+                            <option value="d2:hasUserRole( <user_role> )">d2:hasUserRole{'( <user_role> )'}</option>
+                            <option value="d2:zScoreWFA( <ageInMonth>, <weight>, <gender> )">d2:zScoreWFA{'( <ageInMonth>, <weight>, <gender> )'}</option>  
+                            <option value="d2:zScoreHFA( <ageInMonth>, <height>, <gender> )">d2:zScoreHFA{'( <ageInMonth>, <height>, <gender> )'}</option>
+                            <option value="d2:zScoreWFH( <height>, <weight>, <gender> )">d2:zScoreWFH{'( <height>, <weight>, <gender> )'}</option>
+                            <option value="d2:extractDataMatrixValue( <key>, <value>)">d2:extractDataMatrixValue{'( <key>, <value>)'}</option>
+                        </select>
                     </div>
                 </div>
-                <p>&nbsp;&nbsp;+ &nbsp;&nbsp; - &nbsp;&nbsp; * &nbsp;&nbsp; / &nbsp;&nbsp; % &nbsp;&nbsp; &lt; &nbsp;&nbsp; &gt;= &nbsp;&nbsp; &lt;= &nbsp;&nbsp; == &nbsp;&nbsp; != &nbsp;&nbsp;NOT &nbsp;&nbsp;AND &nbsp; OR</p>
-                
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}>
+          {Object.keys(operatorMapping).map((displayLabel) => (
+            <span
+              key={displayLabel}
+              onClick={() => handleOperatorClick(operatorMapping[displayLabel])}
+              style={{ padding: '5px 10px', cursor: 'pointer', fontSize:'21px', borderRadius: '4px' }}
+            >
+              {displayLabel}
+            </span>
+          ))}
+        </div>
+      
+                <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
                 <div className="form-group">
-                    <h4>Define program rule action</h4>
-                    <select className="form-input" name="action" value={programRule.action} onChange={handleChange} placeholder="Action">
+                    <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action">
                         <option value="">Select Action</option>
-                        <option value="Show warning message">Show warning message</option>
-                        <option value="Show error message">Show error message</option>
-                        <option value="Hide field">Hide field</option>
-                        <option value="Make field mandatory">Make field mandatory</option>
+                        <option value="SHOWWARNING">Show warning message</option>
+                        <option value="SHOWERROR">Show error message</option>
+                        <option value="HIDEFIELD">Hide field</option>
+                        <option value="MANDATORYFIELD">Make field mandatory</option>
                     </select>
                 </div>
-                <div className="form-button"></div>
-                {/* Other form inputs */}
+                <div className="form-group">
+                    <label>Action Data</label>
+                    <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
+                </div>
                 <div className="form-button">
-                    <button className="form-buttonsave" onClick={handleSave} disabled={loading}>
-                        {loading ? 'Saving...' : 'Save'}
+                    <button className="form-buttonsave" type="submit" disabled={loading || mutationLoading} style={{ textDecoration: 'none' }}>
+                        {loading || mutationLoading ? 'Saving...' : 'Save'}
                     </button>
                     <button className="form-buttoncancel" type="button">Cancel</button>
                 </div>

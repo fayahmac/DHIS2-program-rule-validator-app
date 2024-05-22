@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { BsFillArchiveFill, BsListCheck, BsFillBellFill, BsTools, BsGear, BsFillPeopleFill } from 'react-icons/bs';
 import { FiPlus } from 'react-icons/fi';
-import { FaAd, FaCheckDouble, FaCut, FaExchangeAlt, FaExclamation, FaGlobe, FaHandPointRight } from 'react-icons/fa';
+import { FaAd, FaBackward, FaBeer, FaCheck, FaCheckDouble, FaCut, FaExchangeAlt, FaExclamation, FaForward, FaGlobe, FaHandPointRight } from 'react-icons/fa';
 import './HomeCard.css'; 
 import { Link } from 'react-router-dom';
 
@@ -81,7 +81,7 @@ const HomeCard = () => {
                             </div>
                             {/* button on the card */}
                             <button className='plus-button'>
-                                <FaCut className='icon-plus'/>
+                            <FaCheck className='exclaim'/>
                             </button>
                         </Link>
                     </div>

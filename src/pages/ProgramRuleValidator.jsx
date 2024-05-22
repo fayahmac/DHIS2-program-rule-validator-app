@@ -9,10 +9,10 @@ const ProgramRuleValidator = () => {
  //get program rules from the instance using useDataQuery
   const programRulesQuery = {
     programRules: {
-      resource: 'programRules',
-      params: {
-        fields: ['id', 'displayName', 'program', 'condition', 'action'],
-      },
+      resource: 'programRules?fields=id,programRuleActions[*],displayName,condition',
+      // params: {
+      //   fields: ['id', 'displayName', 'program', 'condition', 'action'],
+      // },
     },
   };
 //initialize the fetched program rule data
@@ -22,7 +22,8 @@ const ProgramRuleValidator = () => {
   useEffect(() => {
     if (data && data.programRules) {
       setProgramRules(data.programRules.programRules);
-    }
+      console.log('Fetched program rules (samples):', data.programRules[0], data.programRules[4], data.programRules[9], data.programRules[14]);
+        }
   }, [data]);
   
   //fetching program data elements from the API
@@ -58,7 +59,7 @@ const ProgramRuleValidator = () => {
     return variables;
   };
 //validation logic
-  const validateProgramRule = async (rule,evaluationContext, enrollmentStatus) => {
+  const validateProgramRule = async (rule) => {
     let isValid = true;
     let errorMessage = '';
 //validate]ing the program rule by checking if its attached to program 
@@ -86,50 +87,50 @@ const ProgramRuleValidator = () => {
     }
   
       // Check enrollment status
-      if (!enrollmentStatus || !enrollmentStatus.stage || enrollmentStatus.program !== rule.program) {
-        isValid = false;
-        errorMessage += 'Program rule is not applicable to the current program stage.\n';
-        return { isValid, errorMessage };
-      }
+    //   if (!enrollmentStatus || !enrollmentStatus.stage || enrollmentStatus.program !== rule.program) {
+    //     isValid = false;
+    //     errorMessage += 'Program rule is not applicable to the current program stage.\n';
+    //     return { isValid, errorMessage };
+    //   }
        
-    if (!rule.action || rule.action.length === 0) {
-      isValid = false;
-      errorMessage += 'Program rule must have at least one defined program rule action.\n';
-    }
+    // if (!rule.action || rule.action.length === 0) {
+    //   isValid = false;
+    //   errorMessage += 'Program rule must have at least one defined program rule action.\n';
+    // }
 
-    // Check for dynamic behavior
-    if (isValid) {
-      const dynamicBehavior = getDynamicBehavior(rule.action);
-      if (!dynamicBehavior) {
-        isValid = false;
-        errorMessage += 'Program rule does not have defined dynamic behavior.\n';
-      }
-    }
+    // // Check for dynamic behavior
+    // if (isValid) {
+    //   const dynamicBehavior = getDynamicBehavior(rule.action);
+    //   if (!dynamicBehavior) {
+    //     isValid = false;
+    //     errorMessage += 'Program rule does not have defined dynamic behavior.\n';
+    //   }
+    // }
 
     return { isValid, errorMessage };
   };
 
-  const getDynamicBehavior = (rule, evaluationContext) => {
-    // Check if the conditions of the rule are met
-    const conditionsMet = evaluateConditions(rule.condition, evaluationContext);
+  // const getDynamicBehavior = (rule, evaluationContext) => {
+  //   // Check if the conditions of the rule are met
+  //   const conditionsMet = evaluateConditions(rule.condition, evaluationContext);
     
-    // If conditions are met, determine dynamic behavior
-    if (conditionsMet) {
-      // Check the program rule configuration for dynamic behavior
-      const dynamicBehavior = rule.dynamicBehavior;
+  //   // If conditions are met, determine dynamic behavior
+  //   if (conditionsMet) {
+  //     // Check the program rule configuration for dynamic behavior
+  //     const dynamicBehavior = rule.dynamicBehavior;
       
-      if (dynamicBehavior) {
-        // Return the dynamic behavior configuration
-        return dynamicBehavior;
-      } else {
-        // If no dynamic behavior is defined, return null
-        return null;
-      }
-    } else {
-      // If conditions are not met, return null
-      return null;
-    }
-  };
+  //     if (dynamicBehavior) {
+  //       // Return the dynamic behavior configuration
+  //       return dynamicBehavior;
+  //     } else {
+  //       // If no dynamic behavior is defined, return null
+  //       return null;
+  //     }
+  //   } else {
+  //     // If conditions are not met, return null
+  //     return null;
+  //   }
+  // };
   
 // handling onclick guncution
   const handleValidateClick = async (rule) => {
@@ -139,7 +140,7 @@ const ProgramRuleValidator = () => {
 
     if (isValid) {
       // If the program rule is valid, navigate to a notification page
-      navigate('/notification');
+      alert(`Program rule "${rule.displayName}" is  valid`);
     } else {
       
       // If the program rule is not valid, display an alert with the error message`
