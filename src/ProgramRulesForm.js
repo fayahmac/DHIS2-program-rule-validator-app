@@ -4,7 +4,12 @@ import { useDataMutation } from '@dhis2/app-runtime'
 import { useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRulesForm.css'; // Import CSS file for styling
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { BrowserRouter, Route, Routes, Router } from 'react-router-dom'// jika
 import ConditionCheck from './ConditionChecker';
+import ClickableOption from './ClickableOption'; 
+import { useNavigate } from 'react-router-dom';
+import FormComponent from './FormComponent';
+import OptionsComponent from './OptionsComponent';
 
 const ProgramRulesForm = () => {
     const [selectedFunction, setSelectedFunction] = useState('');
@@ -75,6 +80,17 @@ const ProgramRulesForm = () => {
             setCondition(value); // Set the selected function as the condition
         }
     };
+
+    // jika
+// Perform any additional actions based on the clicked option (optional)
+const [selectedOption, setSelectedOption] = useState(null);
+const handleOptionClick = (value) => {
+  setSelectedOption(value);
+  // Perform any additional actions based on the clicked option (optional)
+    };
+
+
+
 
     const getSyntaxMessage = () => {
         switch (isSyntaxCorrect) {
@@ -224,12 +240,35 @@ const ProgramRulesForm = () => {
                 <div className="form-group">
                     <h4 class='section1'><span class="circle">3</span> Define program rule action</h4>
                     <select className="form-input" name="action" value={programRule.action} onChange={handleChange} placeholder="Action">
-                        <option value="">Select Action</option>
-                        <option value="Show warning message">Show warning message</option>
+                        <option value="">Select Action</option> 
+                        {/* <option value="Show warning message">Show warning message</option>
                         <option value="Show error message">Show error message</option>
                         <option value="Hide field">Hide field</option>
                         <option value="Make field mandatory">Make field mandatory</option>
+                        */}
+                       
+                       {/* jika */}
+                       
+                        <Routes>
+                            <Route path="/" element={<FormComponent />} />
+                            <Route path="/options" element={<OptionsComponent />} />
+                            <Route path="/option1" element={<div>Show warning message</div>} />
+                            <Route path="/option2" element={<div>show error message</div>} />
+                            <Route path="/option3" element={<div>hide field</div>} />
+                        </Routes>
+                    
+
+
+
+
+                        {/*  jika,  trying to add a link pageform to an optin */}
+                        <ClickableOption value="Option 1" onClick={() => handleOptionClick('Show warning message')} />
+                        <ClickableOption value="Option 2" onClick={() => handleOptionClick('show errol message')} />
+                        <p>Selected Option: {selectedOption}</p>
+
+
                     </select>
+
                 </div>
                 {/* Other form inputs */}
                 <div className="form-button">

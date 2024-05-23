@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRulesForm.css'; // Import CSS file for styling
+import ClickableOption from './ClickableOption'; 
 
 const ProgramRulesForm = () => {
     const [programRule, setProgramRule] = useState({
@@ -37,6 +38,14 @@ const ProgramRulesForm = () => {
             [name]: value
         }));
     };
+
+    // Perform any additional actions based on the clicked option (optional)
+    const [selectedOption, setSelectedOption] = useState(null);
+    const handleOptionClick = (value) => {
+      setSelectedOption(value);
+      // Perform any additional actions based on the clicked option (optional)
+        };
+
 
     const handleSave = async () => {
         try {
@@ -108,11 +117,18 @@ const ProgramRulesForm = () => {
                 <div className="form-group">
                     <h4>Define program rule action</h4>
                     <select className="form-input" name="action" value={programRule.action} onChange={handleChange} placeholder="Action">
-                        <option value="">Select Action</option>
-                        <option value="Show warning message">Show warning message</option>
+                        {/* <option value="">Select Action</option> */}
+                        {/* <option value="Show warning message">Show warning message</option>
                         <option value="Show error message">Show error message</option>
                         <option value="Hide field">Hide field</option>
-                        <option value="Make field mandatory">Make field mandatory</option>
+                        <option value="Make field mandatory">Make field mandatory</option> */}
+                              <h2>Select an Option:</h2>
+                        <ClickableOption value="Option 1" onClick={() => handleOptionClick('Option 1')} />
+                        <ClickableOption value="Option 2" onClick={() => handleOptionClick('Option 2')} />
+                         {/* Add more options as needed */}
+                        <p>Selected Option: {selectedOption}</p>
+
+
                     </select>
                 </div>
                 <div className="form-button"></div>
