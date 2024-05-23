@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BsListCheck } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
+import { evaluate } from 'mathjs';
 import './TroubleshootingEngine.css'; // Import CSS file for styling
 
 class RuleActionHideField {}
@@ -35,7 +36,7 @@ const query = {
   },
 };
 
-const TroubleshootingEngine = () => {
+const TroubleshootingEngine = ({ contextPath }) => {
   const [failedRules, setFailedRules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -94,7 +95,6 @@ const TroubleshootingEngine = () => {
 
   const ruleExternalLink = (uid) => {
     try {
-      const contextPath = d2.system.systemInfo.contextPath;
       return `${contextPath}/api/programRules/${uid}?fields=*,programRuleActions[*]`;
     } catch (error) {
       console.error('Error constructing rule external link:', error);
@@ -183,21 +183,19 @@ const TroubleshootingEngine = () => {
       return 'Condition is empty';
     }
 
-    // try {
-    //   const expression = new Expression(condition, 'RULE_ENGINE_CONDITION');
-    //   const expressionData = {
-    //     supplementaryValues: {},
-    //     programRuleVariableValues: valueMap,
-    //   };
-    //   expression.evaluate((name) => {
-    //     throw new Error(name);
-    //   }, expressionData);
+    try {
+      // Replace the placeholders in the condition with actual values from valueMap
+      const replacedCondition = condition.replace(/#\{(\w+)\}/g, (match, name) => {
+        return valueMap.has(name) ? valueMap.get(name).value : 'undefined';
+      });
 
-    //   return '';
-    // } catch (e) {
-    //   console.error(`Error evaluating condition "${condition}":`, e.message);
-    //   return `Condition ${condition} not executed: ${e.message}`;
-    // }
+      // Evaluate the condition using mathjs
+      const result = evaluate(replacedCondition);
+      return result ? '' : 'Condition evaluated to false';
+    } catch (e) {
+      console.error(`Error evaluating condition "${condition}":`, e.message);
+      return `Condition ${condition} not executed: ${e.message}`;
+    }
   };
 
   const evaluateAction = (ruleAction, valueMap) => {
