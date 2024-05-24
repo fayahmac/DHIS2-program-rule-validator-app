@@ -9,11 +9,8 @@ const ProgramRuleValidator = () => {
  //get program rules from the instance using useDataQuery
   const programRulesQuery = {
     programRules: {
-      resource: 'programRules?fields=id,programRuleActions[*],displayName,condition',
-      // params: {
-      //   fields: ['id', 'displayName', 'program', 'condition', 'action'],
-      // },
-    },
+      resource: 'programRules?fields=id,programRuleActions[*],displayName,condition,program[*]',
+         },
   };
 //initialize the fetched program rule data
   const [programRules, setProgramRules] = useState([]);
@@ -30,7 +27,7 @@ const ProgramRuleValidator = () => {
   const getProgramDataElements = async (programId) => {
     try {
       // the endpoint URL for fetching program data elements
-      const response = await fetch(`/api/programs/${programId}/dataElements`);
+      const response = await fetch(`/api/programs/${programId}/dataElements[*]`);
       
       // Checking if response is okay
       if (!response.ok) {

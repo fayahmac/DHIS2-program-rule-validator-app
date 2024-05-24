@@ -121,17 +121,27 @@ const TroubleshootingEngine = ({ contextPath }) => {
 
   const toRuleVariableList = (ruleVariables, trackedEntityAttributes, dataElements, options) => {
     const ruleVariableMap = new Map();
-
+  
+    // Create sets for quick lookup
+    const trackedEntityAttributeSet = new Set(trackedEntityAttributes.map(attr => attr.id));
+    const dataElementSet = new Set(dataElements.map(de => de.id));
+    const optionSet = new Set(options.map(option => option.id));
+  
     ruleVariables.forEach((variable) => {
       let valueType;
       let valueKey;
-
+  
       switch (variable.__typename) {
         case 'RuleVariableCalculatedValue':
           valueType = variable.calculatedValueType;
           valueKey = variable.name;
           break;
         case 'RuleVariableAttribute':
+          // Validate tracked entity attribute
+          if (!trackedEntityAttributeSet.has(variable.trackedEntityAttribute)) {
+            console.warn(`Invalid trackedEntityAttribute ID: ${variable.trackedEntityAttribute}`);
+            return;
+          }
           valueType = variable.trackedEntityAttributeType;
           valueKey = variable.trackedEntityAttribute;
           break;
@@ -139,6 +149,11 @@ const TroubleshootingEngine = ({ contextPath }) => {
         case 'RuleVariableNewestEvent':
         case 'RuleVariableCurrentEvent':
         case 'RuleVariablePreviousEvent':
+          // Validate data element
+          if (!dataElementSet.has(variable.dataElement)) {
+            console.warn(`Invalid dataElement ID: ${variable.dataElement}`);
+            return;
+          }
           valueType = variable.dataElementType;
           valueKey = variable.dataElement;
           break;
@@ -146,7 +161,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
           valueType = null;
           valueKey = null;
       }
-
+  
       if (valueKey) {
         ruleVariableMap.set(variable.name, {
           value: valueKey,
@@ -154,13 +169,13 @@ const TroubleshootingEngine = ({ contextPath }) => {
         });
       }
     });
-
+  
     const ENV_VARIABLES = {
       ENV_VARIABLE_1: 'NUMERIC',
       ENV_VARIABLE_2: 'TEXT',
       ENV_VARIABLE_3: 'BOOLEAN',
     };
-
+  
     for (const [envLabelKey, type] of Object.entries(ENV_VARIABLES)) {
       const value = null; // Replace with actual environment variable value if available
       const ruleValueType = {
@@ -174,21 +189,26 @@ const TroubleshootingEngine = ({ contextPath }) => {
         valueType: ruleValueType,
       });
     }
-
+  
     return ruleVariableMap;
   };
+  
 
   const processRuleCondition = (condition, valueMap) => {
     if (!condition) {
       return 'Condition is empty';
     }
-
+  
     try {
       // Replace the placeholders in the condition with actual values from valueMap
       const replacedCondition = condition.replace(/#\{(\w+)\}/g, (match, name) => {
-        return valueMap.has(name) ? valueMap.get(name).value : 'undefined';
+        if (valueMap.has(name)) {
+          const value = valueMap.get(name).value;
+          return typeof value === 'string' ? `"${value}"` : value;
+        }
+        return 'undefined';
       });
-
+  
       // Evaluate the condition using mathjs
       const result = evaluate(replacedCondition);
       return result ? '' : 'Condition evaluated to false';
@@ -197,6 +217,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
       return `Condition ${condition} not executed: ${e.message}`;
     }
   };
+  
 
   const evaluateAction = (ruleAction, valueMap) => {
     if (ruleAction.needsContent && ruleAction.needsContent()) {
