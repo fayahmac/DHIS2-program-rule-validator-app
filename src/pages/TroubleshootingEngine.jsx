@@ -5,13 +5,64 @@ import { useDataQuery } from '@dhis2/app-runtime';
 import { evaluate } from 'mathjs';
 import './TroubleshootingEngine.css'; // Import CSS file for styling
 
-class RuleActionHideField {}
-class RuleActionHideOption {}
-class RuleActionHideOptionGroup {}
-class RuleActionHideProgramStage {}
-class RuleActionHideSection {}
-class RuleActionSetMandatoryField {}
-class RuleActionShowOptionGroup {}
+class RuleActionHideField {
+  constructor(field) {
+    this.field = field;
+  }
+  needsContent() {
+    return !!this.field;
+  }
+}
+class RuleActionHideOption {
+  constructor(field, option) {
+    this.field = field;
+    this.option = option;
+  }
+  needsContent() {
+    return !!this.field && !!this.option;
+  }
+}
+class RuleActionHideOptionGroup {
+  constructor(field, optionGroup) {
+    this.field = field;
+    this.optionGroup = optionGroup;
+  }
+  needsContent() {
+    return !!this.field && !!this.optionGroup;
+  }
+}
+class RuleActionHideProgramStage {
+  constructor(programStage) {
+    this.programStage = programStage;
+  }
+  needsContent() {
+    return !!this.programStage;
+  }
+}
+class RuleActionHideSection {
+  constructor(programStageSection) {
+    this.programStageSection = programStageSection;
+  }
+  needsContent() {
+    return !!this.programStageSection;
+  }
+}
+class RuleActionSetMandatoryField {
+  constructor(field) {
+    this.field = field;
+  }
+  needsContent() {
+    return !!this.field;
+  }
+}
+class RuleActionShowOptionGroup {
+  constructor(optionGroup) {
+    this.optionGroup = optionGroup;
+  }
+  needsContent() {
+    return !!this.optionGroup;
+  }
+}
 
 const query = {
   programRules: {
@@ -73,15 +124,19 @@ const TroubleshootingEngine = ({ contextPath }) => {
         ruleValidationItem.conditionError = ruleConditionResult;
       }
 
-      const ruleActionConditions = rule.programRuleActions
-        .map((ruleAction) => evaluateAction(ruleAction, valueMap))
-        .filter(Boolean);
+      if (!rule.programRuleActions || rule.programRuleActions.length === 0) {
+        ruleValidationItem.actionsError = ['This rule has no associated actions. Consider adding actions to make it effective'];
+      } else {
+        const ruleActionConditions = rule.programRuleActions
+          .map((ruleAction) => evaluateAction(ruleAction, valueMap))
+          .filter(Boolean);
 
-      if (ruleActionConditions.length > 0) {
-        ruleValidationItem.actionsError = ruleActionConditions;
+        if (ruleActionConditions.length > 0) {
+          ruleValidationItem.actionsError = ruleActionConditions;
+        }
       }
 
-      const isValid = !ruleValidationItem.conditionError && ruleActionConditions.length === 0;
+      const isValid = !ruleValidationItem.conditionError && (!ruleValidationItem.actionsError || ruleValidationItem.actionsError.length === 0);
       ruleValidationItem.isValid = isValid;
 
       setValidationResults((prevState) => ({
@@ -121,16 +176,16 @@ const TroubleshootingEngine = ({ contextPath }) => {
 
   const toRuleVariableList = (ruleVariables, trackedEntityAttributes, dataElements, options) => {
     const ruleVariableMap = new Map();
-  
+
     // Create sets for quick lookup
     const trackedEntityAttributeSet = new Set(trackedEntityAttributes.map(attr => attr.id));
     const dataElementSet = new Set(dataElements.map(de => de.id));
     const optionSet = new Set(options.map(option => option.id));
-  
+
     ruleVariables.forEach((variable) => {
       let valueType;
       let valueKey;
-  
+
       switch (variable.__typename) {
         case 'RuleVariableCalculatedValue':
           valueType = variable.calculatedValueType;
@@ -161,7 +216,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
           valueType = null;
           valueKey = null;
       }
-  
+
       if (valueKey) {
         ruleVariableMap.set(variable.name, {
           value: valueKey,
@@ -169,13 +224,13 @@ const TroubleshootingEngine = ({ contextPath }) => {
         });
       }
     });
-  
+
     const ENV_VARIABLES = {
       ENV_VARIABLE_1: 'NUMERIC',
       ENV_VARIABLE_2: 'TEXT',
       ENV_VARIABLE_3: 'BOOLEAN',
     };
-  
+
     for (const [envLabelKey, type] of Object.entries(ENV_VARIABLES)) {
       const value = null; // Replace with actual environment variable value if available
       const ruleValueType = {
@@ -189,16 +244,15 @@ const TroubleshootingEngine = ({ contextPath }) => {
         valueType: ruleValueType,
       });
     }
-  
+
     return ruleVariableMap;
   };
-  
 
   const processRuleCondition = (condition, valueMap) => {
     if (!condition) {
       return 'Condition is empty';
     }
-  
+
     try {
       // Replace the placeholders in the condition with actual values from valueMap
       const replacedCondition = condition.replace(/#\{(\w+)\}/g, (match, name) => {
@@ -208,7 +262,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
         }
         return 'undefined';
       });
-  
+
       // Evaluate the condition using mathjs
       const result = evaluate(replacedCondition);
       return result ? '' : 'Condition evaluated to false';
@@ -217,7 +271,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
       return `Condition ${condition} not executed: ${e.message}`;
     }
   };
-  
 
   const evaluateAction = (ruleAction, valueMap) => {
     if (ruleAction.needsContent && ruleAction.needsContent()) {
