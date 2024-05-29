@@ -7,7 +7,6 @@ import Home from './home/Home'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Homeee from './components/Homeee'
 import Header from './components/Header'
-import ProgramRule from './programRules/ProgramRule'
 import ProgramRulesForm from './ProgramRulesForm'
 import NewProgramRule from './NewProgramRule'
 import ConditionCheck from './ConditionChecker'
@@ -17,11 +16,13 @@ const MyApp = () => {
     // <div>
     //   <ConditionCheck/>
     // </div>
+  
     <BrowserRouter>
+    
     <ProgramRulesForm/>
-      <Routes>
+      {/* <Routes>
         <Route path="/program-rules" element={<ProgramRulesForm />} />
-      </Routes>
+      </Routes> */}
     
     </BrowserRouter>
   );

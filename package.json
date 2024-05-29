@@ -17,8 +17,15 @@
   "dependencies": {
     "@dhis2/app-runtime": "^3.10.2",
     "@dhis2/ui-icons": "^9.4.4",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.18",
+    "d2-utilizr": "^0.2.16",
+    "material-ui": "^0.20.2",
+    "prop-types": "^15.8.1",
     "react-icons": "^5.1.0",
     "react-router-dom": "^6.23.0",
-    "recharts": "^2.12.3"
+    "recharts": "^2.12.3",
+    "recompose": "^0.30.0"
   }
 }
