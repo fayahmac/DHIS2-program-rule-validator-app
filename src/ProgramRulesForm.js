@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
-import { Link } from 'react-router-dom';
 import './ProgramRulesForm.css';
 
 const ProgramRulesForm = () => {
@@ -129,8 +128,7 @@ const ProgramRulesForm = () => {
             programRuleActions: [
                 {
                     programRuleActionType: actionType,
-                    data: actionData,
-                    content: name,
+                    content: actionData,
                     location: 'feedback',
                 }
             ],
@@ -215,6 +213,7 @@ const ProgramRulesForm = () => {
                         name="condition"
                         disabled={!programRule.program}
                     />
+                    <div className="syntax-message">{getSyntaxMessage()}</div>
                     <div className='form-option'>
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
                             <option value="">Built-in Function</option>
