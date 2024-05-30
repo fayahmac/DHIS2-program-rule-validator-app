@@ -3,7 +3,8 @@ import { BsListCheck } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { evaluate } from 'mathjs';
-import './TroubleshootingEngine.css'; // Import CSS file for styling
+import { differenceInYears } from 'date-fns';
+import './TroubleshootingEngine.css';
 
 class RuleActionHideField {
   constructor(field) {
@@ -102,8 +103,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
       setLoading(false);
     } else if (!queryLoading && data) {
       setLoading(false);
-      console.log('Fetched data:', data); // Debug: Log fetched data
-      // Process data if necessary
       if (data.programRules && data.programRules.programRules) {
         setFailedRules(data.programRules.programRules);
       }
@@ -177,7 +176,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
   const toRuleVariableList = (ruleVariables, trackedEntityAttributes, dataElements, options) => {
     const ruleVariableMap = new Map();
 
-    // Create sets for quick lookup
     const trackedEntityAttributeSet = new Set(trackedEntityAttributes.map(attr => attr.id));
     const dataElementSet = new Set(dataElements.map(de => de.id));
     const optionSet = new Set(options.map(option => option.id));
@@ -192,7 +190,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
           valueKey = variable.name;
           break;
         case 'RuleVariableAttribute':
-          // Validate tracked entity attribute
           if (!trackedEntityAttributeSet.has(variable.trackedEntityAttribute)) {
             console.warn(`Invalid trackedEntityAttribute ID: ${variable.trackedEntityAttribute}`);
             return;
@@ -204,7 +201,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
         case 'RuleVariableNewestEvent':
         case 'RuleVariableCurrentEvent':
         case 'RuleVariablePreviousEvent':
-          // Validate data element
           if (!dataElementSet.has(variable.dataElement)) {
             console.warn(`Invalid dataElement ID: ${variable.dataElement}`);
             return;
@@ -232,7 +228,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
     };
 
     for (const [envLabelKey, type] of Object.entries(ENV_VARIABLES)) {
-      const value = null; // Replace with actual environment variable value if available
+      const value = null;
       const ruleValueType = {
         NUMERIC: 'NUMERIC',
         DATE: 'DATE',
@@ -252,9 +248,9 @@ const TroubleshootingEngine = ({ contextPath }) => {
     if (!condition) {
       return 'Condition is empty';
     }
-
+  
     try {
-      // Replace the placeholders in the condition with actual values from valueMap
+      // Replace variables with their values from the value map
       const replacedCondition = condition.replace(/#\{(\w+)\}/g, (match, name) => {
         if (valueMap.has(name)) {
           const value = valueMap.get(name).value;
@@ -262,17 +258,48 @@ const TroubleshootingEngine = ({ contextPath }) => {
         }
         return 'undefined';
       });
-
-      // Evaluate the condition using mathjs
-      const result = evaluate(replacedCondition);
+  
+      // Define the DHIS2 functions
+      const d2HasValue = (value) => value !== null && value !== undefined && value !== '';
+      const d2YearsBetween = (startDate, endDate) => {
+        if (!startDate || !endDate) return false;
+        return differenceInYears(new Date(endDate), new Date(startDate));
+      };
+      const d2ValidatePattern = (value, pattern) => new RegExp(pattern).test(value);
+  
+      // Replace DHIS2 functions in the condition string
+      const replacedWithD2Functions = replacedCondition
+        .replace(/d2:hasValue\(([^)]+)\)/g, (_, v) => {
+          const varName = v.trim().replace(/['"]+/g, '');  // Remove quotes around variable name
+          const valueObj = valueMap.get(varName);
+          return d2HasValue(valueObj ? valueObj.value : null);
+        })
+        .replace(/d2:yearsBetween\(([^,]+),\s*([^)]+)\)/g, (_, start, end) => {
+          const startVarName = start.trim().replace(/['"]+/g, '');  // Remove quotes around variable name
+          const endVarName = end.trim().replace(/['"]+/g, '');      // Remove quotes around variable name
+          const startValueObj = valueMap.get(startVarName);
+          const endValueObj = valueMap.get(endVarName);
+          return d2YearsBetween(
+            startValueObj ? startValueObj.value : null,
+            endValueObj ? endValueObj.value : null
+          );
+        })
+        .replace(/d2:validatePattern\(([^,]+),\s*'([^']+)'\)/g, (_, value, pattern) => {
+          const varName = value.trim().replace(/['"]+/g, '');  // Remove quotes around variable name
+          const valueObj = valueMap.get(varName);
+          return d2ValidatePattern(valueObj ? valueObj.value : '', pattern);
+        });
+  
+      // Evaluate the final expression
+      const result = evaluate(replacedWithD2Functions);
       return result ? '' : 'Condition evaluated to false';
     } catch (e) {
       console.error(`Error evaluating condition "${condition}":`, e.message);
       return `Condition ${condition} not executed: ${e.message}`;
     }
   };
-
-  const evaluateAction = (ruleAction, valueMap) => {
+  
+   const evaluateAction = (ruleAction, valueMap) => {
     if (ruleAction.needsContent && ruleAction.needsContent()) {
       const actionConditionResult = processRuleCondition(ruleAction.data, valueMap);
       if (actionConditionResult) {
@@ -283,7 +310,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
     return null;
   };
-
+  
   const checkActionVariables = (ruleAction) => {
     if (ruleAction instanceof RuleActionHideField && !ruleAction.field) {
       return 'Missing field';
@@ -308,7 +335,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
     return null;
   };
-
+  
   const toggleExpandedRule = (index, rule) => {
     setExpandedRule(expandedRule === index ? null : index);
     if (expandedRule !== index) {
@@ -318,7 +345,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
 
   return (
     <div className="troubleshooting-container">
-      <h1 className="troubleshooting-heading">Configuration and Troubleshooting Engine</h1>
       <div className="card-bar">
         <div className="validation-bar">
           <BsListCheck className="iconn" />
