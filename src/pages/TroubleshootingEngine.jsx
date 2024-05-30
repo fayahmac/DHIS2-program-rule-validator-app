@@ -6,6 +6,7 @@ import { evaluate } from 'mathjs';
 import { differenceInYears } from 'date-fns';
 import './TroubleshootingEngine.css';
 
+// Classes to handle different types of actions related to program rules
 class RuleActionHideField {
   constructor(field) {
     this.field = field;
@@ -65,6 +66,7 @@ class RuleActionShowOptionGroup {
   }
 }
 
+// Query to fetch required data from DHIS2 API
 const query = {
   programRules: {
     resource: 'programRules',
@@ -89,14 +91,17 @@ const query = {
 };
 
 const TroubleshootingEngine = ({ contextPath }) => {
+  // State variables to manage the component's state
   const [failedRules, setFailedRules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedRule, setExpandedRule] = useState(null);
   const [validationResults, setValidationResults] = useState({});
 
+  // Use DHIS2 data query hook to fetch data
   const { data, error: queryError, loading: queryLoading } = useDataQuery(query);
 
+  // Effect to handle data fetching results
   useEffect(() => {
     if (queryError) {
       setError(queryError.message);
@@ -109,6 +114,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
   }, [data, queryError, queryLoading]);
 
+  // Handle click event on a rule to evaluate its conditions and actions
   const handleRuleClick = async (rule) => {
     try {
       const valueMap = await ruleVariableMap(rule.program.id);
@@ -147,6 +153,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
   };
 
+  // Construct the external link for a rule
   const ruleExternalLink = (uid) => {
     try {
       return `${contextPath}/api/programRules/${uid}?fields=*,programRuleActions[*]`;
@@ -156,6 +163,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
   };
 
+  // Map rule variables for a given program UID
   const ruleVariableMap = async (programUid) => {
     if (!programUid || !data) return new Map();
 
@@ -173,6 +181,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
   };
 
+  // Create a map of rule variables from various data sources
   const toRuleVariableList = (ruleVariables, trackedEntityAttributes, dataElements, options) => {
     const ruleVariableMap = new Map();
 
@@ -221,6 +230,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
       }
     });
 
+    // Example of environment variables for the sake of completeness
     const ENV_VARIABLES = {
       ENV_VARIABLE_1: 'NUMERIC',
       ENV_VARIABLE_2: 'TEXT',
@@ -244,11 +254,12 @@ const TroubleshootingEngine = ({ contextPath }) => {
     return ruleVariableMap;
   };
 
+  // Process rule conditions and evaluate them using mathjs and custom functions
   const processRuleCondition = (condition, valueMap) => {
     if (!condition) {
       return 'Condition is empty';
     }
-  
+
     try {
       // Replace variables with their values from the value map
       const replacedCondition = condition.replace(/#\{(\w+)\}/g, (match, name) => {
@@ -258,7 +269,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
         }
         return 'undefined';
       });
-  
+
       // Define the DHIS2 functions
       const d2HasValue = (value) => value !== null && value !== undefined && value !== '';
       const d2YearsBetween = (startDate, endDate) => {
@@ -266,7 +277,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
         return differenceInYears(new Date(endDate), new Date(startDate));
       };
       const d2ValidatePattern = (value, pattern) => new RegExp(pattern).test(value);
-  
+
       // Replace DHIS2 functions in the condition string
       const replacedWithD2Functions = replacedCondition
         .replace(/d2:hasValue\(([^)]+)\)/g, (_, v) => {
@@ -289,17 +300,34 @@ const TroubleshootingEngine = ({ contextPath }) => {
           const valueObj = valueMap.get(varName);
           return d2ValidatePattern(valueObj ? valueObj.value : '', pattern);
         });
-  
+
       // Evaluate the final expression
-      const result = evaluate(replacedWithD2Functions);
+      console.log('Evaluating condition:', replacedWithD2Functions);  // Debugging line
+
+      // Ensure the replaced condition is correctly formatted for mathjs
+      const validExpression = replacedWithD2Functions.replace(/undefined/g, 'null');
+
+      // Evaluate the expression
+      const result = evaluate(validExpression);
       return result ? '' : 'Condition evaluated to false';
     } catch (e) {
       console.error(`Error evaluating condition "${condition}":`, e.message);
       return `Condition ${condition} not executed: ${e.message}`;
     }
   };
-  
-   const evaluateAction = (ruleAction, valueMap) => {
+
+  // Dummy data for testing purposes
+  const valueMap = new Map();
+  valueMap.set('Age', { value: 7 });
+  valueMap.set('Weight', { value: 9 });
+
+  // Example usage
+  const condition = '#{Age} != 6 && #{Weight} != 8';
+  const validationResult = processRuleCondition(condition, valueMap);
+  console.log(validationResult);
+
+  // Evaluate actions associated with a rule
+  const evaluateAction = (ruleAction, valueMap) => {
     if (ruleAction.needsContent && ruleAction.needsContent()) {
       const actionConditionResult = processRuleCondition(ruleAction.data, valueMap);
       if (actionConditionResult) {
@@ -310,7 +338,8 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
     return null;
   };
-  
+
+  // Check for missing variables in rule actions
   const checkActionVariables = (ruleAction) => {
     if (ruleAction instanceof RuleActionHideField && !ruleAction.field) {
       return 'Missing field';
@@ -335,7 +364,8 @@ const TroubleshootingEngine = ({ contextPath }) => {
     }
     return null;
   };
-  
+
+  // Toggle the expansion of a rule's details
   const toggleExpandedRule = (index, rule) => {
     setExpandedRule(expandedRule === index ? null : index);
     if (expandedRule !== index) {
