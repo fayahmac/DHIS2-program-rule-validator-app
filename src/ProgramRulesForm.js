@@ -19,24 +19,42 @@ const ProgramRulesForm = () => {
     const [programs, setPrograms] = useState([]);
     const [variables, setVariables] = useState([]);
 
-    const { loading, error, data } = useDataQuery({
+    const { loading: loadingPrograms, error: errorPrograms, data: dataPrograms } = useDataQuery({
         programs: {
             resource: 'programs',
             params: {
                 fields: ['id', 'displayName'],
             },
-        },
-        variables: {
-            resource: 'dataElements', // Assuming variables are data elements, adjust as needed
-        },
+        }
     });
 
+    const { refetch: fetchVariables, loading: loadingVariables, error: errorVariables, data: dataVariables } = useDataQuery({
+        variables: {
+            resource: 'programRuleVariables',
+            params: ({ programId }) => ({
+                filter: `program.id:eq:${programId}`,
+                fields: ['id', 'displayName'],
+            }),
+        },
+    }, { lazy: true });
+
     useEffect(() => {
-        if (!loading && !error && data) {
-            setPrograms(data.programs.programs);
-            setVariables(data.variables.dataElements); // Adjust based on actual API response structure
+        if (!loadingPrograms && !errorPrograms && dataPrograms) {
+            setPrograms(dataPrograms.programs.programs);
         }
-    }, [loading, error, data]);
+    }, [loadingPrograms, errorPrograms, dataPrograms]);
+
+    useEffect(() => {
+        if (programRule.program) {
+            fetchVariables({ programId: programRule.program });
+        }
+    }, [programRule.program]);
+
+    useEffect(() => {
+        if (!loadingVariables && !errorVariables && dataVariables) {
+            setVariables(dataVariables.variables.programRuleVariables);
+        }
+    }, [loadingVariables, errorVariables, dataVariables]);
 
     useEffect(() => {
         checkSyntax();
@@ -77,7 +95,7 @@ const ProgramRulesForm = () => {
             }
         } else if (name === 'variable') {
             if (value) {
-                const variableSyntax = `{${value}}`;
+                const variableSyntax = `#{${value}}`;
                 setCondition(prevCondition => prevCondition + variableSyntax);
                 setProgramRule({ ...programRule, condition: condition + variableSyntax });
             }
@@ -120,7 +138,6 @@ const ProgramRulesForm = () => {
     };
 
     const handleOperatorClick = (operator) => {
-        // Insert the operator at the cursor position in the textarea
         const textarea = document.querySelector('.form-condition');
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
@@ -142,7 +159,6 @@ const ProgramRulesForm = () => {
         'NOT': '!',
         'AND': '&&',
         'OR': '||'
-        
     };
 
     const [mutate, { loading: mutationLoading }] = useDataMutation(myMutation);
@@ -216,9 +232,9 @@ const ProgramRulesForm = () => {
                             <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
                         </select>
                         <select className="form-input" name="variable" onChange={handleChange} placeholder="Variable" disabled={!programRule.program}>
-                            <option value="">Select Variable</option>
+                            <option value="">Variables</option>
                             {variables.map(variable => (
-                                <option key={variable.id} value={variable.id}>{variable.displayName}</option>
+                                <option key={variable.id} value={variable.displayName}>{variable.displayName}</option>
                             ))}
                         </select>
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
@@ -259,10 +275,10 @@ const ProgramRulesForm = () => {
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  >
                     {Object.keys(operatorMapping).map((displayLabel) => (
                         <span
-                         disabled={!programRule.program}
                             key={displayLabel}
                             onClick={() => handleOperatorClick(operatorMapping[displayLabel])}
                             style={{ padding: '5px 10px', cursor: 'pointer', fontSize: '21px', borderRadius: '4px' }} 
+                            disabled={!programRule.program}
                         >
                             {displayLabel}
                         </span>
@@ -279,8 +295,8 @@ const ProgramRulesForm = () => {
                     </select>
                 </div>
                 <div className="form-button">
-                    <button className="form-buttonsave" type="submit" disabled={loading || mutationLoading} style={{ textDecoration: 'none' }}>
-                        {loading || mutationLoading ? 'Saving...' : 'Save'}
+                    <button className="form-buttonsave" type="submit" disabled={loadingPrograms || mutationLoading} style={{ textDecoration: 'none' }}>
+                        {loadingPrograms || mutationLoading ? 'Saving...' : 'Save'}
                     </button>
                     <button className="form-buttoncancel" type="button">Cancel</button>
                 </div>

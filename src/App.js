@@ -8,8 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Homeee from './components/Homeee'
 import Header from './components/Header'
 import ProgramRulesForm from './ProgramRulesForm'
-import NewProgramRule from './NewProgramRule'
-import ConditionCheck from './ConditionChecker'
+
 
 const MyApp = () => {
   return (
