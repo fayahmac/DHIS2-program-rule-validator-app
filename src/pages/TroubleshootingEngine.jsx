@@ -128,7 +128,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
       if (ruleConditionResult) {
         ruleValidationItem.conditionError = ruleConditionResult;
       }
-
+      //checking if the rule has associated actions
       if (!rule.programRuleActions || rule.programRuleActions.length === 0) {
         ruleValidationItem.actionsError = ['This rule has no associated actions. Consider adding actions to make it effective'];
       } else {
@@ -140,7 +140,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
           ruleValidationItem.actionsError = ruleActionConditions;
         }
       }
-
+    //checking rule validity
       const isValid = !ruleValidationItem.conditionError && (!ruleValidationItem.actionsError || ruleValidationItem.actionsError.length === 0);
       ruleValidationItem.isValid = isValid;
 
@@ -315,17 +315,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
       return `Condition ${condition} not executed: ${e.message}`;
     }
   };
-
-  // Dummy data for testing purposes
-  const valueMap = new Map();
-  valueMap.set('Age', { value: 7 });
-  valueMap.set('Weight', { value: 9 });
-
-  // Example usage
-  const condition = '#{Age} != 6 && #{Weight} != 8';
-  const validationResult = processRuleCondition(condition, valueMap);
-  console.log(validationResult);
-
   // Evaluate actions associated with a rule
   const evaluateAction = (ruleAction, valueMap) => {
     if (ruleAction.needsContent && ruleAction.needsContent()) {
