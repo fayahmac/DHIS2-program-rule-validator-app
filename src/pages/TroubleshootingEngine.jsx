@@ -70,7 +70,7 @@ class RuleActionShowOptionGroup {
 const query = {
   programRules: {
     resource: 'programRules',
-    params: { fields: '*' },
+    params: { fields: '*,created' }, // Ensure 'created' field is fetched
   },
   programRuleVariables: {
     resource: 'programRuleVariables',
@@ -109,7 +109,9 @@ const TroubleshootingEngine = ({ contextPath }) => {
     } else if (!queryLoading && data) {
       setLoading(false);
       if (data.programRules && data.programRules.programRules) {
-        setFailedRules(data.programRules.programRules);
+        // Sort the rules by creation date in descending order
+        const sortedRules = data.programRules.programRules.sort((a, b) => new Date(b.created) - new Date(a.created));
+        setFailedRules(sortedRules);
       }
     }
   }, [data, queryError, queryLoading]);
