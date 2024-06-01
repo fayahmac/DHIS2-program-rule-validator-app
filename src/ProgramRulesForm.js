@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
+import { Link } from 'react-router-dom';
 import './ProgramRulesForm.css';
 
 const ProgramRulesForm = () => {
@@ -11,7 +12,8 @@ const ProgramRulesForm = () => {
         description: '',
         condition: '',
         actionType: '',
-        actionData: ''
+        actionData: '',
+        dataElementId: ''
     });
     const [condition, setCondition] = useState('');
     const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
@@ -119,20 +121,25 @@ const ProgramRulesForm = () => {
     const myMutation = {
         resource: 'programRules',
         type: 'create',
-        data: ({ program, name, priority, description, condition, actionType, actionData }) => ({
-            program,
-            name,
-            priority,
-            description,
-            condition,
-            programRuleActions: [
-                {
-                    programRuleActionType: actionType,
-                    content: actionData,
-                    location: 'feedback',
-                }
-            ],
-        }),
+        data: ({ program, name, priority, description, condition, actionType, actionData, dataElementId }) => {
+            const data = {
+                program: { id: program },
+                name,
+                priority,
+                description,
+                condition,
+                programRuleActions: [
+                    {
+                        id: 'UoEMMzMMz2M', // This should be dynamically generated or passed
+                        programRuleActionType: actionType,
+                        content: actionData,
+                        dataElement: { id: dataElementId },
+                        location: 'feedback', // Keep location property
+                    }
+                ]
+            };
+            return data;
+        },
     };
 
     const handleOperatorClick = (operator) => {
@@ -142,7 +149,6 @@ const ProgramRulesForm = () => {
         const newValue = condition.slice(0, start) + operator + condition.slice(end);
         handleChange({ target: { name: 'condition', value: newValue } });
     };
-
     const operatorMapping = {
         '+': '+',
         '-': '-',
@@ -213,9 +219,9 @@ const ProgramRulesForm = () => {
                         name="condition"
                         disabled={!programRule.program}
                     />
-                    <div className="syntax-message">{getSyntaxMessage()}</div>
+                     
                     <div className='form-option'>
-                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
+                    <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
                             <option value="">Built-in Function</option>
                             <option value="V{current_date}">V {'{current_date}'}</option>
                             <option value="V{event_date}">V {'{event_date}'}</option>
@@ -230,12 +236,13 @@ const ProgramRulesForm = () => {
                             <option value="V{program_stage_name}">V {'{program_stage_name}'}</option>
                             <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
                         </select>
-                        <select className="form-input" name="variable" onChange={handleChange} placeholder="Variable" disabled={!programRule.program}>
+                        <select className="form-input" value={programRule.variable} name="variable" onChange={handleChange} disabled={!programRule.program}>
                             <option value="">Variables</option>
                             {variables.map(variable => (
-                                <option key={variable.id} value={variable.displayName}>{variable.displayName}</option>
+                                <option key={variable.id} value={variable.id}>{variable.displayName}</option>
                             ))}
                         </select>
+
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
                             <option value="">Function</option>
                             <option value="d2:ceil (<number>)">d2:ceil {'(<number>)'}</option>
@@ -269,9 +276,10 @@ const ProgramRulesForm = () => {
                             <option value="d2:zScoreWFH( <height>, <weight>, <gender> )">d2:zScoreWFH{'( <height>, <weight>, <gender> )'}</option>
                             <option value="d2:extractDataMatrixValue( <key>, <value>)">d2:extractDataMatrixValue{'( <key>, <value>)'}</option>
                         </select>
-                    </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  >
+                        </div>
+                        </div>
+                        <div style={{ display: 'grid', }}  >
+                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  > 
                     {Object.keys(operatorMapping).map((displayLabel) => (
                         <span
                             key={displayLabel}
@@ -282,24 +290,27 @@ const ProgramRulesForm = () => {
                             {displayLabel}
                         </span>
                     ))}
+                 </div>
+              <p>  {getSyntaxMessage()}</p>
+                
                 </div>
                 <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
-                <div className="form-group">
+                
                     <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program}>
                         <option value="">Select Action</option>
                         <option value="SHOWWARNING">Show warning message</option>
                         <option value="SHOWERROR">Show error message</option>
                         <option value="HIDEFIELD">Hide field</option>
                         <option value="MANDATORYFIELD">Make field mandatory</option>
-                    </select>
+                    </select>  
+                
+                <button  className="form-buttonsave" type="submit" disabled={mutationLoading}>Save</button>
+                <Link to="/programRules">
+                    <button className="form-buttoncancel">Back</button>
+                </Link>
+               
                 </div>
-                <div className="form-button">
-                    <button className="form-buttonsave" type="submit" disabled={loadingPrograms || mutationLoading} style={{ textDecoration: 'none' }}>
-                        {loadingPrograms || mutationLoading ? 'Saving...' : 'Save'}
-                    </button>
-                    <button className="form-buttoncancel" type="button">Cancel</button>
-                </div>
-            </div>
+           
         </form>
     );
 };

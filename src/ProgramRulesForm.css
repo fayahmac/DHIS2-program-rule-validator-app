@@ -33,7 +33,7 @@
   
   .form-button {
     display: flex;
-    padding: 20px;
+    padding: 2px;
     border: none;
     cursor: pointer;
     margin-left: 60%;
@@ -41,16 +41,17 @@
   .form-buttonsave {
     width: 20%;
     margin: 20px;
-    margin-left: 200px;
+    margin-left: 20px;
     background-color: #007bff;
     color: #fff;
     border: none;
+    padding: 10px;
     border-radius: 3px;
     cursor: pointer;
   }
   .form-buttoncancel {
     width: 20%;
-    margin: 20px;
+    margin: 200px;
     padding: 10px;
     color: #fff;
     background-color: #9c9898;
@@ -98,4 +99,9 @@
   font-weight: bold; /* Make the number bold */
   /*padding-right: 20px; /* Add padding to create space inside the circle */
   margin-right: 10px;
+}
+
+.form-gr{
+  padding-top: 1px;
+  margin: 1px;
 }
