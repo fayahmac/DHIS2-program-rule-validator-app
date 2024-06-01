@@ -269,6 +269,11 @@ const TroubleshootingEngine = ({ contextPath }) => {
           const value = valueMap.get(name).value;
           return typeof value === 'string' ? `"${value}"` : value;
         }
+        const undefinedVariables = condition.filter(varName => !valueMap.has(varName));
+
+        if (undefinedVariables.length > 0) {
+          return `Condition references undefined variables: ${undefinedVariables.join(', ')}`;
+        }
         return 'undefined';
       });
 
