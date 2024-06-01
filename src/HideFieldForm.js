@@ -25,7 +25,17 @@ const HideFieldForm = () => {
     return (
         <form className="form-container" onSubmit={handleSubmit}>
             <div className="form-group">
-                <label>Main Field-one</label>
+                <label>Program</label>
+                <input
+                    type="text"
+                    name="mainField"
+                    value={formData.mainField}
+                    onChange={handleChange}
+                    placeholder="Enter program"
+                />
+            </div>
+            <div className="form-group">
+                <label>conditions</label>
                 <input
                     type="text"
                     name="mainField"
@@ -35,17 +45,7 @@ const HideFieldForm = () => {
                 />
             </div>
             <div className="form-group">
-                <label>Main Field-two</label>
-                <input
-                    type="text"
-                    name="mainField"
-                    value={formData.mainField}
-                    onChange={handleChange}
-                    placeholder="Enter main field"
-                />
-            </div>
-            <div className="form-group">
-                <label>Main Field-three</label>
+                <label>parameters</label>
                 <input
                     type="text"
                     name="mainField"
@@ -67,26 +67,26 @@ const HideFieldForm = () => {
             </div>
             {formData.showOptionalField && (
                 <div className="form-group">
-                    <label>Optional Field-one</label>
+                    <label>data element</label>
                     <input
                         type="text"
                         name="optionalField"
                         value={formData.optionalField}
                         onChange={handleChange}
-                        placeholder="Enter optional field"
+                        placeholder="Enter element"
                     />
                 </div>
                  
             )}
             {formData.showOptionalField && (
                 <div className="form-group">
-                    <label>Optional Field-two</label>
+                    <label>data element type</label>
                     <input
                         type="text"
                         name="optionalField"
                         value={formData.optionalField}
                         onChange={handleChange}
-                        placeholder="Enter optional field"
+                        placeholder="Enter element type"
                     />
                 </div>
                  

@@ -14,7 +14,7 @@ import ConditionCheck from './ConditionChecker'
 import ShowWarningMessage from './ShowWarningMessage';  //importing showwarntext by jika
 import ShowErrorMessage from './ShowErrorMessage'; // Import the component
 import HideFieldForm from './HideFieldForm';
-
+import MakeFieldMandatoryForm from './MakeFieldMandatoryForm';
 
 
 
@@ -28,23 +28,27 @@ const MyApp = () => {
 
 
 //calling the showwarnform
-  //   <div>
-  //<h1>Warnings:</h1>
-  //     <ShowWarningMessage />
-  // </div>
+ //   <div>
+ // <h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Warnings:</h1>
+  //    <ShowWarningMessage />
+  //</div>
 
 
 //calling showerrorform
-// <div>
-//<h1>errors met</h1>
+//<div>
+//<h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>errors met</h1>
 //<ShowErrorMessage />
 //</div>
 
-<div className="App">
-<h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Hide Fields</h1>
-<HideFieldForm />
-</div>
+//<div className="App">
+//<h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Hide Fields</h1>
+//<HideFieldForm />
+//</div>
 
+<div className="App">
+<h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Make Fields Mandatory</h1>
+<MakeFieldMandatoryForm />
+</div>
 
 
 

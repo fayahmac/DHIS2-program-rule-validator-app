@@ -39,6 +39,7 @@ const ShowWarningMessage = () => {
 
               
         <div style={warningStyle}>
+        <div className="error-icon">⚠️</div>
           <span  >There are items that require your attention</span>
                  </div>
 
@@ -72,7 +73,7 @@ const ShowWarningMessage = () => {
           />
         </div>
 
-        <button type="submit" style={{ backgroundColor: 'blue', color: 'white', color: 'white', padding: '10px 20px',  border: 'none', }}>Send</button>
+        <button type="submit" style={{ backgroundColor: '#530b0b', color: 'white', padding: '10px 20px',  border: 'none', }}>Send</button>
       </form>
 
       {showWarning && (

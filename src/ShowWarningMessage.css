@@ -26,7 +26,7 @@
   }
   
   .warning-box {
-    background-color: hsl(241, 92%, 66%);
+    background-color: #530b0b;
     border: 1px solid hwb(229 93% 3%);
     padding: 20px;
     margin-top: 20px;
