@@ -1,0 +1,47 @@
+/* ShowWarningMessage.css */
+.warning-message {
+    background-color: rgb(89, 0, 255);
+    border: 5px solid rgb(201, 21, 21);
+    padding: 1px;
+    margin-top: 1px;
+  }
+
+
+
+  /* ShowWarningMessage.css */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    margin-left: 10px;
+  }
+  
+  .warning-box {
+    background-color: hsl(241, 92%, 66%);
+    border: 1px solid hwb(229 93% 3%);
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    width: 50%;
+    max-width: 500px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .warning-box h2 {
+    margin: 0;
+  }
+  
+  .warning-box p {
+    margin: 10px 0 0;
+  }
+  
+  
