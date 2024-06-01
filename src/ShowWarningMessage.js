@@ -72,7 +72,7 @@ const ShowWarningMessage = () => {
           />
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" style={{ backgroundColor: 'blue', color: 'white', color: 'white', padding: '10px 20px',  border: 'none', }}>Send</button>
       </form>
 
       {showWarning && (

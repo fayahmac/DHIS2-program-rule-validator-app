@@ -1,0 +1,30 @@
+.error-message-container {
+    display: flex;
+    align-items: center;
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 0px;
+    margin: 0px 0;
+}
+
+.error-icon {
+    margin-right: 10px;
+    font-size: 1.5em;
+}
+
+.error-message {
+    font-size: 1em;
+}
+
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background-color: #fff;
+}

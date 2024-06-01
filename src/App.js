@@ -12,6 +12,13 @@ import ProgramRulesForm from './ProgramRulesForm'
 import NewProgramRule from './NewProgramRule'
 import ConditionCheck from './ConditionChecker'
 import ShowWarningMessage from './ShowWarningMessage';  //importing showwarntext by jika
+import ShowErrorMessage from './ShowErrorMessage'; // Import the component
+
+
+
+
+
+
 
 const MyApp = () => {
   return (
@@ -21,12 +28,15 @@ const MyApp = () => {
 
 
 //calling the showwarnform
-    <div>
-      <ShowWarningMessage />
-  </div>
+  //   <div>
+  //     <ShowWarningMessage />
+  // </div>
 
 
 
+<div>
+<ShowErrorMessage />
+</div>
 
     // <BrowserRouter>
 
