@@ -13,7 +13,7 @@ import NewProgramRule from './NewProgramRule'
 import ConditionCheck from './ConditionChecker'
 import ShowWarningMessage from './ShowWarningMessage';  //importing showwarntext by jika
 import ShowErrorMessage from './ShowErrorMessage'; // Import the component
-
+import HideFieldForm from './HideFieldForm';
 
 
 
@@ -29,14 +29,24 @@ const MyApp = () => {
 
 //calling the showwarnform
   //   <div>
+  //<h1>Warnings:</h1>
   //     <ShowWarningMessage />
   // </div>
 
 
+//calling showerrorform
+// <div>
+//<h1>errors met</h1>
+//<ShowErrorMessage />
+//</div>
 
-<div>
-<ShowErrorMessage />
+<div className="App">
+<h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>Hide Fields</h1>
+<HideFieldForm />
 </div>
+
+
+
 
     // <BrowserRouter>
 
