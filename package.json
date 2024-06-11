@@ -6,7 +6,11 @@
   "private": true,
   "scripts": {
     "build": "d2-app-scripts build",
+<<<<<<< HEAD
     "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-41-0",
+=======
+    "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-40-3-1",
+>>>>>>> d372a7716ad3c747e017d5ec904fd4c6ce1c86f1
     "test": "d2-app-scripts test",
     "deploy": "d2-app-scripts deploy"
   },
@@ -21,9 +25,13 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@material-ui/core": "^4.12.4",
+<<<<<<< HEAD
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
     "@mui/system": "^5.15.15",
+=======
+    "@mui/material": "^5.15.18",
+>>>>>>> d372a7716ad3c747e017d5ec904fd4c6ce1c86f1
     "d2-utilizr": "^0.2.16",
     "material-ui": "^0.20.2",
     "prop-types": "^15.8.1",
