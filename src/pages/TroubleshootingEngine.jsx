@@ -14,6 +14,7 @@ class RuleActionHideField {
     return !!this.field;
   }
 }
+
 class RuleActionHideOption {
   constructor(field, option) {
     this.field = field;
@@ -23,6 +24,7 @@ class RuleActionHideOption {
     return !!this.field && !!this.option;
   }
 }
+
 class RuleActionHideOptionGroup {
   constructor(field, optionGroup) {
     this.field = field;
@@ -32,6 +34,7 @@ class RuleActionHideOptionGroup {
     return !!this.field && !!this.optionGroup;
   }
 }
+
 class RuleActionHideProgramStage {
   constructor(programStage) {
     this.programStage = programStage;
@@ -40,6 +43,7 @@ class RuleActionHideProgramStage {
     return !!this.programStage;
   }
 }
+
 class RuleActionHideSection {
   constructor(programStageSection) {
     this.programStageSection = programStageSection;
@@ -48,6 +52,7 @@ class RuleActionHideSection {
     return !!this.programStageSection;
   }
 }
+
 class RuleActionSetMandatoryField {
   constructor(field) {
     this.field = field;
@@ -56,6 +61,7 @@ class RuleActionSetMandatoryField {
     return !!this.field;
   }
 }
+
 class RuleActionShowOptionGroup {
   constructor(optionGroup) {
     this.optionGroup = optionGroup;
@@ -249,11 +255,11 @@ const TroubleshootingEngine = ({ contextPath }) => {
     if (!condition) {
       return 'Condition is empty';
     }
-  
+
     try {
       // List to track undefined variables
       const undefinedVariables = [];
-  
+
       // Replace variables with their values from the valueMap
       const replacedCondition = condition.replace(/#\{(\w+)\}/g, (match, name) => {
         if (valueMap.has(name)) {
@@ -264,17 +270,13 @@ const TroubleshootingEngine = ({ contextPath }) => {
           return 'undefined';
         }
       });
-  
+
       // Check for numeric-only conditions
       const numericOnlyConditionRegex = /^[\d\s=<>!&|]+$/;
       if (numericOnlyConditionRegex.test(replacedCondition)) {
         return 'Condition is invalid: numeric-only comparisons are not allowed';
       }
-  
-      // if (undefinedVariables.length > 0) {
-      //   return `Condition references undefined variables: ${undefinedVariables.join(', ')}`;
-      // }
-  
+
       // Define the DHIS2 functions
       const d2HasValue = (value) => value !== null && value !== undefined && value !== '';
       const d2YearsBetween = (startDate, endDate) => {
@@ -282,7 +284,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
         return differenceInYears(new Date(endDate), new Date(startDate));
       };
       const d2ValidatePattern = (value, pattern) => new RegExp(pattern).test(value);
-  
+
       // Replace DHIS2 functions in the condition string
       const replacedWithD2Functions = replacedCondition
         .replace(/d2:hasValue\(([^)]+)\)/g, (_, v) => {
@@ -305,13 +307,13 @@ const TroubleshootingEngine = ({ contextPath }) => {
           const valueObj = valueMap.get(varName);
           return d2ValidatePattern(valueObj ? valueObj.value : '', pattern);
         });
-  
+
       // Ensure the replaced condition is correctly formatted for mathjs
       const validExpression = replacedWithD2Functions.replace(/undefined/g, 'null');
-  
+
       // Evaluate the final expression
       console.log('Evaluating condition:', validExpression); // Debugging line
-  
+
       const result = evaluate(validExpression);
       return result ? '' : 'Condition evaluated to false';
     } catch (e) {
@@ -319,8 +321,6 @@ const TroubleshootingEngine = ({ contextPath }) => {
       return `Condition ${condition} not executed: ${e.message}`;
     }
   };
-  
-  
 
   const evaluateAction = (ruleAction, valueMap) => {
     if (ruleAction.needsContent && ruleAction.needsContent()) {

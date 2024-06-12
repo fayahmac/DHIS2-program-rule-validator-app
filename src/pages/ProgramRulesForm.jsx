@@ -120,27 +120,22 @@ const ProgramRulesForm = () => {
     const myMutation = {
         resource: 'programRules',
         type: 'create',
-        data: ({ program, name, priority, description, condition, actionType, actionData }) => {
-          const data = {
+        data: ({ program, name, priority, description, condition, actionType, actionData }) => ({
             program,
             name,
             priority,
             description,
             condition,
-          };
-          if (actionType && actionData) {
-            data.programRuleActions = [
-              {
-                programRuleActionType: actionType,
-                data: actionData,
-                location: 'feedback', // Keep location property
-              }
-            ];
-          }
-          return data;
-        },
-      };
-      
+            programRuleActions: [
+                {
+                    programRuleActionType: actionType,
+                    data: actionData,
+                    content: name,
+                    location: 'feedback',
+                }
+            ],
+        }),
+    };
 
     const handleOperatorClick = (operator) => {
         const textarea = document.querySelector('.form-condition');
@@ -289,7 +284,7 @@ const ProgramRulesForm = () => {
                         </span>
                     ))}
                 </div>
-                <h4 className='section1'><span className="circle">3</span> Define program rule action (optional)</h4>
+                <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
                 <div className="form-group">
                     <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program}>
                         <option value="">Select Action</option>
@@ -298,9 +293,6 @@ const ProgramRulesForm = () => {
                         <option value="HIDEFIELD">Hide field</option>
                         <option value="MANDATORYFIELD">Make field mandatory</option>
                     </select>
-                </div>
-                <div className="form-group">
-                    <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
                 </div>
                 <div className="form-button">
                     <button className="form-buttonsave" type="submit" disabled={loadingPrograms || mutationLoading} style={{ textDecoration: 'none' }}>

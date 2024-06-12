@@ -11,15 +11,7 @@ function Header({OpenSidebar}) {
              <BsJustify className='icon' onClick={OpenSidebar}/>
          </div>
          {/* header contents and icons */}
-         <div className='header-left'>
-             <BsSearch className='icon'/>         
-         </div>
-         <div>
-            <BsFillBellFill className='icon'/>
-            <BsFillEnvelopeFill className='icon'/>
-            <BsPersonCircle className='icon'/> 
-         </div>
-    </header>
+               </header>
   )
 }
 

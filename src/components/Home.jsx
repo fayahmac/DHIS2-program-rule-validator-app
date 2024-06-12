@@ -1,7 +1,7 @@
 import React from 'react'
 import {BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill, BsListCheck}from 'react-icons/bs'
 import { FaPlus } from 'react-icons/fa'
-import Dashboard from './HomeCard'
+import HomeCard from './HomeCard'
 
 function Home() {
   return (
@@ -11,7 +11,7 @@ function Home() {
           <h3>DASHBOARD OVERVIEW</h3>
           </div>
           {/* rendering the homecard component */}
-          <Dashboard/>
+          <HomeCard/>
     </main>
   )
 }
