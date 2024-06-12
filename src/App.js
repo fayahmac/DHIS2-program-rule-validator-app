@@ -10,40 +10,26 @@ import Header from './components/Header'
 import ProgramRulesForm from './ProgramRulesForm'
 
 
-<<<<<<< HEAD
 
 const MyApp = () => {
   return (
     // <div>
     //   <ProgramRulesForm/>
-=======
-const MyApp = () => {
-  return (
-    // <div>
-    //   <ConditionCheck/>
->>>>>>> d372a7716ad3c747e017d5ec904fd4c6ce1c86f1
-    // </div>
+
   
     <BrowserRouter>
     
     <ProgramRulesForm/>
-<<<<<<< HEAD
       <Routes>
         <Route path="/program-rules" element={<ProgramRulesForm />} />
       </Routes>
-=======
+
       {/* <Routes>
         <Route path="/program-rules" element={<ProgramRulesForm />} />
       </Routes> */}
->>>>>>> d372a7716ad3c747e017d5ec904fd4c6ce1c86f1
+
     
     </BrowserRouter>
-  );
+);
 }
-    
-
-<<<<<<< HEAD
 export default MyApp
-=======
-export default MyApp
->>>>>>> d372a7716ad3c747e017d5ec904fd4c6ce1c86f1
