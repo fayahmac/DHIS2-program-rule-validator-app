@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-40-3-2",
+    "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-39-5",
     "test": "d2-app-scripts test",
     "deploy": "d2-app-scripts deploy"
   },

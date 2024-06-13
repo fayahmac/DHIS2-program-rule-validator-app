@@ -4,48 +4,61 @@ import { useDataQuery } from '@dhis2/app-runtime';
 import './ProgramRuleValidator.css';
 
 const ProgramRuleValidator = () => {
-  // using useNavigate to save history instead of useHistory which is no longer in use
   const navigate = useNavigate();
- //get program rules from the instance using useDataQuery
-  const programRulesQuery = {
+  
+  // Define the query to fetch multiple data elements
+  const query = {
     programRules: {
-      resource: 'programRules?fields=id,programRuleActions[*],displayName,condition,program[*]',
-         },
+      resource: 'programRules',
+      params: { fields: '*,created' },
+    },
+    programRuleVariables: {
+      resource: 'programRuleVariables',
+      params: { fields: '*' },
+    },
+    trackedEntityAttributes: {
+      resource: 'trackedEntityAttributes',
+      params: { fields: '*' },
+    },
+    dataElements: {
+      resource: 'dataElements',
+      params: { fields: '*' },
+    },
+    options: {
+      resource: 'options',
+      params: { fields: '*' },
+    },
   };
-//initialize the fetched program rule data
-  const [programRules, setProgramRules] = useState([]);
-  const { data, loading, error } = useDataQuery(programRulesQuery);
 
+  // Initialize state for fetched data
+  const [programRules, setProgramRules] = useState([]);
+  const { data, loading, error } = useDataQuery(query);
+
+  // Use effect to set program rules when data is fetched
   useEffect(() => {
     if (data && data.programRules) {
       setProgramRules(data.programRules.programRules);
-      console.log('Fetched program rules (samples):', data.programRules[0], data.programRules[4], data.programRules[9], data.programRules[14]);
-        }
+      console.log('Fetched program rules (samples):', data.programRules.programRules.slice(0, 5));
+    }
   }, [data]);
-  
-  //fetching program data elements from the API
+
+  // Fetching program data elements from the API
   const getProgramDataElements = async (programId) => {
     try {
-      // the endpoint URL for fetching program data elements
       const response = await fetch(`/api/programs/${programId}/dataElements[*]`);
-      
-      // Checking if response is okay
       if (!response.ok) {
         throw new Error(`Failed to fetch data elements for program ${programId}. Status: ${response.status}`);
       }
-  
-      // Parse and return data elements from response
       const data = await response.json();
       console.log('Fetched program data elements:', data.dataElements);
       return data.dataElements || [];
     } catch (error) {
       console.error('Error fetching data elements:', error);
-      // Handle errors (e.g., display error message)
-      return []; // Return empty array to avoid breaking logic
+      return [];
     }
   };
-  
-//getting the variables from the conditions
+
+  // Extract variables from conditions
   const extractVariables = (condition) => {
     const regex = /#{([^}]*)}/g;
     const variables = [];
@@ -55,26 +68,23 @@ const ProgramRuleValidator = () => {
     }
     return variables;
   };
-//validation logic
+
+  // Validate program rule
   const validateProgramRule = async (rule) => {
     let isValid = true;
     let errorMessage = '';
-//validate]ing the program rule by checking if its attached to program 
+
     if (!rule.program) {
       isValid = false;
       errorMessage += 'Program rule must be assigned to a program.\n';
     }
-//validating pogram rule by checking existence of conditions in that program rule
+
     if (!rule.condition || rule.condition.length === 0) {
       isValid = false;
       errorMessage += 'Program rule must have conditions set.\n';
-    } 
-    //check the variables in program conditions agaisnt the generated data elements
-    else {
+    } else {
       const variables = extractVariables(rule.condition);
-      // Fetch program data elements for the program associated with the rule
-      const programDataElements = await getProgramDataElements(rule.program);
-      // Check if variables conform to data elements in the program
+      const programDataElements = await getProgramDataElements(rule.program.id);
       variables.forEach(variable => {
         if (!programDataElements.includes(variable)) {
           isValid = false;
@@ -82,69 +92,23 @@ const ProgramRuleValidator = () => {
         }
       });
     }
-  
-      // Check enrollment status
-    //   if (!enrollmentStatus || !enrollmentStatus.stage || enrollmentStatus.program !== rule.program) {
-    //     isValid = false;
-    //     errorMessage += 'Program rule is not applicable to the current program stage.\n';
-    //     return { isValid, errorMessage };
-    //   }
-       
-    // if (!rule.action || rule.action.length === 0) {
-    //   isValid = false;
-    //   errorMessage += 'Program rule must have at least one defined program rule action.\n';
-    // }
-
-    // // Check for dynamic behavior
-    // if (isValid) {
-    //   const dynamicBehavior = getDynamicBehavior(rule.action);
-    //   if (!dynamicBehavior) {
-    //     isValid = false;
-    //     errorMessage += 'Program rule does not have defined dynamic behavior.\n';
-    //   }
-    // }
 
     return { isValid, errorMessage };
   };
 
-  // const getDynamicBehavior = (rule, evaluationContext) => {
-  //   // Check if the conditions of the rule are met
-  //   const conditionsMet = evaluateConditions(rule.condition, evaluationContext);
-    
-  //   // If conditions are met, determine dynamic behavior
-  //   if (conditionsMet) {
-  //     // Check the program rule configuration for dynamic behavior
-  //     const dynamicBehavior = rule.dynamicBehavior;
-      
-  //     if (dynamicBehavior) {
-  //       // Return the dynamic behavior configuration
-  //       return dynamicBehavior;
-  //     } else {
-  //       // If no dynamic behavior is defined, return null
-  //       return null;
-  //     }
-  //   } else {
-  //     // If conditions are not met, return null
-  //     return null;
-  //   }
-  // };
-  
-// handling onclick guncution
+  // Handle validation click
   const handleValidateClick = async (rule) => {
     console.log('Program rule:', rule);
-
     const { isValid, errorMessage } = await validateProgramRule(rule);
 
     if (isValid) {
-      // If the program rule is valid, navigate to a notification page
-      alert(`Program rule "${rule.displayName}" is  valid`);
+      alert(`Program rule "${rule.displayName}" is valid`);
     } else {
-      
-      // If the program rule is not valid, display an alert with the error message`
       alert(`Program rule "${rule.displayName}" is not valid:\n${errorMessage}`);
     }
   };
- //ui div remderrimh
+
+  // Render the component
   return (
     <div className="program-rule-validator">
       <h2>PROGRAM RULE VALIDATOR</h2>

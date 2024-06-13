@@ -71,7 +71,7 @@ const HomeCard = () => {
                     {/* home second card in the row and its inside card with routing link */}
                     <div className="card green">
                         <h3><BsListCheck className='icon'/> Rule Validator</h3> 
-                        <Link to="/validate-rules" style={{ textDecoration: 'none' }}>
+                        <Link to="/notification" style={{ textDecoration: 'none' }}>
                             <div className="cardlist1">
                             {/* displaying fetcheng program rule counted in the card*/}
                                 {totalProgramRules} Available Program Rules <FaCheckDouble className='qoute'/>

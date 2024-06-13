@@ -8,7 +8,7 @@ import NotificationPage from './pages/NotificationPage';
 import TroubleshootingEngine from './pages/TroubleshootingEngine';
 
 function App() {
-  const contextPath = ' https://play.im.dhis2.org/stable-2-40-3-2'; 
+  const contextPath = ' https://play.im.dhis2.org/stable-2-41-0'; 
 
   return (
     <HashRouter>

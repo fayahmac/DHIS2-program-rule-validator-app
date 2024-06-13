@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { Link } from 'react-router-dom';
 import './ProgramRulesForm.css';
 
 const ProgramRulesForm = () => {
-    const navigate = useNavigate(); // Initialize useNavigate
     const [selectedFunction, setSelectedFunction] = useState('');
     const [programRule, setProgramRule] = useState({
         program: '',
@@ -175,22 +174,6 @@ const ProgramRulesForm = () => {
             await mutate(programRule);
             console.log('Program rule saved successfully');
             alert('Program rule saved successfully!');
-
-            // Reset the form
-            setProgramRule({
-                program: '',
-                name: '',
-                priority: '',
-                description: '',
-                condition: '',
-                actionType: '',
-                actionData: ''
-            });
-            setCondition('');
-            setIsSyntaxCorrect(null);
-
-            // Redirect to notification page with a message
-            navigate('/notification', { state: { message: 'Program rule saved successfully!' } });
         } catch (error) {
             console.error('Error saving program rule:', error);
             alert('Failed to save program rule');
