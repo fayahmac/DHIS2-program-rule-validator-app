@@ -252,37 +252,37 @@ const ProgramRulesForm = () => {
         'OR': '||'
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (isSyntaxCorrect !== 2) {
-            alert('Please fix the syntax errors in the condition.');
-            return;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (isSyntaxCorrect !== 2) {
+        alert('Please fix the syntax errors in the condition.');
+        return;
+    }
+
+    try {
+        const { program, name, condition, actionType, dataElementId } = programRule;
+        const data = {
+            program,
+            name,
+            condition,
+            actionType,
+            dataElementId
+        };
+
+        await mutate({ data });
+        console.log('Program rule saved successfully');
+        alert('Program rule saved successfully!');
+    } catch (error) {
+        if (error.status === 409) {
+            console.error('Conflict while saving program rule:', error);
+            alert('There was a conflict while saving the program rule. Please resolve the conflict and try again.');
+        } else {
+            console.error('Error saving program rule:', error);
+            alert('Failed to save program rule');
         }
-    
-        try {
-            const { program, name, condition, actionType, dataElementId } = programRule;
-            const data = {
-                program,
-                name,
-                condition,
-                actionType,
-                dataElementId
-            };
-    
-            await mutate({ data });
-            console.log('Program rule saved successfully');
-            alert('Program rule saved successfully!');
-        } catch (error) {
-            if (error.status === 409) {
-                console.error('Conflict while saving program rule:', error);
-                alert('There was a conflict while saving the program rule. Please resolve the conflict and try again.');
-            } else {
-                console.error('Error saving program rule:', error);
-                alert('Failed to save program rule');
-            }
-        }
-    };
-    
+    }
+};
+
 
     return (
         <form onSubmit={handleSubmit}>
