@@ -2,8 +2,8 @@ import React from 'react';
 import { useLocation } from 'react-router-dom'; // Import useLocation
 import './NotificationPage.css';
 const NotificationPage = () => {
-    // const location = useLocation(); // Initialize useLocation
-    // const message = location.state?.message || 'No message available';
+    const location = useLocation(); // Initialize useLocation
+    const message = location.state?.message || 'No message available';
 
       return (
         <div className="notification-container">
@@ -14,6 +14,7 @@ const NotificationPage = () => {
           <button className="validation-button">
             RUN RULE VALIDATION CHECK
           </button>
+          <p>{message}</p>
         </div>
       );
     };
