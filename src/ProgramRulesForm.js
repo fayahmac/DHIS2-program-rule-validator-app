@@ -404,64 +404,18 @@ const ProgramRulesForm = () => {
                     <p>{getSyntaxMessage()}</p>
                 </div>
                 <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
-                <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program}>
+                {/* <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program}>
                     <option value="">Select Action</option>
                     <option value="SHOWWARNING">Show warning message</option>
                     <option value="SHOWERROR">Show error message</option>
                     <option value="HIDEFIELD">Hide field</option>
                     <option value="MANDATORYFIELD">Make field mandatory</option>
-                </select> 
+                </select>  */}
 
-                <div className="App">
-            <h1>React Dropdown Button Example</h1>
-            <DropdownButton />
-        </div>
-
-                <div>
-            <form onSubmit={handleSubmitt}>
-                
-                <div>
-                    <label>
-                        Data Element:
-                        <input type="text" value={dataElement} onChange={(e) => setDataElement(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Tracked Entity Data Value:
-                        <input type="text" value={trackedEntityDataValue} onChange={(e) => setTrackedEntityDataValue(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Program Stage Section:
-                        <input type="text" value={programStageSection} onChange={(e) => setProgramStageSection(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Tracked Entity Attribute:
-                        <input type="text" value={trackedEntityAttribute} onChange={(e) => setTrackedEntityAttribute(e.target.value)} />
-                    </label>
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-
-            {actionType && (
-                <ProgramRuleAction
-                    actionType={actionType}
-                    content={content}
-                    data={data}
-                    dataElement={dataElement}
-                    trackedEntityDataValue={trackedEntityDataValue}
-                    programStageSection={programStageSection}
-                    trackedEntityAttribute={trackedEntityAttribute}
-                />
-            )}
-        </div>
-
-
-
+    
+            <DropdownButton   className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program} />
+   
+        
                 <Button 
                 className="form-buttonsave" type="submit" disabled={mutationLoading}
         variant="contained"
