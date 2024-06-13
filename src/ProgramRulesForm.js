@@ -11,7 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import ProgramRuleAction from './ProgramRuleAction';
-
+import DropdownButton from './DropdownButton';
 const ProgramRulesForm = () => {
 
 
@@ -412,38 +412,14 @@ const ProgramRulesForm = () => {
                     <option value="MANDATORYFIELD">Make field mandatory</option>
                 </select> 
 
-               
+                <div className="App">
+            <h1>React Dropdown Button Example</h1>
+            <DropdownButton />
+        </div>
 
                 <div>
             <form onSubmit={handleSubmitt}>
-                <div>
-                    <label>
-                        Action Type:
-                        <select value={actionType} onChange={(e) => setActionType(e.target.value)}>
-                            <option value="">Select an action</option>
-                            <option value="DISPLAYTEXT">DISPLAYTEXT</option>
-                            <option value="DISPLAYKEYVALUEPAIR">DISPLAYKEYVALUEPAIR</option>
-                            <option value="HIDEFIELD">HIDEFIELD</option>
-                            <option value="HIDESECTION">HIDESECTION</option>
-                            <option value="ASSIGN">ASSIGN</option>
-                            <option value="SHOWWARNING">SHOWWARNING</option>
-                            <option value="SHOWERROR">SHOWERROR</option>
-                            <option value="WARNINGONCOMPLETE">WARNINGONCOMPLETE</option>
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Content:
-                        <input type="text" value={content} onChange={(e) => setContent(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Data:
-                        <input type="text" value={data} onChange={(e) => setData(e.target.value)} />
-                    </label>
-                </div>
+                
                 <div>
                     <label>
                         Data Element:
