@@ -413,7 +413,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
           </div>
         </div>
       ))}
-      <button className="buttonn"><Link to="/" style={{ textDecoration: 'none' }}>HOME</Link></button>
+      <button className="buttonn"><Link to="/" style={{ textDecoration: 'none' }}>BACK</Link></button>
     </div>
   );
 };

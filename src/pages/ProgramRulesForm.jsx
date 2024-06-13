@@ -420,12 +420,14 @@ const ProgramRulesForm = () => {
         <DialogTitle id="validation-dialog-title">Validate Rule</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please validate the save operation.
+            Please Run Rule validation Test.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleValidation} color="primary">
+          <Link to="/configuration-engine"  style={{ textDecoration: 'none' }}>
             Validate
+          </Link>
           </Button>
           <Button onClick={handleDialogClose} color="secondary">
             Cancel
@@ -434,7 +436,7 @@ const ProgramRulesForm = () => {
       </Dialog>
 
                 {/* <button className="form-buttonsave" type="submit" disabled={mutationLoading}>Save</button> */}
-                <Link to="/programRules">
+                <Link to="/">
                     <button className="form-buttoncancel">Back</button>
                 </Link>
               
