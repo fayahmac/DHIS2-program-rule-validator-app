@@ -417,7 +417,7 @@ const ProgramRulesForm = () => {
         onClose={handleDialogClose}
         aria-labelledby="validation-dialog-title"
       >
-        <DialogTitle id="validation-dialog-title">Validate Save</DialogTitle>
+        <DialogTitle id="validation-dialog-title">Validate Rule</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please validate the save operation.
