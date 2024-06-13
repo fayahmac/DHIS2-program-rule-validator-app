@@ -7,7 +7,13 @@ const NotificationPage = () => {
 
       return (
         <div className="notification-container">
-         
+          <div className="notification-message">
+            <div className="notification-icon">&#10003;</div>
+            <div className="notification-text">RULE CREATED SUCCESFULLY</div>
+          </div>
+          <button className="validation-button">
+            RUN RULE VALIDATION CHECK
+          </button>
         </div>
       );
     };
