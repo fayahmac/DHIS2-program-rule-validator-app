@@ -2,8 +2,95 @@ import React, { useState, useEffect } from 'react';
 import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
 import { Link } from 'react-router-dom';
 import './ProgramRulesForm.css';
-
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import DropdownButton from './DropdownButton';
 const ProgramRulesForm = () => {
+
+    const [actionType, setActionType] = useState('');
+    const [content, setContent] = useState('');
+    const [data, setData] = useState('');
+    const [dataElement, setDataElement] = useState('');
+    const [trackedEntityDataValue, setTrackedEntityDataValue] = useState('');
+    const [programStageSection, setProgramStageSection] = useState('');
+    const [trackedEntityAttribute, setTrackedEntityAttribute] = useState('');
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const handleActionChange = (e) => {
+        setActionType(e.target.value);
+        setModalIsOpen(true);
+    };
+
+    const handleSubmitt = (e) => {
+        e.preventDefault();
+        console.log('Form submitted');
+        setModalIsOpen(false);
+    };
+    const [mutationLoading, setMutationLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleSaveClick = async () => {
+    try {
+      // Start the loading indicator
+      setMutationLoading(true);
+
+      // Simulate saving the program rules (replace with your actual save logic)
+      await saveProgramRules();
+
+      // Show the validation dialog
+      setIsDialogOpen(true);
+    } catch (error) {
+      console.error('Error saving program rules:', error);
+      // Handle the error if needed
+    } finally {
+      // Stop the loading indicator regardless of success or failure
+      setMutationLoading(false);
+    }
+  };
+
+  const saveProgramRules = async () => {
+    // Replace this with your actual API call to save the program rules
+    // Example:
+    // const response = await fetch('your_api_endpoint', {
+    //   method: 'POST',
+    //   body: JSON.stringify(programRulesData),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // });
+    // if (!response.ok) {
+    //   throw new Error('Failed to save program rules');
+    // }
+    // return response.json();
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleValidation = () => {
+    // Add validation logic here if needed
+    setIsDialogOpen(false);
+  };
+
+    const [open, setOpen] = useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const [selectedFunction, setSelectedFunction] = useState('');
     const [programRule, setProgramRule] = useState({
         program: '',
@@ -12,7 +99,8 @@ const ProgramRulesForm = () => {
         description: '',
         condition: '',
         actionType: '',
-        actionData: ''
+        actionData: '',
+        dataElementId: ''
     });
     const [condition, setCondition] = useState('');
     const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
@@ -120,22 +208,25 @@ const ProgramRulesForm = () => {
     const myMutation = {
         resource: 'programRules',
         type: 'create',
-        data: ({ program, name, priority, description, condition, actionType, actionData }) => ({
-            program,
-            name,
-            priority,
-            description,
+        data: ({ program, name, condition, actionType, dataElementId }) => ({
             condition,
+            name,
+            program: { id: program },
             programRuleActions: [
                 {
                     programRuleActionType: actionType,
-                    data: actionData,
-                    content: name,
-                    location: 'feedback',
+                    dataElement: { id: dataElementId },
                 }
-            ],
+            ]
         }),
+        headers: {
+            Authorization: 'Basic ' + btoa('admin:district')
+        },
     };
+
+    // const [mutate] = useDataMutation(myMutation);
+    const [mutate] = useDataMutation(myMutation);
+    
 
     const handleOperatorClick = (operator) => {
         const textarea = document.querySelector('.form-condition');
@@ -161,8 +252,6 @@ const ProgramRulesForm = () => {
         'OR': '||'
     };
 
-    const [mutate, { loading: mutationLoading }] = useDataMutation(myMutation);
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (isSyntaxCorrect !== 2) {
@@ -171,12 +260,25 @@ const ProgramRulesForm = () => {
         }
 
         try {
-            await mutate(programRule);
+            const data = {
+                program: programRule.program,
+                name: programRule.name,
+                condition: programRule.condition,
+                actionType: programRule.actionType,
+                dataElementId: programRule.dataElementId
+            };
+
+            await mutate({ data });
             console.log('Program rule saved successfully');
             alert('Program rule saved successfully!');
         } catch (error) {
-            console.error('Error saving program rule:', error);
-            alert('Failed to save program rule');
+            if (error.status === 409) {
+                console.error('Conflict while saving program rule:', error);
+                alert('There was a conflict while saving the program rule. Please resolve the conflict and try again.');
+            } else {
+                console.error('Error saving program rule:', error);
+                alert('Failed to save program rule');
+            }
         }
     };
 
@@ -231,12 +333,13 @@ const ProgramRulesForm = () => {
                             <option value="V{program_stage_name}">V {'{program_stage_name}'}</option>
                             <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
                         </select>
-                        <select className="form-input" name="variable" onChange={handleChange} placeholder="Variable" disabled={!programRule.program}>
+                        <select className="form-input" value={programRule.variable} name="variable" onChange={handleChange} disabled={!programRule.program}>
                             <option value="">Variables</option>
                             {variables.map(variable => (
-                                <option key={variable.id} value={variable.displayName}>{variable.displayName}</option>
+                                <option key={variable.id} value={variable.id}>{variable.displayName}</option>
                             ))}
                         </select>
+
                         <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
                             <option value="">Function</option>
                             <option value="d2:ceil (<number>)">d2:ceil {'(<number>)'}</option>
@@ -255,7 +358,6 @@ const ProgramRulesForm = () => {
                             <option value="d2:addDays (<date>,<number>)">d2:addDays {'(<date>,<number>)'}</option>
                             <option value="d2:countIfValue (<sourcefield>, <value>)">d2:countIfValue {'(<sourcefield>, <value>)'}</option>
                             <option value="d2:countIfZeroPos (<sourcefield>)">d2:countIfZeroPos {'(<sourcefield>)'}</option>
-                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
                             <option value="d2:zpvc (<object>,<object>)">d2:zpvc {'(<object>,<object>)'}</option>
                             <option value="d2:validatePatterns (<text>,<regex)">d2:validatePatterns {'(<text>,<regex)'}</option>
                             <option value="d2:left (<text>,<number>)">d2:left {'(<text>,<number>)'}</option>
@@ -272,34 +374,70 @@ const ProgramRulesForm = () => {
                         </select>
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  >
-                    {Object.keys(operatorMapping).map((displayLabel) => (
-                        <span
-                            key={displayLabel}
-                            onClick={() => handleOperatorClick(operatorMapping[displayLabel])}
-                            style={{ padding: '5px 10px', cursor: 'pointer', fontSize: '21px', borderRadius: '4px' }} 
-                            disabled={!programRule.program}
-                        >
-                            {displayLabel}
-                        </span>
-                    ))}
+                <div style={{ display: 'grid' }}  >
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  > 
+                        {Object.keys(operatorMapping).map((displayLabel) => (
+                            <span
+                                key={displayLabel}
+                                onClick={() => handleOperatorClick(operatorMapping[displayLabel])}
+                                style={{ padding: '5px 10px', cursor: 'pointer', fontSize: '21px', borderRadius: '4px' }} 
+                                disabled={!programRule.program}
+                            >
+                                {displayLabel}
+                            </span>
+                        ))}
+                    </div>
+                    <p>{getSyntaxMessage()}</p>
                 </div>
                 <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
-                <div className="form-group">
-                    <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program}>
-                        <option value="">Select Action</option>
-                        <option value="SHOWWARNING">Show warning message</option>
-                        <option value="SHOWERROR">Show error message</option>
-                        <option value="HIDEFIELD">Hide field</option>
-                        <option value="MANDATORYFIELD">Make field mandatory</option>
-                    </select>
-                </div>
-                <div className="form-button">
-                    <button className="form-buttonsave" type="submit" disabled={loadingPrograms || mutationLoading} style={{ textDecoration: 'none' }}>
-                        {loadingPrograms || mutationLoading ? 'Saving...' : 'Save'}
-                    </button>
-                    <button className="form-buttoncancel" type="button">Cancel</button>
-                </div>
+                {/* <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program}>
+                    <option value="">Select Action</option>
+                    <option value="SHOWWARNING">Show warning message</option>
+                    <option value="SHOWERROR">Show error message</option>
+                    <option value="HIDEFIELD">Hide field</option>
+                    <option value="MANDATORYFIELD">Make field mandatory</option>
+                </select>  */}
+
+    
+            <DropdownButton   className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program} />
+   
+        
+                <Button 
+                className="form-buttonsave" type="submit" disabled={mutationLoading}
+        variant="contained"
+        color="primary"
+        onClick={handleSaveClick}
+        // disabled={mutationLoading}
+      >
+        Save
+      </Button>
+
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="validation-dialog-title"
+      >
+        <DialogTitle id="validation-dialog-title">Validate Save</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please validate the save operation.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleValidation} color="primary">
+            Validate
+          </Button>
+          <Button onClick={handleDialogClose} color="secondary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+                {/* <button className="form-buttonsave" type="submit" disabled={mutationLoading}>Save</button> */}
+                <Link to="/programRules">
+                    <button className="form-buttoncancel">Back</button>
+                </Link>
+              
             </div>
         </form>
     );

@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-39-5",
+    "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-38-6",
     "test": "d2-app-scripts test",
     "deploy": "d2-app-scripts deploy"
   },
@@ -16,6 +16,10 @@
   },
   "dependencies": {
     "@dhis2/app-runtime": "^3.10.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.20",
+    "@mui/material": "^5.15.20",
     "d2": "^31.10.2",
     "date-fns": "^3.6.0",
     "expression-parser": "^1.0.0",
