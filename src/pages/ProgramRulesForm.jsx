@@ -258,16 +258,17 @@ const ProgramRulesForm = () => {
             alert('Please fix the syntax errors in the condition.');
             return;
         }
-
+    
         try {
+            const { program, name, condition, actionType, dataElementId } = programRule;
             const data = {
-                program: programRule.program,
-                name: programRule.name,
-                condition: programRule.condition,
-                actionType: programRule.actionType,
-                dataElementId: programRule.dataElementId
+                program,
+                name,
+                condition,
+                actionType,
+                dataElementId
             };
-
+    
             await mutate({ data });
             console.log('Program rule saved successfully');
             alert('Program rule saved successfully!');
@@ -281,6 +282,7 @@ const ProgramRulesForm = () => {
             }
         }
     };
+    
 
     return (
         <form onSubmit={handleSubmit}>
