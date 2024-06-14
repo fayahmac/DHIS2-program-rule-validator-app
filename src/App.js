@@ -9,14 +9,8 @@ import Homeee from './components/Homeee'
 import Header from './components/Header'
 import ProgramRulesForm from './ProgramRulesForm'
 
-
-
 const MyApp = () => {
   return (
-    // <div>
-    //   <ProgramRulesForm/>
-
-  
     <BrowserRouter>
     
     <ProgramRulesForm/>

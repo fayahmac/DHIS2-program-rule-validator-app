@@ -36,6 +36,7 @@ const DropdownDialog = () => {
     const [field3, setField3] = useState(""); // For static text input
     const [dataElements, setDataElements] = useState([]);
     const [trackedEntityAttributes, setTrackedEntityAttributes] = useState([]);
+    const [concatenatedString, setConcatenatedString] = useState(''); // State for concatenated string
 
     const { loading: loadingDataElements, error: errorDataElements, data: dataDataElements } = useDataQuery(dataElementQuery);
     const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataTrackedEntityAttributes } = useDataQuery(trackedEntityAttributeQuery);
@@ -68,6 +69,7 @@ const DropdownDialog = () => {
         setField2(""); // Reset selected tracked entity attribute id
         setField3(""); // Reset static text
         setSelectedDataElement(""); // Reset selectedDataElement state
+        setConcatenatedString(""); // Reset concatenated string state
     };
 
     const handleDataElementSelect = (event) => {
@@ -80,8 +82,40 @@ const DropdownDialog = () => {
     };
 
     const handleValidation = () => {
-        // Handle validation logic here
-        console.log("Validation logic here...");
+        // Create the concatenated string based on the selected options
+        let concatString = selectedOption;
+        if (selectedOption === "Show Warning" || selectedOption === "Show error") {
+            if (field1) {
+                const selectedElement = dataElements.find(element => element.id === field1);
+                if (selectedElement) {
+                    concatString += `: on " ${selectedElement.displayName}"`;
+                }
+            }
+            if (field2) {
+                const selectedAttribute = trackedEntityAttributes.find(attribute => attribute.id === field2);
+                if (selectedAttribute) {
+                    concatString += ` - ${selectedAttribute.displayName}`;
+                }
+            }
+            if (field3) {
+                concatString += ` - ${field3}`;
+            }
+        } else if (selectedOption === "Make field mandatory") {
+            if (field1) {
+                const selectedElement = dataElements.find(element => element.id === field1);
+                if (selectedElement) {
+                    concatString += `: on " ${selectedElement.displayName}"`;
+                }
+            }
+            if (field2) {
+                const selectedAttribute = trackedEntityAttributes.find(attribute => attribute.id === field2);
+                if (selectedAttribute) {
+                    concatString += ` - ${selectedAttribute.displayName}`;
+                }
+            }
+        }
+        
+        setConcatenatedString(concatString);
         setOpen(false);
     };
 
@@ -116,10 +150,10 @@ const DropdownDialog = () => {
                     >
                         <MenuItem value="">-- Select --</MenuItem>
                         <MenuItem value="Show Warning">Show Warning</MenuItem>
-                        <MenuItem value="Option 2">Make field mandatory</MenuItem>
-                        <MenuItem value="Option 3">Show error</MenuItem>
+                        <MenuItem value="Make field mandatory">Make field mandatory</MenuItem>
+                        <MenuItem value="Show error">Show error</MenuItem>
                     </Select>
-                    {(selectedOption === "Show Warning" || selectedOption === "Option 3") && (
+                    {(selectedOption === "Show Warning" || selectedOption === "Show error") && (
                         <div>
                             <TextField
                                 select
@@ -159,7 +193,7 @@ const DropdownDialog = () => {
                             />
                         </div>
                     )}
-                    {selectedOption === "Option 2" && (
+                    {selectedOption === "Make field mandatory" && (
                         <div>
                             <TextField
                                 select
@@ -201,11 +235,11 @@ const DropdownDialog = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            {selectedDataElement && (
+            {concatenatedString && (
                 <div style={{ margin: '10px' }}>
                     <TextField
-                        label="Selected Data Element"
-                        value={selectedDataElement}
+                        label="Selected Action"
+                        value={concatenatedString}
                         fullWidth
                         InputProps={{
                             readOnly: true,

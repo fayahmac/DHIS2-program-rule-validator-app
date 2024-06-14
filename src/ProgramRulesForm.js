@@ -10,117 +10,28 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import ProgramRuleAction from './ProgramRuleAction';
 import DropdownButton from './DropdownButton';
+
 const ProgramRulesForm = () => {
-
-
-
-
-
     const [actionType, setActionType] = useState('');
-    const [content, setContent] = useState('');
-    const [data, setData] = useState('');
-    const [dataElement, setDataElement] = useState('');
-    const [trackedEntityDataValue, setTrackedEntityDataValue] = useState('');
-    const [programStageSection, setProgramStageSection] = useState('');
-    const [trackedEntityAttribute, setTrackedEntityAttribute] = useState('');
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-
-    const handleActionChange = (e) => {
-        setActionType(e.target.value);
-        setModalIsOpen(true);
-    };
-
-    const handleSubmitt = (e) => {
-        e.preventDefault();
-        console.log('Form submitted');
-        setModalIsOpen(false);
-    };
-
-
-
-
-
-
-
-
-
-    const [mutationLoading, setMutationLoading] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const handleSaveClick = async () => {
-    try {
-      // Start the loading indicator
-      setMutationLoading(true);
-
-      // Simulate saving the program rules (replace with your actual save logic)
-      await saveProgramRules();
-
-      // Show the validation dialog
-      setIsDialogOpen(true);
-    } catch (error) {
-      console.error('Error saving program rules:', error);
-      // Handle the error if needed
-    } finally {
-      // Stop the loading indicator regardless of success or failure
-      setMutationLoading(false);
-    }
-  };
-
-  const saveProgramRules = async () => {
-    // Replace this with your actual API call to save the program rules
-    // Example:
-    // const response = await fetch('your_api_endpoint', {
-    //   method: 'POST',
-    //   body: JSON.stringify(programRulesData),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // });
-    // if (!response.ok) {
-    //   throw new Error('Failed to save program rules');
-    // }
-    // return response.json();
-  };
-
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-  };
-
-  const handleValidation = () => {
-    // Add validation logic here if needed
-    setIsDialogOpen(false);
-  };
-
-    const [open, setOpen] = useState(false);
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const [selectedFunction, setSelectedFunction] = useState('');
+    const [condition, setCondition] = useState('');
     const [programRule, setProgramRule] = useState({
         program: '',
         name: '',
         priority: '',
         description: '',
-        condition: '',
         actionType: '',
-        actionData: '',
         dataElementId: ''
     });
-    const [condition, setCondition] = useState('');
-    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
     const [programs, setPrograms] = useState([]);
     const [variables, setVariables] = useState([]);
+    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [mutationLoading, setMutationLoading] = useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
+    // Fetch programs and program rule variables
     const { loading: loadingPrograms, error: errorPrograms, data: dataPrograms } = useDataQuery({
         programs: {
             resource: 'programs',
@@ -190,7 +101,6 @@ const ProgramRulesForm = () => {
             setCondition(value);
             setProgramRule({ ...programRule, condition: value });
         } else if (name === 'function') {
-            setSelectedFunction(value);
             if (value) {
                 setCondition(prevCondition => prevCondition + value);
                 setProgramRule({ ...programRule, condition: condition + value });
@@ -219,85 +129,100 @@ const ProgramRulesForm = () => {
         }
     };
 
-    const myMutation = {
-        resource: 'programRules',
-        type: 'create',
-        data: ({ program, name, condition, actionType, dataElementId }) => ({
-            condition,
-            name,
-            program: { id: program },
+    const saveProgramRuleMetadata = async () => {
+        const { program, name, condition, actionType, dataElementId } = programRule;
+        const programRuleId = generateId();
+        const programRuleActionId = generateId();
+
+        const metadata = {
+            programRules: [
+                {
+                    condition: condition,
+                    name: name,
+                    program: { id: program },
+                    programRuleActions: [
+                        {
+                            id: programRuleActionId,
+                            programRuleActionType: actionType,
+                            programRule: { id: programRuleId },
+                            dataElement: { id: dataElementId }
+                        }
+                    ],
+                    id: programRuleId
+                }
+            ],
             programRuleActions: [
                 {
+                    id: programRuleActionId,
                     programRuleActionType: actionType,
-                    dataElement: { id: dataElementId },
+                    programRule: { id: programRuleId },
+                    dataElement: { id: dataElementId }
                 }
             ]
-        }),
-        headers: {
-            Authorization: 'Basic ' + btoa('admin:district')
-        },
-    };
-
-    // const [mutate] = useDataMutation(myMutation);
-    const [mutate] = useDataMutation(myMutation);
-    
-
-    const handleOperatorClick = (operator) => {
-        const textarea = document.querySelector('.form-condition');
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const newValue = condition.slice(0, start) + operator + condition.slice(end);
-        handleChange({ target: { name: 'condition', value: newValue } });
-    };
-
-    const operatorMapping = {
-        '+': '+',
-        '-': '-',
-        '*': '*',
-        '/': '/',
-        '%': '%',
-        '<': '<',
-        '>=': '>=',
-        '<=': '<=',
-        '==': '==',
-        '!=': '!=',
-        'NOT': '!',
-        'AND': '&&',
-        'OR': '||'
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (isSyntaxCorrect !== 2) {
-            alert('Please fix the syntax errors in the condition.');
-            return;
-        }
+        };
 
         try {
-            const data = {
-                program: programRule.program,
-                name: programRule.name,
-                condition: programRule.condition,
-                actionType: programRule.actionType,
-                dataElementId: programRule.dataElementId
-            };
+            const response = await fetch('http://localhost:8080/api/41/programRules', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(metadata)
+            });
 
-            await mutate({ data });
-            console.log('Program rule saved successfully');
-            alert('Program rule saved successfully!');
-        } catch (error) {
-            if (error.status === 409) {
-                console.error('Conflict while saving program rule:', error);
-                alert('There was a conflict while saving the program rule. Please resolve the conflict and try again.');
-            } else {
-                console.error('Error saving program rule:', error);
-                alert('Failed to save program rule');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
             }
+
+            // Check if the response is JSON
+            let responseData;
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                responseData = await response.json();
+            } else {
+                responseData = await response.text(); // Handle non-JSON responses
+            }
+            console.log('Program rule metadata saved successfully:', responseData);
+
+        } catch (error) {
+            console.error('Failed to save program rule metadata:', error);
+            alert(`Error: ${error.message}`);
         }
     };
 
+    const handleSaveClick = async (event) => {
+        event.preventDefault(); // Prevent form submission default behavior
+        try {
+            // Start the loading indicator
+            setMutationLoading(true);
+
+            // Simulate saving the program rules (replace with your actual save logic)
+            await saveProgramRuleMetadata();
+
+            // Show the validation dialog
+            setIsDialogOpen(true);
+        } catch (error) {
+            console.error('Error saving program rules:', error);
+            alert(`Failed to save program rule: ${error.message}`);
+        } finally {
+            // Stop the loading indicator regardless of success or failure
+            setMutationLoading(false);
+        }
+    };
+
+    const handleDialogClose = () => {
+        setIsDialogOpen(false);
+    };
+
+    const handleValidation = () => {
+        setIsDialogOpen(false);
+    };
+
+    const generateId = () => 'id-' + Math.random().toString(36).substr(2, 9);
+
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSaveClick}>
             <div className="form-container">
                 <h4 className='section1'><span className="circle">1</span> Enter program rule details</h4>
                 <div className="form-group">
@@ -321,138 +246,62 @@ const ProgramRulesForm = () => {
                     <label>Description</label>
                     <input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
                 </div>
-                <h4 className='section1'><span className="circle">2</span> Enter program rule expression</h4>
-                <label>Condition</label>
-                <div className="form-g">
-                    <textarea className="form-condition"
-                        value={condition}
-                        onChange={handleChange}
-                        placeholder="Enter condition here"
-                        name="condition"
-                        disabled={!programRule.program}
-                    />
-                    <div className='form-option'>
-                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
-                            <option value="">Built-in Function</option>
-                            <option value="V{current_date}">V {'{current_date}'}</option>
-                            <option value="V{event_date}">V {'{event_date}'}</option>
-                            <option value="V{due_date}">V {'{due_date}'}</option>
-                            <option value="V{event_count}">V {'{event_count}'}</option>
-                            <option value="V{enrollment_date}">V {'{enrollment_date}'}</option>
-                            <option value="V{incident_date}">V {'{incident_date}'}</option>
-                            <option value="V{enrollment_id}">V {'{enrollment_id}'}</option>
-                            <option value="V{environment}">V {'{environment}'}</option>  
-                            <option value="V{event_id}">V {'{event_id}'}</option>
-                            <option value="V{orgunit_code}">V {'{orgunit_code}'}</option>
-                            <option value="V{program_stage_name}">V {'{program_stage_name}'}</option>
-                            <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
-                        </select>
-                        <select className="form-input" value={programRule.variable} name="variable" onChange={handleChange} disabled={!programRule.program}>
-                            <option value="">Variables</option>
-                            {variables.map(variable => (
-                                <option key={variable.id} value={variable.id}>{variable.displayName}</option>
-                            ))}
-                        </select>
-
-                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
-                            <option value="">Function</option>
-                            <option value="d2:ceil (<number>)">d2:ceil {'(<number>)'}</option>
-                            <option value="d2:floor (<number>)">d2:floor {'(<number>)'}</option>
-                            <option value="d2:round (<number>)">d2:round {'(<number>)'}</option>
-                            <option value="d2:modulus (<number>,<number>)">d2:modulus {'(<number>,<number>)'}</option>
-                            <option value="d2:zing (<number>)">d2:zing {'(<number>)'}</option>
-                            <option value="d2:oizp (<number>)">d2:oizp {'(<number>)'}</option>
-                            <option value="d2:concatenate (<object>,<object>)">d2:concatenate {'(<object>,<object>)'}</option>
-                            <option value="d2:daysBetween (<date>,<date>)">d2:daysBetween {'(<date>,<date>)'}</option>  
-                            <option value="d2:weeksBetween (<date>,<date>)">d2:weeksBetween {'(<date>,<date>)'}</option>
-                            <option value="d2:monthsBetween (<date>,<date>)">d2:monthsBetween {'(<date>,<date>)'}</option>
-                            <option value="d2:yearsBetween (<date>,<date>)">d2:yearsBetween {'(<date>,<date>)'}</option>
-                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
-                            <option value="d2:validatePattern (<text>,<regex>)">d2:validatePattern {'(<text>,<regex>)'}</option>
-                            <option value="d2:addDays (<date>,<number>)">d2:addDays {'(<date>,<number>)'}</option>
-                            <option value="d2:countIfValue (<sourcefield>, <value>)">d2:countIfValue {'(<sourcefield>, <value>)'}</option>
-                            <option value="d2:countIfZeroPos (<sourcefield>)">d2:countIfZeroPos {'(<sourcefield>)'}</option>
-                            <option value="d2:zpvc (<object>,<object>)">d2:zpvc {'(<object>,<object>)'}</option>
-                            <option value="d2:validatePatterns (<text>,<regex)">d2:validatePatterns {'(<text>,<regex)'}</option>
-                            <option value="d2:left (<text>,<number>)">d2:left {'(<text>,<number>)'}</option>
-                            <option value="d2:right (<text>,<number>)">d2:right {'(<text>,<number>)'}</option>
-                            <option value="d2:substring (<text>,<number>,<number>)">d2:substring {'(<text>,<number>,<number>)'}</option>  
-                            <option value="d2:split (<text>,<text>,<number>)">d2:split {'(<text>,<text>,<number>)'}</option>
-                            <option value="d2:length (<text>)">d2:length {'(<text>)'}</option>
-                            <option value="d2:inOrgUnitGroup( <orgunit_group_code> )">d2:inOrgUnitGroup{'( <orgunit_group_code> )'}</option>
-                            <option value="d2:hasUserRole( <user_role> )">d2:hasUserRole{'( <user_role> )'}</option>
-                            <option value="d2:zScoreWFA( <ageInMonth>, <weight>, <gender> )">d2:zScoreWFA{'( <ageInMonth>, <weight>, <gender> )'}</option>  
-                            <option value="d2:zScoreHFA( <ageInMonth>, <height>, <gender> )">d2:zScoreHFA{'( <ageInMonth>, <height>, <gender> )'}</option>
-                            <option value="d2:zScoreWFH( <height>, <weight>, <gender> )">d2:zScoreWFH{'( <height>, <weight>, <gender> )'}</option>
-                            <option value="d2:extractDataMatrixValue( <key>, <value>)">d2:extractDataMatrixValue{'( <key>, <value>)'}</option>
-                        </select>
-                    </div>
+                <h4 className='section1'><span className="circle">2</span> Define program rule condition</h4>
+                <div className="form-group">
+                    <label>Condition(*)</label>
+                    <textarea className="form-input" name="condition" value={condition} onChange={handleChange} placeholder="Enter Condition"></textarea>
+                    <div className={`syntax-message ${isSyntaxCorrect === 2 ? 'correct' : 'incorrect'}`}>{getSyntaxMessage()}</div>
                 </div>
-                <div style={{ display: 'grid' }}  >
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  > 
-                        {Object.keys(operatorMapping).map((displayLabel) => (
-                            <span
-                                key={displayLabel}
-                                onClick={() => handleOperatorClick(operatorMapping[displayLabel])}
-                                style={{ padding: '5px 10px', cursor: 'pointer', fontSize: '21px', borderRadius: '4px' }} 
-                                disabled={!programRule.program}
-                            >
-                                {displayLabel}
-                            </span>
-                        ))}
-                    </div>
-                    <p>{getSyntaxMessage()}</p>
+                <div className="form-group">
+                    <label>Functions</label>
+                    <DropdownButton options={["#{value}", "#{option}", "d2:daysBetween"]} name="function" onChange={handleChange} />
                 </div>
-                <h4 className='section1'><span className="circle">3</span> Define program rule action</h4>
-                {/* <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program}>
-                    <option value="">Select Action</option>
-                    <option value="SHOWWARNING">Show warning message</option>
-                    <option value="SHOWERROR">Show error message</option>
-                    <option value="HIDEFIELD">Hide field</option>
-                    <option value="MANDATORYFIELD">Make field mandatory</option>
-                </select>  */}
-
-    
-            <DropdownButton   className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action" disabled={!programRule.program} />
-   
-        
-                <Button 
-                className="form-buttonsave" type="submit" disabled={mutationLoading}
-        variant="contained"
-        color="primary"
-        onClick={handleSaveClick}
-        // disabled={mutationLoading}
-      >
-        Save
-      </Button>
-
-      <Dialog
-        open={isDialogOpen}
-        onClose={handleDialogClose}
-        aria-labelledby="validation-dialog-title"
-      >
-        <DialogTitle id="validation-dialog-title">Validate Save</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please validate the save operation.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleValidation} color="primary">
-            Validate
-          </Button>
-          <Button onClick={handleDialogClose} color="secondary">
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-                {/* <button className="form-buttonsave" type="submit" disabled={mutationLoading}>Save</button> */}
-                <Link to="/programRules">
-                    <button className="form-buttoncancel">Back</button>
-                </Link>
-              
+                <div className="form-group">
+                    <label>Program rule variables</label>
+                    <DropdownButton options={variables.map(v => v.displayName)} name="variable" onChange={handleChange} />
+                </div>
+                <h4 className='section1'><span className="circle">3</span> Program rule action</h4>
+                <div className="form-group">
+                    <label>Action Type(*)</label>
+                    <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action Type">
+                        <option value="">Select Action Type</option>
+                        <option value="ASSIGN">Assign value</option>
+                        <option value="SHOWWARNING">Show warning</option>
+                        <option value="SHOWERROR">Show error</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>Data Element(*)</label>
+                    <input className="form-input" type="text" name="dataElementId" value={programRule.dataElementId} onChange={handleChange} placeholder="Data Element ID" />
+                </div>
+                <div className="button-container">
+                    <button type="button" onClick={handleSaveClick} disabled={mutationLoading} className="save-button">
+                        {mutationLoading ? 'Saving...' : 'Save'}
+                    </button>
+                    <Link to="/" className="cancel-button">Cancel</Link>
+                </div>
             </div>
+            <Dialog
+                fullScreen={fullScreen}
+                open={isDialogOpen}
+                onClose={handleDialogClose}
+                aria-labelledby="validation-dialog-title"
+            >
+                <DialogTitle id="validation-dialog-title">Validate Program Rule</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        The program rule was saved successfully! Do you want to validate the program rule now?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleDialogClose}>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleValidation} autoFocus>
+                        Validate
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </form>
     );
 };
