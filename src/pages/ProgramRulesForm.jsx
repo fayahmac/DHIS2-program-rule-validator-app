@@ -31,6 +31,8 @@ const ProgramRulesForm = () => {
     const [variables, setVariables] = useState([]);
     const [mutationLoading, setMutationLoading] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const { loading: loadingPrograms, error: errorPrograms, data: dataPrograms } = useDataQuery({
         programs: {
@@ -196,14 +198,21 @@ const ProgramRulesForm = () => {
 
             const response = await mutate(payload);
             console.log('API Response:', response);
-
-            alert('Program rule saved successfully!');
+            setIsDialogOpen(true);
         } catch (error) {
             console.error('Error saving program rule:', error);
             alert('Failed to save program rule');
         } finally {
             setMutationLoading(false);
         }
+       
+    };
+    const handleDialogClose = () => {
+        setIsDialogOpen(false);
+    };
+
+    const handleValidation = () => {
+        setIsDialogOpen(false);
     };
 
     return (
@@ -255,26 +264,34 @@ const ProgramRulesForm = () => {
                         handleChange={handleChange}
                     />
                 </div>
-                <h4 className='section2'><span className="circle">2</span> Enter program rule action</h4>
-                <div className="form-group">
-                    <label>Action Type (Optional)</label>
-                    <input className="form-input" type="text" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action Type" />
-                </div>
-                <div className="form-group">
-                    <label>Data Element ID (Optional)</label>
-                    <input className="form-input" type="text" name="dataElementId" value={programRule.dataElementId} onChange={handleChange} placeholder="Data Element ID" />
-                </div>
-                <div className="form-group">
-                    <label>Action Data (Optional)</label>
-                    <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
-                </div>
                 <div className="form-actions">
                     <button className="form-button" type="submit" disabled={mutationLoading}>
                         {mutationLoading ? 'Saving...' : 'Save'}
                     </button>
-                    <Link className="form-button cancel-button" to="/program-rules">Cancel</Link>
+                    <button> <Link to="/" style={{ textDecoration: 'none' }}>BACK</Link></button>
                 </div>
             </div>
+            <Dialog
+                fullScreen={fullScreen}
+                open={isDialogOpen}
+                onClose={handleDialogClose}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogTitle id="responsive-dialog-title">{"Program rule validation"}</DialogTitle>
+                <DialogContent> 
+                    <DialogContentText>
+                        The Rule successfully created: Run validation!
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDialogClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleValidation} color="primary" autoFocus>
+                    <Link to="/configuration-engine" style={{ textDecoration: 'none' }}>Validate</Link>
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </form>
     );
 };
