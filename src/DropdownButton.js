@@ -81,7 +81,7 @@ const DropdownDialog = () => {
         }
     };
 
-    const handleValidation = () => {
+    const handleValidationn = () => {
         // Create the concatenated string based on the selected options
         let concatString = selectedOption;
         if (selectedOption === "Show Warning" || selectedOption === "Show error") {
@@ -227,7 +227,7 @@ const DropdownDialog = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleValidation} color="primary">
+                    <Button onClick={handleValidationn} color="primary">
                         COMMIT
                     </Button>
                     <Button onClick={handleClose} color="secondary">
