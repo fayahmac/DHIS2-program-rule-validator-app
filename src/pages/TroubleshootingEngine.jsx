@@ -100,8 +100,9 @@ const TroubleshootingEngine = ({ contextPath }) => {
   const [error, setError] = useState(null);
   const [expandedRule, setExpandedRule] = useState(null);
   const [validationResults, setValidationResults] = useState({});
+  const [previousData, setPreviousData] = useState(null);
 
-  const { data, error: queryError, loading: queryLoading } = useDataQuery(query);
+  const { data, error: queryError, loading: queryLoading, refetch } = useDataQuery(query);
 
   useEffect(() => {
     if (queryError) {
@@ -112,9 +113,26 @@ const TroubleshootingEngine = ({ contextPath }) => {
       if (data.programRules && data.programRules.programRules) {
         const sortedRules = data.programRules.programRules.sort((a, b) => new Date(b.created) - new Date(a.created));
         setFailedRules(sortedRules);
+        setPreviousData(data);
       }
     }
   }, [data, queryError, queryLoading]);
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      try {
+        const newData = await refetch();
+        if (JSON.stringify(newData) !== JSON.stringify(previousData)) {
+          // If data has changed, reload the page
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('Error fetching new data:', error);
+      }
+    }, 60000); // Check for updates every 60 seconds
+
+    return () => clearInterval(intervalId); // Clean up the interval on component unmount
+  }, [previousData, refetch]);
 
   const handleRuleClick = async (rule) => {
     try {

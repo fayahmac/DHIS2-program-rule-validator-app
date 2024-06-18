@@ -1,0 +1,53 @@
+{
+    "programRules": [
+        {
+            "program": {
+                "id": "IpHINAT79UW"
+            },
+            "name": "mc-check ",
+            "priority": "1",
+            "description": "check if the age limit is below 5 is included",
+            "condition": "1==1",
+            "programRuleActions": [
+                {
+                    "programRuleActionType": "DISPLAYTEXT",
+                    "data": "",
+                    "location": "feedback"
+                }
+            ]
+        }
+    ]
+}............
+
+{
+    "programRules": [
+        {
+            "description": "getting the payload",
+            "priority": "1",
+            "condition": "1==1",
+            "name": "check",
+            "program": {
+                "id": "IpHINAT79UW"
+            },
+            "programRuleActions": [
+                {
+                    "data": "1==1",
+                    "content": "n",
+                    "id": "K7q5dthSf0x",
+                    "href": "<strip from clone>",
+                    "programRuleActionType": "SHOWWARNING",
+                    "trackedEntityAttribute": {
+                        "id": "w75KJ2mc4zz"
+                    },
+                    "programRule": {
+                        "id": "AKAlW2KR2FX"
+                    },
+                    "dataElement": {
+                        "id": "a3kGcGDCuk6"
+                    }
+                }
+            ],
+            "id": "AKAlW2KR2FX"
+        }
+    ]
+}

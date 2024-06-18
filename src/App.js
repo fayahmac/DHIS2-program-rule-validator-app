@@ -6,16 +6,17 @@ import ProgramRuleValidator from './pages/ProgramRuleValidator';
 import ProgramRulesForm from './pages/ProgramRulesForm';
 import NotificationPage from './pages/NotificationPage';
 import TroubleshootingEngine from './pages/TroubleshootingEngine';
+// import Programrule from './pages/Programrule';
 
 function App() {
-  const contextPath = ' https://play.im.dhis2.org/stable-2-38-6'; 
+  const contextPath = 'https://play.im.dhis2.org/stable-2-41-0'; 
 
   return (
     <HashRouter>
       <Routes>
         {/* Routing and rendering the home page component the dashboard view */}
         <Route path="/" element={<Dashboard />} />
-        <Route path="/program-rules" element={<ProgramRulesForm />} />
+        <Route path="/program-rules" element={<ProgramRulesForm/>} />
         <Route path="/validate-rules" element={<ProgramRuleValidator />} />
        <Route path="/notification" element={<NotificationPage />} />
         <Route path="/configuration-engine" element={<TroubleshootingEngine contextPath={contextPath} />} />

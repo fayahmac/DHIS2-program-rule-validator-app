@@ -114,37 +114,23 @@ const ProgramRulesForm = () => {
 
     const fetchNewId = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/system/id', {
+            const response = await fetch('/api/system/id', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Basic ${btoa('admin:district')}` // Ensure these credentials are correct
+                    'Authorization': `Basic ${btoa('username:password')}` // Replace with your actual credentials
                 }
             });
-    
             if (!response.ok) {
-                console.error('Response Status:', response.status, response.statusText);
-                const errorText = await response.text();
-                console.error('Response Body:', errorText);
-                throw new Error(`Failed to fetch new ID: ${response.statusText}`);
+                throw new Error('Failed to fetch new ID');
             }
-    
-            // Check if response is JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const errorText = await response.text();
-                console.error('Response Body:', errorText);
-                throw new Error('Response is not valid JSON');
-            }
-    
             const data = await response.json();
-            return data.codes[0];
+            return data.codes[0]; // Assuming 'codes' is the key in the returned JSON where IDs are stored
         } catch (error) {
             console.error('Error fetching new ID:', error);
             throw error;
         }
     };
-    
 
     const createProgramRuleMutation = {
         resource: 'metadata',
@@ -163,15 +149,17 @@ const ProgramRulesForm = () => {
         try {
             setMutationLoading(true);
 
+            // Fetch new IDs for the program rule and the program rule action
             const [newProgramRuleId, newProgramRuleActionId] = await Promise.all([fetchNewId(), fetchNewId()]);
 
+            // Create the payload
             const payload = {
                 programRules: [
                     {
                         id: newProgramRuleId,
-                        description: programRule.description,
-                        priority: programRule.priority,
-                        condition: programRule.condition,
+                        description: programRule.description || '',
+                        priority: programRule.priority || '1',
+                        condition: programRule.condition || '1==1',
                         name: programRule.name,
                         program: {
                             id: programRule.program,
@@ -181,21 +169,23 @@ const ProgramRulesForm = () => {
                                 {
                                     id: newProgramRuleActionId,
                                     programRuleActionType: programRule.actionType,
-                                    data: programRule.actionData,
+                                    data: programRule.actionData || '',
                                     content: 'n',
                                     programRule: {
                                         id: newProgramRuleId,
                                     },
-                                    dataElement: programRule.dataElementId ? { id: programRule.dataElementId } : undefined,
+                                    dataElement: {
+                                        id: programRule.dataElementId || '', // Use your dataElementId or provide a default one
+                                    },
                                 },
                             ]
-                            : [],
+                            : [], // Empty array if no actionType is provided
                     },
                 ],
             };
 
-            const response = await mutate(payload);
-            console.log('API Response:', response);
+            // Submit the payload
+            await mutate(payload);
 
             alert('Program rule saved successfully!');
         } catch (error) {
@@ -237,35 +227,20 @@ const ProgramRulesForm = () => {
                 </div>
                 <div className="form-group">
                     <label>Program Rule Variable</label>
-                    <DropdownButton items={variables} name="variable" handleChange={handleChange} />
-                </div>
-                <div className="form-group">
-                    <label>Function</label>
                     <DropdownButton
-                        items={[
-                            { id: '(', displayName: '(' },
-                            { id: ')', displayName: ')' },
-                            { id: '=', displayName: '=' },
-                            { id: '>', displayName: '>' },
-                            { id: '<', displayName: '<' },
-                            { id: '&&', displayName: '&&' },
-                            { id: '||', displayName: '||' },
-                        ]}
-                        name="function"
-                        handleChange={handleChange}
+                        name="variable"
+                        value={programRule.dataElementId}
+                        options={variables.map(variable => ({ value: variable.id, label: variable.displayName }))}
+                        onSelect={handleChange}
+                        defaultOptionText="Select Variable"
                     />
                 </div>
-                <h4 className='section2'><span className="circle">2</span> Enter program rule action</h4>
                 <div className="form-group">
-                    <label>Action Type (Optional)</label>
+                    <label>Action Type</label>
                     <input className="form-input" type="text" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action Type" />
                 </div>
                 <div className="form-group">
-                    <label>Data Element ID (Optional)</label>
-                    <input className="form-input" type="text" name="dataElementId" value={programRule.dataElementId} onChange={handleChange} placeholder="Data Element ID" />
-                </div>
-                <div className="form-group">
-                    <label>Action Data (Optional)</label>
+                    <label>Action Data</label>
                     <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
                 </div>
                 <div className="form-actions">
