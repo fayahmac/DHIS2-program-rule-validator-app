@@ -365,11 +365,11 @@ const ProgramRulesForm = () => {
                         handleChange={handleChange}
                     />
                 </div>
-                <div className="form-actions">
-                    <button className="form-button" type="submit" disabled={mutationLoading}>
-                        {mutationLoading ? 'Saving...' : 'Save'}
+                <div className="form-button">
+                    <button className="form-buttonsave" type="submit" disabled={mutationLoading}>
+                        {mutationLoading ? 'Saving...' : 'SAVE'}
                     </button>
-                    <button> <Link to="/" style={{ textDecoration: 'none' }}>BACK</Link></button>
+                    <button className="form-buttoncancel"> <Link to="/" style={{ textDecoration: 'none' }}>CANCEL</Link></button>
                 </div>
             </div>
             <Dialog
