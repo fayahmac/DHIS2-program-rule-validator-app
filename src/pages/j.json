@@ -1,0 +1,48 @@
+{
+    "programRules": [
+        {
+            "id": "w5kW02vIm2W",
+            "description": "Show warrning if Apgar is between 0 and 4 and there is no comment provided.",
+            "priority": "1",
+            "condition": "1==1",
+            "name": "checkfoodvc",
+            "program": {
+                "id": "IpHINAT79UW"
+            },
+            "programRuleActions": [
+                {
+                    "id": "fdQJpQ8PHhj",
+                    "data": "1==1",
+                    "content": "",
+                    "programRuleActionType": "SHOWWARNING",
+                    "trackedEntityAttribute": {
+                        "id": "B6TnnFMgmCk"
+                    },
+                    "programRule": {
+                        "id": "w5kW02vIm2W"
+                    },
+                    "dataElement": {
+                        "id": ""
+                    }
+                }
+            ]
+        }
+    ],
+    "programRuleActions": [
+        {
+            "id": "fdQJpQ8PHhj",
+            "data": "1==1",
+            "content": "",
+            "programRuleActionType": "SHOWWARNING",
+            "trackedEntityAttribute": {
+                "id": "B6TnnFMgmCk"
+            },
+            "programRule": {
+                "id": "w5kW02vIm2W"
+            },
+            "dataElement": {
+                "id": ""
+            }
+        }
+    ]
+}

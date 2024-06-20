@@ -261,7 +261,10 @@ const ProgramRulesForm = () => {
                                 programRule: {
                                     id: newProgramRuleId,
                                 },
-                              
+                                dataElement: {
+                                    id: selectedDataElementId,
+                                },
+
                             },
                         ] ,
                     },
@@ -278,7 +281,9 @@ const ProgramRulesForm = () => {
                         programRule: {
                             id: newProgramRuleId,
                         },
-                      
+                        dataElement: {
+                            id: selectedDataElementId,
+                        },
                     },
                 ] 
             };
@@ -455,7 +460,7 @@ const ProgramRulesForm = () => {
             </div>
             <div className="form-group">
                 <label>Data Element</label>
-                <select className="form-input" name="dataElementId" value={programRule.dataElementId} onChange={handleChange} placeholder="Data Element">
+                <select className="form-input" name="dataElement" value={programRule.dataElement} onChange={handleChange} placeholder="Data Element">
                     <option value="">Select Data Element</option>
                     {dataElements.map(element => (
                         <option key={element.id} value={element.id}>{element.displayName}</option>
@@ -473,7 +478,7 @@ const ProgramRulesForm = () => {
                     </div>
                     <div className="form-group">
                     <label>static text</label>
-                    <input className="form-input" type="text" name="static text" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
+                    <input className="form-input" type="text" name="staticText" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
                    </div>
                     <div className="form-group">
                     <label>Expression to evaluate and display after static text</label>
