@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDataQuery, useDataMutation } from '@dhis2/app-runtime';
-import './ProgramRuleValidator.css';
+import './ProgramRuleConfig.css';
 
 const ProgramRuleConfig = () => {
   const navigate = useNavigate();

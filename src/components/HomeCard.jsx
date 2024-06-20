@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { BsFillArchiveFill, BsListCheck, BsFillBellFill, BsTools, BsGear, BsFillPeopleFill } from 'react-icons/bs';
 import { FiPlus } from 'react-icons/fi';
-import { FaAd, FaBackward, FaBeer, FaCheck, FaCheckDouble, FaCut, FaExchangeAlt, FaExclamation, FaForward, FaGlobe, FaHandPointRight } from 'react-icons/fa';
-import './HomeCard.css'; 
+import { FaAd, FaBackward, FaBeer, FaCheck, FaCheckDouble, FaCut, FaExchangeAlt, FaExclamation, FaForward, FaGlobe, FaHandPointRight } from 'react-icons/fa'; 
 import { Link } from 'react-router-dom';
 
 const programRulesQuery = {
