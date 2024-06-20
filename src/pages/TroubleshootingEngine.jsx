@@ -431,7 +431,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
           </div>
         </div>
       ))}
-      <button className="buttonn"><Link to="/" style={{ textDecoration: 'none' }}>BACK</Link></button>
+      <button className="buttonn"><Link to="/" style={{ textDecoration: 'none', color:'white', }}>BACK</Link></button>
     </div>
   );
 };

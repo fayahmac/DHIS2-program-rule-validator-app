@@ -478,7 +478,7 @@ const ProgramRulesForm = () => {
                     </div>
                     <div className="form-group">
                     <label>static text</label>
-                    <input className="form-input" type="text" name="staticText" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
+                    <input className="form-input" type="text" name="actionContent" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
                    </div>
                     <div className="form-group">
                     <label>Expression to evaluate and display after static text</label>
