@@ -81,9 +81,7 @@ const ProgramRulesForm = () => {
         setOpen(false);
     };
 
-   
-
-    const { loading: loadingPrograms, error: errorPrograms, data: dataPrograms } = useDataQuery({
+   const { loading: loadingPrograms, error: errorPrograms, data: dataPrograms } = useDataQuery({
         programs: {
             resource: 'programs',
             params: {
@@ -164,8 +162,10 @@ const ProgramRulesForm = () => {
         }
         if (name === 'dataElement') {
             setSelectedDataElementId(value);
+            console.log('Selected Data Element ID:', value);
         } else if (name === 'trackedEntity') {
             setSelectedTrackedEntityId(value);
+            console.log('Selected Data Element ID:', value);
         }
     };
     const fetchNewId = async () => {
@@ -261,10 +261,7 @@ const ProgramRulesForm = () => {
                                 programRule: {
                                     id: newProgramRuleId,
                                 },
-                                dataElement: {
-                                    id: selectedDataElementId,
-                                },
-
+                              
                             },
                         ] ,
                     },
@@ -275,15 +272,13 @@ const ProgramRulesForm = () => {
                         data: programRule.actionData,
                         content: programRule.actionContent,
                         programRuleActionType: programRule.actionType,
-                        // trackedEntityAttribute: {
-                        //     id: selectedTrackedEntityId,
-                        // },
+                        trackedEntityAttribute: {
+                            id: selectedTrackedEntityId,
+                        },
                         programRule: {
                             id: newProgramRuleId,
                         },
-                        // dataElement: {
-                        //     id: selectedDataElementId,
-                        // },
+                      
                     },
                 ] 
             };
@@ -479,7 +474,7 @@ const ProgramRulesForm = () => {
                     <div className="form-group">
                     <label>static text</label>
                     <input className="form-input" type="text" name="static text" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
-                </div>
+                   </div>
                     <div className="form-group">
                     <label>Expression to evaluate and display after static text</label>
                     <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />

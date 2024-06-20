@@ -1,0 +1,33 @@
+.card{
+    padding: 10px;
+    margin-left: 0px;
+    margin-right: 20px;
+    background-color: aliceblue;
+    color: rgb(6, 12, 87);
+    text-align: center;
+    box-shadow: 10px 10px 20px rgba(83, 79, 79, 0.5);
+    border-radius: 20px;
+}
+.cardlist{
+    /* box-shadow: 10px 10px 20px rgba(0.2, 0, 0, 0.3);  */
+    border-radius: 10px;
+    margin-bottom: 6px;
+    box-shadow: 10px 10px 20px rgba(252, 234, 234, 0.8);
+}
+.plus-button{
+    box-shadow: 10px 10px 20px rgba(94, 77, 77, 0.8);
+    background-color: #152186ec;
+    color: rgb(251, 252, 253);
+
+}
+.cardlist1{
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px rgba(252, 234, 234, 0.8);
+    
+}
+.cardlist0{
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px rgba(252, 234, 234, 0.8);
+}

@@ -43,6 +43,7 @@
   margin: 20px;
   margin-left: 150px;
   background-color: #007bff;
+  box-shadow: 10px 10px 20px rgb(83,79,79,0.5);
   color: #fff;
   border: none;
   border-radius: 3px;
@@ -56,6 +57,7 @@
   background-color: #d4d1d1;
   border: none;
   border-radius: 3px;
+  box-shadow: 10px 10px 20px rgb(83,79,79,0.5);
   cursor: pointer;
 }
 
