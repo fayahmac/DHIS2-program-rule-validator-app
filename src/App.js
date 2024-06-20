@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Dashboard from './pages/Dashboard';
 import {HashRouter, Route, Routes } from 'react-router-dom';
-import ProgramRuleValidator from './pages/ProgramRuleValidator';
+import ProgramRuleConfig from './pages/ProgramRuleConfig';
 import ProgramRulesForm from './pages/ProgramRulesForm';
 import TroubleshootingEngine from './pages/TroubleshootingEngine';
 
@@ -17,7 +17,7 @@ function App() {
         {/* Routing and rendering the home page component the dashboard view */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/program-rules" element={<ProgramRulesForm/>} />
-        <Route path="/Config-rules" element={<ProgramRuleValidator />} />
+        <Route path="/Config-rules" element={<ProgramRuleConfig />} />
         <Route path="/configuration-engine" element={<TroubleshootingEngine contextPath={contextPath} />} />
       </Routes>
     </HashRouter>

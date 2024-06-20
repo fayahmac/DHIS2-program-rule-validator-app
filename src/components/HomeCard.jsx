@@ -70,7 +70,7 @@ const HomeCard = () => {
                     </div>
                     {/* home second card in the row and its inside card with routing link */}
                     <div className="card green">
-                        <h3><BsListCheck className='icon'/> Rule Validator</h3> 
+                        <h3><BsListCheck className='icon'/> Configure Rule</h3> 
                         <Link to="/Config-rules" style={{ textDecoration: 'none' }}>
                             <div className="cardlist1">
                             {/* displaying fetcheng program rule counted in the card*/}

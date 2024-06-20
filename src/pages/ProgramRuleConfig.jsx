@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDataQuery, useDataMutation } from '@dhis2/app-runtime';
 import './ProgramRuleValidator.css';
 
-const ProgramRuleValidator = () => {
+const ProgramRuleConfig = () => {
   const navigate = useNavigate();
 
   // Define the query to fetch multiple data elements
@@ -54,7 +54,7 @@ const ProgramRuleValidator = () => {
   // Render the component
   return (
     <div className="program-rule-validator">
-      <h2>PROGRAM RULE VALIDATOR</h2>
+      <h2>PROGRAM RULE CONFIGURATION</h2>
       <div className="search-bar-space"></div>
       <h3>Program Rules</h3>
       {loading ? (
@@ -80,4 +80,4 @@ const ProgramRuleValidator = () => {
   );
 };
 
-export default ProgramRuleValidator;
+export default ProgramRuleConfig;

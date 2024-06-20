@@ -21,12 +21,12 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
             <li className='sidebar-list-item'>
             {/* sidebar first listeditem and its routing link */}
                 <Link to="/program-rules" style={{ textDecoration: 'none' }}>
-                <BsFillArchiveFill className="icon"/>PROGRAM RULES</Link>
+                <BsFillArchiveFill className="icon"/>CREATE RULES</Link>
             </li>
             <li className='sidebar-list-item'>
              {/* sidebar second listeditem and its routing link */}
                 <Link to="/validate-rules"style={{ textDecoration: 'none' }}>
-                 <BsListCheck className='icon'/>VALIDATE RULES</Link>
+                 <BsListCheck className='icon'/>CONFIGURE RULES</Link>
             </li>
             <li className='sidebar-list-item'>
              {/* sidebar third listeditem and its routing link */}
