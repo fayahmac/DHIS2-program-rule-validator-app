@@ -68,11 +68,6 @@ const ProgramRuleValidator = () => {
           {programRules.map(rule => (
             <li key={rule.id} className="program-rule">
               <span>{rule.displayName}</span>
-              <button onClick={() => handleEditClick(rule)}>
-                <Link to={`/edit-rules/${rule.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  Edit
-                </Link>
-              </button>
               <button onClick={() => handleDeleteClick(rule)}>
                 Delete
               </button>

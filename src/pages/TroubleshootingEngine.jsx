@@ -333,7 +333,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
       console.log('Evaluating condition:', validExpression); // Debugging line
 
       const result = evaluate(validExpression);
-      return result ? '' : 'Condition evaluated to false';
+      return result ? '' : 'Condition evaluated to false: this might be due to lack of mapped value or variable';
     } catch (e) {
       console.error(`Error evaluating condition "${condition}":`, e.message);
       return `Condition ${condition} not executed: ${e.message}`;
@@ -423,7 +423,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
                       ))}
                     </div>
                   ) : (
-                    <p>{validationResults[rule.id]?.isValid ? 'Rule is valid.' : 'No validation errors found.'}</p>
+                    <p>{validationResults[rule.id]?.isValid ? 'Rule will trigger the action.' : 'No validation errors found.'}</p>
                   )}
                 </div>
               )}

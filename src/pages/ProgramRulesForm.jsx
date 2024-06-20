@@ -306,6 +306,14 @@ const ProgramRulesForm = () => {
     const handleValidation = () => {
         setIsDialogOpen(false);
     };
+
+    const handleOperatorClick = (operator) => {
+        const textarea = document.querySelector('.form-condition');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const newValue = condition.slice(0, start) + operator + condition.slice(end);
+        handleChange({ target: { name: 'condition', value: newValue } });
+    };
     const operatorMapping = {
         '+': '+',
         '-': '-',
