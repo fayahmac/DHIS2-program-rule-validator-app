@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './ProgramRulesForm.css';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -13,6 +13,7 @@ import { useTheme } from '@mui/material/styles';
 
 
 const EditProgramRule = () => {
+    const { ruleId } = useParams(); 
     const [programRule, setProgramRule] = useState({
         program: '',
         name: '',
@@ -57,6 +58,47 @@ const EditProgramRule = () => {
             },
         },
     };
+
+    
+    const programRuleQuery = {
+        programRule: {
+            resource: `programRules/${ruleId}`,
+            params: {
+                fields: [
+                    'id',
+                    'name',
+                    'priority',
+                    'description',
+                    'condition',
+                    'program[id]',
+                    'programRuleActions[data,content,programRuleActionType,trackedEntityAttribute[id],dataElement[id]]'
+                ],
+            },
+        },
+    };
+
+    const { loading: loadingProgramRule, error: errorProgramRule, data: dataProgramRule } = useDataQuery(programRuleQuery);
+
+    useEffect(() => {
+        if (!loadingProgramRule && !errorProgramRule && dataProgramRule) {
+            const fetchedProgramRule = dataProgramRule.programRule;
+            setProgramRule({
+                program: fetchedProgramRule.program.id,
+                name: fetchedProgramRule.name,
+                priority: fetchedProgramRule.priority,
+                description: fetchedProgramRule.description,
+                condition: fetchedProgramRule.condition,
+                actionType: fetchedProgramRule.programRuleActions[0]?.programRuleActionType || '',
+                actionData: fetchedProgramRule.programRuleActions[0]?.data || '',
+                actionContent: fetchedProgramRule.programRuleActions[0]?.content || '',
+                trackedEntity: fetchedProgramRule.programRuleActions[0]?.trackedEntityAttribute?.id || '',
+                dataElement: fetchedProgramRule.programRuleActions[0]?.dataElement?.id || ''
+            });
+            setCondition(fetchedProgramRule.condition);
+            setSelectedTrackedEntityId(fetchedProgramRule.programRuleActions[0]?.trackedEntityAttribute?.id || '');
+            setSelectedDataElementId(fetchedProgramRule.programRuleActions[0]?.dataElement?.id || '');
+        }
+    }, [loadingProgramRule, errorProgramRule, dataProgramRule]);
 
     const { loading: loadingDataElements, error: errorDataElements, data: dataDataElements } = useDataQuery(dataElementQuery);
     const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataTrackedEntityAttributes } = useDataQuery(trackedEntityAttributeQuery);
@@ -168,6 +210,7 @@ const EditProgramRule = () => {
             setSelectedTrackedEntityId(value);
         }
     };
+
     const fetchNewId = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/system/id', {
@@ -218,11 +261,12 @@ const EditProgramRule = () => {
         }
     };
 
-    const createProgramRuleMutation = {
+   const createProgramRuleMutation = {
         resource: 'metadata',
-        type: 'create',
+        type: 'update',
         data: (payload) => payload,
     };
+
 
     const [mutate] = useDataMutation(createProgramRuleMutation);
 

@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/program-rules" element={<ProgramRulesForm/>} />
         <Route path="/Config-rules" element={<ProgramRuleValidator />} />
-       <Route path="/edit-rules" element={<EditProgramRule />} />
+       <Route path="/edit-rules/:ruleId" element={<EditProgramRule />} />
         <Route path="/configuration-engine" element={<TroubleshootingEngine contextPath={contextPath} />} />
       </Routes>
     </HashRouter>

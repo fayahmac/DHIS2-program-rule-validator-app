@@ -12,7 +12,7 @@ const ProgramRuleValidator = () => {
       resource: 'programRules',
       params: { fields: '*,created' },
     },
-     };
+  };
 
   // Define the delete mutation
   const deleteMutation = {
@@ -45,9 +45,10 @@ const ProgramRuleValidator = () => {
     }
   };
 
-  // Handle edit click (you need to implement this function)
+  // Handle edit click
   const handleEditClick = (rule) => {
-    // Implement your edit logic here
+    // Navigate to the edit page with the rule ID
+    navigate(`/edit-rules/${rule.id}`);
   };
 
   // Render the component
@@ -68,9 +69,9 @@ const ProgramRuleValidator = () => {
             <li key={rule.id} className="program-rule">
               <span>{rule.displayName}</span>
               <button onClick={() => handleEditClick(rule)}>
-              <Link to="/edit-rules">
-              Edit
-              </Link>
+                <Link to={`/edit-rules/${rule.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  Edit
+                </Link>
               </button>
               <button onClick={() => handleDeleteClick(rule)}>
                 Delete
