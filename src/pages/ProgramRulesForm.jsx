@@ -25,13 +25,25 @@ const ProgramRulesForm = () => {
         condition: '',
         actionType: '',
         actionData: '',
-        dataElementId: ''
+        actionContent:'',
+        trackedEntity:'',
+        dataElement: ''
     });
- 
-
-
-
-
+    const [selectedFunction, setSelectedFunction] = useState('');
+    const [condition, setCondition] = useState('');
+    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
+    const [programs, setPrograms] = useState([]);
+    const [variables, setVariables] = useState([]);
+    const [mutationLoading, setMutationLoading] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [selectedDataElementId, setSelectedDataElementId] = useState('');
+    const [selectedTrackedEntityId, setSelectedTrackedEntityId] = useState('');
+    const [open, setOpen] = useState(false);
+    const [dataElements, setDataElements] = useState([]);
+    const [trackedEntityAttributes, setTrackedEntityAttributes] = useState([]);
+   
     const dataElementQuery = {
         dataElements: {
             resource: 'dataElements',
@@ -49,21 +61,7 @@ const ProgramRulesForm = () => {
             },
         },
     };
-
-
-
-
-
-    const [open, setOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState("");
-    const [selectedDataElement, setSelectedDataElement] = useState(""); // State to hold selected data element name after commit
-    const [field1, setField1] = useState(""); // For selected action or data element id
-    const [field2, setField2] = useState(""); // For selected tracked entity attribute id
-    const [field3, setField3] = useState(""); // For static text input
-    const [dataElements, setDataElements] = useState([]);
-    const [concatenatedString, setConcatenatedString] = useState(''); 
-    const [trackedEntityAttributes, setTrackedEntityAttributes] = useState([]);
-
+    
     const { loading: loadingDataElements, error: errorDataElements, data: dataDataElements } = useDataQuery(dataElementQuery);
     const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataTrackedEntityAttributes } = useDataQuery(trackedEntityAttributeQuery);
 
@@ -87,76 +85,7 @@ const ProgramRulesForm = () => {
         setOpen(false);
     };
 
-    const handleOptionSelect = (event) => {
-        const value = event.target.value;
-        setSelectedOption(value);
-        // Reset fields when a new option is selected
-        setField1(""); // Reset selected data element or action id
-        setField2(""); // Reset selected tracked entity attribute id
-        setField3(""); // Reset static text
-        setSelectedDataElement(""); // Reset selectedDataElement state
-    };
-
-    const handleDataElementSelect = (event) => {
-        const selectedElementId = event.target.value;
-        const selectedElement = dataElements.find(element => element.id === selectedElementId);
-        if (selectedElement) {
-            setField1(selectedElement.id); // Set selected data element id
-            setSelectedDataElement(selectedElement.displayName); // Set selected data element name to display after commit
-        }
-    };
-
-    const handleValidationn = () => {
-        // Create the concatenated string based on the selected options
-        let concatString = selectedOption;
-        if (selectedOption === "Show Warning" || selectedOption === "Show error") {
-            if (field1) {
-                const selectedElement = dataElements.find(element => element.id === field1);
-                if (selectedElement) {
-                    concatString += `: on " ${selectedElement.displayName}"`;
-                }
-            }
-            if (field2) {
-                const selectedAttribute = trackedEntityAttributes.find(attribute => attribute.id === field2);
-                if (selectedAttribute) {
-                    concatString += ` - ${selectedAttribute.displayName}`;
-                }
-            }
-            if (field3) {
-                concatString += ` - ${field3}`;
-            }
-        } else if (selectedOption === "Make field mandatory") {
-            if (field1) {
-                const selectedElement = dataElements.find(element => element.id === field1);
-                if (selectedElement) {
-                    concatString += `: on " ${selectedElement.displayName}"`;
-                }
-            }
-            if (field2) {
-                const selectedAttribute = trackedEntityAttributes.find(attribute => attribute.id === field2);
-                if (selectedAttribute) {
-                    concatString += ` - ${selectedAttribute.displayName}`;
-                }
-            }
-        }
-        
-        setConcatenatedString(concatString);
-        setOpen(false);
-    };
-
-
-
-
-
-    const [selectedFunction, setSelectedFunction] = useState('');
-    const [condition, setCondition] = useState('');
-    const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
-    const [programs, setPrograms] = useState([]);
-    const [variables, setVariables] = useState([]);
-    const [mutationLoading, setMutationLoading] = useState(false);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+   
 
     const { loading: loadingPrograms, error: errorPrograms, data: dataPrograms } = useDataQuery({
         programs: {
@@ -236,6 +165,11 @@ const ProgramRulesForm = () => {
             setProgramRule({ ...programRule, condition: condition + variableSyntax });
         } else {
             setProgramRule({ ...programRule, [name]: value });
+        }
+        if (name === 'dataElement') {
+            setSelectedDataElementId(value);
+        } else if (name === 'trackedEntity') {
+            setSelectedTrackedEntityId(value);
         }
     };
     const fetchNewId = async () => {
@@ -323,11 +257,18 @@ const ProgramRulesForm = () => {
                             {
                                 id: newProgramRuleActionId,
                                 data: programRule.actionData,
-                                content: 'n',
+                                content:programRule.actionContent,
                                 programRuleActionType: programRule.actionType,
+                                // trackedEntityAttribute: {
+                                //     id: selectedTrackedEntityId,
+                                // },
                                 programRule: {
                                     id: newProgramRuleId,
                                 },
+                                // dataElement: {
+                                //     id: selectedDataElementId,
+                                // },
+
                             },
                         ] ,
                     },
@@ -336,11 +277,17 @@ const ProgramRulesForm = () => {
                     {
                         id: newProgramRuleActionId,
                         data: programRule.actionData,
-                        content: 'n',
+                        content: programRule.actionContent,
                         programRuleActionType: programRule.actionType,
+                        // trackedEntityAttribute: {
+                        //     id: selectedTrackedEntityId,
+                        // },
                         programRule: {
                             id: newProgramRuleId,
                         },
+                        // dataElement: {
+                        //     id: selectedDataElementId,
+                        // },
                     },
                 ] 
             };
@@ -390,11 +337,7 @@ const ProgramRulesForm = () => {
                 return "";
         }
     };
-
-
-
-
-    return (
+  return (
         <form onSubmit={handleSubmit}>
             <div className="form-container">
                 <h4 className='section1'><span className="circle">1</span> Enter program rule details</h4>
@@ -512,10 +455,6 @@ const ProgramRulesForm = () => {
                 </select>
             </div>
             <div className="form-group">
-                <label>Action Data</label>
-                <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
-            </div>
-            <div className="form-group">
                 <label>Data Element</label>
                 <select className="form-input" name="dataElementId" value={programRule.dataElementId} onChange={handleChange} placeholder="Data Element">
                     <option value="">Select Data Element</option>
@@ -533,6 +472,14 @@ const ProgramRulesForm = () => {
                     ))}
                     </select>
                     </div>
+                    <div className="form-group">
+                    <label>static text</label>
+                    <input className="form-input" type="text" name="static text" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
+                </div>
+                    <div className="form-group">
+                    <label>Expression to evaluate and display after static text</label>
+                    <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
+                </div>
             
                 <div className="form-button">
                     <button className="form-buttonsave" type="submit" disabled={mutationLoading}>
