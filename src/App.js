@@ -17,7 +17,7 @@ function App() {
         {/* Routing and rendering the home page component the dashboard view */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/program-rules" element={<ProgramRulesForm/>} />
-        <Route path="/validate-rules" element={<ProgramRuleValidator />} />
+        <Route path="/Config-rules" element={<ProgramRuleValidator />} />
        <Route path="/notification" element={<NotificationPage />} />
         <Route path="/configuration-engine" element={<TroubleshootingEngine contextPath={contextPath} />} />
       </Routes>

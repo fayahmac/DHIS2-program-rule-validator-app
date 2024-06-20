@@ -1,38 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDataQuery } from '@dhis2/app-runtime';
+import { useDataQuery, useDataMutation } from '@dhis2/app-runtime';
 import './ProgramRuleValidator.css';
 
 const ProgramRuleValidator = () => {
   const navigate = useNavigate();
-  
+
   // Define the query to fetch multiple data elements
   const query = {
     programRules: {
       resource: 'programRules',
       params: { fields: '*,created' },
     },
-    programRuleVariables: {
-      resource: 'programRuleVariables',
-      params: { fields: '*' },
-    },
-    trackedEntityAttributes: {
-      resource: 'trackedEntityAttributes',
-      params: { fields: '*' },
-    },
-    dataElements: {
-      resource: 'dataElements',
-      params: { fields: '*' },
-    },
-    options: {
-      resource: 'options',
-      params: { fields: '*' },
-    },
+     };
+
+  // Define the delete mutation
+  const deleteMutation = {
+    resource: 'programRules',
+    type: 'delete',
+    id: ({ id }) => id,
   };
 
   // Initialize state for fetched data
   const [programRules, setProgramRules] = useState([]);
   const { data, loading, error } = useDataQuery(query);
+  const [deleteProgramRule] = useDataMutation(deleteMutation);
 
   // Use effect to set program rules when data is fetched
   useEffect(() => {
@@ -42,70 +34,20 @@ const ProgramRuleValidator = () => {
     }
   }, [data]);
 
-  // Fetching program data elements from the API
-  const getProgramDataElements = async (programId) => {
+  // Handle delete click
+  const handleDeleteClick = async (rule) => {
     try {
-      const response = await fetch(`/api/programs/${programId}/dataElements[*]`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data elements for program ${programId}. Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log('Fetched program data elements:', data.dataElements);
-      return data.dataElements || [];
+      await deleteProgramRule({ id: rule.id });
+      setProgramRules(programRules.filter(pr => pr.id !== rule.id)); // Update the state
+      console.log(`Program rule with id ${rule.id} deleted successfully`);
     } catch (error) {
-      console.error('Error fetching data elements:', error);
-      return [];
+      console.error(`Failed to delete program rule with id ${rule.id}`, error);
     }
   };
 
-  // Extract variables from conditions
-  const extractVariables = (condition) => {
-    const regex = /#{([^}]*)}/g;
-    const variables = [];
-    let match;
-    while ((match = regex.exec(condition))) {
-      variables.push(match[1]);
-    }
-    return variables;
-  };
-
-  // Validate program rule
-  const validateProgramRule = async (rule) => {
-    let isValid = true;
-    let errorMessage = '';
-
-    if (!rule.program) {
-      isValid = false;
-      errorMessage += 'Program rule must be assigned to a program.\n';
-    }
-
-    if (!rule.condition || rule.condition.length === 0) {
-      isValid = false;
-      errorMessage += 'Program rule must have conditions set.\n';
-    } else {
-      const variables = extractVariables(rule.condition);
-      const programDataElements = await getProgramDataElements(rule.program.id);
-      variables.forEach(variable => {
-        if (!programDataElements.includes(variable)) {
-          isValid = false;
-          errorMessage += `Variable "${variable}" in condition does not conform to program data elements.\n`;
-        }
-      });
-    }
-
-    return { isValid, errorMessage };
-  };
-
-  // Handle validation click
-  const handleValidateClick = async (rule) => {
-    console.log('Program rule:', rule);
-    const { isValid, errorMessage } = await validateProgramRule(rule);
-
-    if (isValid) {
-      alert(`Program rule "${rule.displayName}" is valid`);
-    } else {
-      alert(`Program rule "${rule.displayName}" is not valid:\n${errorMessage}`);
-    }
+  // Handle edit click (you need to implement this function)
+  const handleEditClick = (rule) => {
+    // Implement your edit logic here
   };
 
   // Render the component
@@ -125,8 +67,11 @@ const ProgramRuleValidator = () => {
           {programRules.map(rule => (
             <li key={rule.id} className="program-rule">
               <span>{rule.displayName}</span>
-              <button onClick={() => handleValidateClick(rule)}>
-                Validate
+              <button onClick={() => handleEditClick(rule)}>
+                Edit
+              </button>
+              <button onClick={() => handleDeleteClick(rule)}>
+                Delete
               </button>
             </li>
           ))}

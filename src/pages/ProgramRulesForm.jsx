@@ -10,10 +10,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-// import { useDataQuery } from '@dhis2/app-runtime';
 
 
 const ProgramRulesForm = () => {
@@ -61,7 +57,7 @@ const ProgramRulesForm = () => {
             },
         },
     };
-    
+
     const { loading: loadingDataElements, error: errorDataElements, data: dataDataElements } = useDataQuery(dataElementQuery);
     const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataTrackedEntityAttributes } = useDataQuery(trackedEntityAttributeQuery);
 
@@ -259,15 +255,15 @@ const ProgramRulesForm = () => {
                                 data: programRule.actionData,
                                 content:programRule.actionContent,
                                 programRuleActionType: programRule.actionType,
-                                // trackedEntityAttribute: {
-                                //     id: selectedTrackedEntityId,
-                                // },
+                                trackedEntityAttribute: {
+                                    id: selectedTrackedEntityId,
+                                },
                                 programRule: {
                                     id: newProgramRuleId,
                                 },
-                                // dataElement: {
-                                //     id: selectedDataElementId,
-                                // },
+                                dataElement: {
+                                    id: selectedDataElementId,
+                                },
 
                             },
                         ] ,
