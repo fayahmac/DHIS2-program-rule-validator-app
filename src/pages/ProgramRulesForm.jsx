@@ -10,8 +10,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+// import { useDataQuery } from '@dhis2/app-runtime';
 
-import DropdownButton from './DropdownButton';
 
 const ProgramRulesForm = () => {
     const [programRule, setProgramRule] = useState({
@@ -25,6 +28,126 @@ const ProgramRulesForm = () => {
         dataElementId: ''
     });
  
+
+
+
+
+    const dataElementQuery = {
+        dataElements: {
+            resource: 'dataElements',
+            params: {
+                fields: ['id', 'displayName'],
+            },
+        },
+    };
+    
+    const trackedEntityAttributeQuery = {
+        trackedEntityAttributes: {
+            resource: 'trackedEntityAttributes',
+            params: {
+                fields: ['id', 'displayName'],
+            },
+        },
+    };
+
+
+
+
+
+    const [open, setOpen] = useState(false);
+    const [selectedOption, setSelectedOption] = useState("");
+    const [selectedDataElement, setSelectedDataElement] = useState(""); // State to hold selected data element name after commit
+    const [field1, setField1] = useState(""); // For selected action or data element id
+    const [field2, setField2] = useState(""); // For selected tracked entity attribute id
+    const [field3, setField3] = useState(""); // For static text input
+    const [dataElements, setDataElements] = useState([]);
+    const [concatenatedString, setConcatenatedString] = useState(''); 
+    const [trackedEntityAttributes, setTrackedEntityAttributes] = useState([]);
+
+    const { loading: loadingDataElements, error: errorDataElements, data: dataDataElements } = useDataQuery(dataElementQuery);
+    const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataTrackedEntityAttributes } = useDataQuery(trackedEntityAttributeQuery);
+
+    useEffect(() => {
+        if (!loadingDataElements && !errorDataElements && dataDataElements) {
+            setDataElements(dataDataElements.dataElements.dataElements);
+        }
+    }, [loadingDataElements, errorDataElements, dataDataElements]);
+
+    useEffect(() => {
+        if (!loadingTrackedEntityAttributes && !errorTrackedEntityAttributes && dataTrackedEntityAttributes) {
+            setTrackedEntityAttributes(dataTrackedEntityAttributes.trackedEntityAttributes.trackedEntityAttributes);
+        }
+    }, [loadingTrackedEntityAttributes, errorTrackedEntityAttributes, dataTrackedEntityAttributes]);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOptionSelect = (event) => {
+        const value = event.target.value;
+        setSelectedOption(value);
+        // Reset fields when a new option is selected
+        setField1(""); // Reset selected data element or action id
+        setField2(""); // Reset selected tracked entity attribute id
+        setField3(""); // Reset static text
+        setSelectedDataElement(""); // Reset selectedDataElement state
+    };
+
+    const handleDataElementSelect = (event) => {
+        const selectedElementId = event.target.value;
+        const selectedElement = dataElements.find(element => element.id === selectedElementId);
+        if (selectedElement) {
+            setField1(selectedElement.id); // Set selected data element id
+            setSelectedDataElement(selectedElement.displayName); // Set selected data element name to display after commit
+        }
+    };
+
+    const handleValidationn = () => {
+        // Create the concatenated string based on the selected options
+        let concatString = selectedOption;
+        if (selectedOption === "Show Warning" || selectedOption === "Show error") {
+            if (field1) {
+                const selectedElement = dataElements.find(element => element.id === field1);
+                if (selectedElement) {
+                    concatString += `: on " ${selectedElement.displayName}"`;
+                }
+            }
+            if (field2) {
+                const selectedAttribute = trackedEntityAttributes.find(attribute => attribute.id === field2);
+                if (selectedAttribute) {
+                    concatString += ` - ${selectedAttribute.displayName}`;
+                }
+            }
+            if (field3) {
+                concatString += ` - ${field3}`;
+            }
+        } else if (selectedOption === "Make field mandatory") {
+            if (field1) {
+                const selectedElement = dataElements.find(element => element.id === field1);
+                if (selectedElement) {
+                    concatString += `: on " ${selectedElement.displayName}"`;
+                }
+            }
+            if (field2) {
+                const selectedAttribute = trackedEntityAttributes.find(attribute => attribute.id === field2);
+                if (selectedAttribute) {
+                    concatString += ` - ${selectedAttribute.displayName}`;
+                }
+            }
+        }
+        
+        setConcatenatedString(concatString);
+        setOpen(false);
+    };
+
+
+
+
+
     const [selectedFunction, setSelectedFunction] = useState('');
     const [condition, setCondition] = useState('');
     const [isSyntaxCorrect, setIsSyntaxCorrect] = useState(null);
@@ -115,7 +238,7 @@ const ProgramRulesForm = () => {
             setProgramRule({ ...programRule, [name]: value });
         }
     };
-       const fetchNewId = async () => {
+    const fetchNewId = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/system/id', {
                 method: 'GET',
@@ -132,7 +255,6 @@ const ProgramRulesForm = () => {
                 throw new Error(`Failed to fetch new ID: ${response.statusText}`);
             }
     
-            // Check if response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const errorText = await response.text();
@@ -148,12 +270,30 @@ const ProgramRulesForm = () => {
         }
     };
     
+    const fetchTwoDistinctIds = async () => {
+        try {
+            const id1 = await fetchNewId();
+            let id2;
+            
+            // Loop until we get a different ID
+            do {
+                id2 = await fetchNewId();
+            } while (id1 === id2);
+    
+            console.log(`Fetched distinct IDs: ${id1}, ${id2}`);
+            return [id1, id2];
+        } catch (error) {
+            console.error('Error fetching two distinct IDs:', error);
+            throw error;
+        }
+    };
 
     const createProgramRuleMutation = {
         resource: 'metadata',
         type: 'create',
         data: (payload) => payload,
     };
+
     const [mutate] = useDataMutation(createProgramRuleMutation);
 
     const handleSubmit = async (event) => {
@@ -162,12 +302,12 @@ const ProgramRulesForm = () => {
             alert('Please fix the syntax errors in the condition.');
             return;
         }
-
+    
         try {
             setMutationLoading(true);
-
-            const [newProgramRuleId, newProgramRuleActionId] = await Promise.all([fetchNewId(), fetchNewId()]);
-
+    
+            const [newProgramRuleId, newProgramRuleActionId] = await fetchTwoDistinctIds();
+    
             const payload = {
                 programRules: [
                     {
@@ -179,24 +319,32 @@ const ProgramRulesForm = () => {
                         program: {
                             id: programRule.program,
                         },
-                        programRuleActions: programRule.actionType
-                            ? [
-                                {
-                                    id: newProgramRuleActionId,
-                                    programRuleActionType: programRule.actionType,
-                                    data: programRule.actionData,
-                                    content: 'n',
-                                    programRule: {
-                                        id: newProgramRuleId,
-                                    },
-                                    dataElement: programRule.dataElementId ? { id: programRule.dataElementId } : undefined,
+                        programRuleActions:[ 
+                            {
+                                id: newProgramRuleActionId,
+                                data: programRule.actionData,
+                                content: 'n',
+                                programRuleActionType: programRule.actionType,
+                                programRule: {
+                                    id: newProgramRuleId,
                                 },
-                            ]
-                            : [],
+                            },
+                        ] ,
                     },
                 ],
+                  programRuleActions: [
+                    {
+                        id: newProgramRuleActionId,
+                        data: programRule.actionData,
+                        content: 'n',
+                        programRuleActionType: programRule.actionType,
+                        programRule: {
+                            id: newProgramRuleId,
+                        },
+                    },
+                ] 
             };
-
+    
             const response = await mutate(payload);
             console.log('API Response:', response);
             setIsDialogOpen(true);
@@ -206,8 +354,8 @@ const ProgramRulesForm = () => {
         } finally {
             setMutationLoading(false);
         }
-       
     };
+    
     const handleDialogClose = () => {
         setIsDialogOpen(false);
     };
@@ -242,6 +390,9 @@ const ProgramRulesForm = () => {
                 return "";
         }
     };
+
+
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -350,21 +501,39 @@ const ProgramRulesForm = () => {
                 </div>
                 <h4 className='section1'><span className="circle">3</span> Enter program rule action details</h4>
                 <div className="form-group">
-                <label>Program Rule Action Type</label>
-                    <DropdownButton
-                        items={[
-                            { id: '(', displayName: '(' },
-                            { id: ')', displayName: ')' },
-                            { id: '=', displayName: '=' },
-                            { id: '>', displayName: '>' },
-                            { id: '<', displayName: '<' },
-                            { id: '&&', displayName: '&&' },
-                            { id: '||', displayName: '||' },
-                        ]}
-                        name="function"
-                        handleChange={handleChange}
-                    />
-                </div>
+                <label>Action Type</label>
+                <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action Type">
+                    <option value="">Select Action Type</option>
+                    <option value="SHOWWARNING">Show Warning</option>
+                    <option value="SHOWERROR">Show Error</option>
+                    <option value="MANDATORYFIELD">Make Field Mandatory</option>
+                    <option value="ASSIGN">Assign Value</option>
+                    <option value="HIDEFIELD">Hide Field</option>
+                </select>
+            </div>
+            <div className="form-group">
+                <label>Action Data</label>
+                <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
+            </div>
+            <div className="form-group">
+                <label>Data Element</label>
+                <select className="form-input" name="dataElementId" value={programRule.dataElementId} onChange={handleChange} placeholder="Data Element">
+                    <option value="">Select Data Element</option>
+                    {dataElements.map(element => (
+                        <option key={element.id} value={element.id}>{element.displayName}</option>
+                    ))}
+                </select>
+            </div>
+            <div className="form-group">
+                <label>Tracked Entity Attribute</label>
+                <select className="form-input" name="trackedEntity" value={programRule.trackedEntity} onChange={handleChange} placeholder="Tracked Entity">
+                    <option value="">Select Tracked Entity</option>
+                    {trackedEntityAttributes.map(attribute => (
+                        <option key={attribute.id} value={attribute.id}>{attribute.displayName}</option>
+                    ))}
+                    </select>
+                    </div>
+            
                 <div className="form-button">
                     <button className="form-buttonsave" type="submit" disabled={mutationLoading}>
                         {mutationLoading ? 'Saving...' : 'SAVE'}
