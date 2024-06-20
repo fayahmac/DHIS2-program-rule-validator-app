@@ -1,0 +1,75 @@
+{
+    "programRules": [
+        {
+            "created": "2015-09-14T21:17:40.841",
+            "description": "Show warrning if Apgar is between 0 and 4 and there is no comment provided.",
+            "lastUpdated": "2017-05-23T00:29:24.523",
+            "condition": "#{apgarscore} >= 0 && #{apgarscore} < 4 && #{apgarcomment} == ''",
+            "name": "Ask for comment for low apgar",
+            "id": "NAgjOfWMXg6",
+            "lastUpdatedBy": {
+                "id": "xE7jOejl9FI"
+            },
+            "program": {
+                "id": "IpHINAT79UW"
+            },
+            "programRuleActions": [
+                {
+                    "access": {
+                        "manage": true,
+                        "externalize": false,
+                        "write": true,
+                        "read": true,
+                        "update": true,
+                        "delete": true
+                    },
+                    "content": "It is suggested that an explanation is provided when the Apgar score is below 4",
+                    "lastUpdated": "2017-05-23T00:29:24.467",
+                    "displayContent": "It is suggested that an explanation is provided when the Apgar score is below 4",
+                    "id": "M8C3uruBCOn",
+                    "href": "<strip from clone>",
+                    "programRuleActionType": "SHOWWARNING",
+                    "created": "2015-09-14T21:17:41.033",
+                    "attributeValues": [],
+                    "sharing": {
+                        "external": false,
+                        "users": {},
+                        "userGroups": {}
+                    },
+                    "favorite": false,
+                    "programRule": {
+                        "id": "NAgjOfWMXg6"
+                    },
+                    "lastUpdatedBy": {
+                        "id": "xE7jOejl9FI"
+                    },
+                    "dataElement": {
+                        "id": "H6uSAMO5WLD"
+                    },
+                    "favorites": [],
+                    "translations": []
+                }
+            ],
+            "translations": []
+        }
+    ],
+    "programRuleActions": [
+        {
+            "content": "It is suggested that an explanation is provided when the Apgar score is below 4",
+            "lastUpdated": "2017-05-23T00:29:24.467",
+            "id": "M8C3uruBCOn",
+            "programRuleActionType": "SHOWWARNING",
+            "created": "2015-09-14T21:17:41.033",
+            "programRule": {
+                "id": "NAgjOfWMXg6"
+            },
+            "lastUpdatedBy": {
+                "id": "xE7jOejl9FI"
+            },
+            "dataElement": {
+                "id": "H6uSAMO5WLD"
+            },
+            "translations": []
+        }
+    ]
+}

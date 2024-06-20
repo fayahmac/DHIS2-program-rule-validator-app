@@ -37,21 +37,23 @@ const DropdownDialog = () => {
     const [dataElements, setDataElements] = useState([]);
     const [trackedEntityAttributes, setTrackedEntityAttributes] = useState([]);
     const [concatenatedString, setConcatenatedString] = useState(''); // State for concatenated string
+    const [visibleFields, setVisibleFields] = useState({});
+    const [mandatoryFields, setMandatoryFields] = useState({});
 
     const { loading: loadingDataElements, error: errorDataElements, data: dataDataElements } = useDataQuery(dataElementQuery);
-    const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataTrackedEntityAttributes } = useDataQuery(trackedEntityAttributeQuery);
+    const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataDataAttributes } = useDataQuery(trackedEntityAttributeQuery);
 
     useEffect(() => {
         if (!loadingDataElements && !errorDataElements && dataDataElements) {
-            setDataElements(dataDataElements.dataElements.dataElements);
+            setDataElements(dataDataElements.dataElements || []);
         }
     }, [loadingDataElements, errorDataElements, dataDataElements]);
 
     useEffect(() => {
-        if (!loadingTrackedEntityAttributes && !errorTrackedEntityAttributes && dataTrackedEntityAttributes) {
-            setTrackedEntityAttributes(dataTrackedEntityAttributes.trackedEntityAttributes.trackedEntityAttributes);
+        if (!loadingTrackedEntityAttributes && !errorTrackedEntityAttributes && dataDataAttributes) {
+            setTrackedEntityAttributes(dataDataAttributes.trackedEntityAttributes || []);
         }
-    }, [loadingTrackedEntityAttributes, errorTrackedEntityAttributes, dataTrackedEntityAttributes]);
+    }, [loadingTrackedEntityAttributes, errorTrackedEntityAttributes, dataDataAttributes]);
 
     const handleOpen = () => {
         setOpen(true);
@@ -88,7 +90,7 @@ const DropdownDialog = () => {
             if (field1) {
                 const selectedElement = dataElements.find(element => element.id === field1);
                 if (selectedElement) {
-                    concatString += `: on " ${selectedElement.displayName}"`;
+                    concatString += `: on "${selectedElement.displayName}"`;
                 }
             }
             if (field2) {
@@ -104,7 +106,7 @@ const DropdownDialog = () => {
             if (field1) {
                 const selectedElement = dataElements.find(element => element.id === field1);
                 if (selectedElement) {
-                    concatString += `: on " ${selectedElement.displayName}"`;
+                    concatString += `: on "${selectedElement.displayName}"`;
                 }
             }
             if (field2) {
@@ -114,18 +116,44 @@ const DropdownDialog = () => {
                 }
             }
         }
-        
+
+        // Apply actions based on the selected option
+        applyActions(selectedOption, field1, field2, field3);
+
         setConcatenatedString(concatString);
         setOpen(false);
+    };
+
+    const applyActions = (option, dataElementId, attributeId, staticText) => {
+        // Here we will manipulate the DOM based on the selected option
+        switch (option) {
+            case "Show Warning":
+            case "Show error":
+                setVisibleFields(prev => ({
+                    ...prev,
+                    [dataElementId]: true,
+                    [attributeId]: true
+                }));
+                break;
+            case "Make field mandatory":
+                setMandatoryFields(prev => ({
+                    ...prev,
+                    [dataElementId]: true,
+                    [attributeId]: true
+                }));
+                break;
+            default:
+                break;
+        }
     };
 
     return (
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', margin: '1px' }}>
                 <h4>Action details</h4>
-                <Button 
-                    style={{ backgroundColor: 'lightblue', padding: '10px', margin: '1px', borderRadius: '50%', marginBlock: '1px' }} 
-                    variant="outlined" 
+                <Button
+                    style={{ backgroundColor: 'lightblue', padding: '10px', margin: '1px', borderRadius: '50%', marginBlock: '1px' }}
+                    variant="outlined"
                     onClick={handleOpen}>
                     +
                 </Button>
@@ -163,7 +191,7 @@ const DropdownDialog = () => {
                                 fullWidth
                                 margin="normal"
                             >
-                                {dataElements.map((element) => (
+                                {dataElements?.map((element) => (
                                     <MenuItem key={element.id} value={element.id}>
                                         {element.displayName}
                                     </MenuItem>
@@ -177,7 +205,7 @@ const DropdownDialog = () => {
                                 fullWidth
                                 margin="normal"
                             >
-                                {trackedEntityAttributes.map((attribute) => (
+                                {trackedEntityAttributes?.map((attribute) => (
                                     <MenuItem key={attribute.id} value={attribute.id}>
                                         {attribute.displayName}
                                     </MenuItem>
@@ -203,7 +231,7 @@ const DropdownDialog = () => {
                                 fullWidth
                                 margin="normal"
                             >
-                                {dataElements.map((element) => (
+                                {dataElements?.map((element) => (
                                     <MenuItem key={element.id} value={element.id}>
                                         {element.displayName}
                                     </MenuItem>
@@ -217,7 +245,7 @@ const DropdownDialog = () => {
                                 fullWidth
                                 margin="normal"
                             >
-                                {trackedEntityAttributes.map((attribute) => (
+                                {trackedEntityAttributes?.map((attribute) => (
                                     <MenuItem key={attribute.id} value={attribute.id}>
                                         {attribute.displayName}
                                     </MenuItem>
@@ -227,26 +255,44 @@ const DropdownDialog = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleValidationn} color="primary">
-                        COMMIT
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
                     </Button>
-                    <Button onClick={handleClose} color="secondary">
-                        CANCEL
+                    <Button onClick={handleValidationn} color="primary">
+                        Commit
                     </Button>
                 </DialogActions>
             </Dialog>
             {concatenatedString && (
-                <div style={{ margin: '10px' }}>
-                    <TextField
-                        label="Selected Action"
-                        value={concatenatedString}
-                        fullWidth
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                    />
+                <div>
+                    <h5>Action Summary:</h5>
+                    <p>{concatenatedString}</p>
                 </div>
             )}
+            {dataElements.map((element) => (
+                <div key={element.id}>
+                    {visibleFields[element.id] && (
+                        <TextField
+                            label={element.displayName}
+                            required={mandatoryFields[element.id] || false}
+                            fullWidth
+                            margin="normal"
+                        />
+                    )}
+                </div>
+            ))}
+            {trackedEntityAttributes.map((attribute) => (
+                <div key={attribute.id}>
+                    {visibleFields[attribute.id] && (
+                        <TextField
+                            label={attribute.displayName}
+                            required={mandatoryFields[attribute.id] || false}
+                            fullWidth
+                            margin="normal"
+                        />
+                    )}
+                </div>
+            ))}
         </div>
     );
 };

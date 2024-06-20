@@ -1,0 +1,82 @@
+.troubleshooting-container {
+    text-align: center;
+}
+
+.troubleshooting-heading {
+    margin-top: 50px;
+    color: #000;
+}
+
+.card-bar {
+    display: flex;
+    flex-wrap: wrap; /* Allow cards to wrap to the next row */
+    margin-top: 20px;
+    padding: 0 20px; /* Add padding to the container */
+}
+
+.validation-bar {
+    flex-basis: 100%; /* Set width to cover the whole row */
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    margin-bottom: 5px; /* Add margin between rows */
+    text-align: left; /* Align content to the left */
+    display: flex; /* Make the container a flexbox */
+    align-items: center; /* Align items vertically */
+    padding: 5px; /* Adjust padding for the height of the bar */
+}
+
+.iconn {
+    font-size: 70px; /* Adjust icon size */
+    color: blue; /* Set icon color to white */
+    background-color:  #fff; /* Set background color for the circle */
+    border-radius: 50%; /* Create a circle */
+    padding: 10px; /* Add padding for the circle size */
+}
+
+.validation-content {
+    margin-left: 20px; /* Add margin between icon and text content */
+    color: #000;
+}
+
+.failed-rules-list {
+    flex-basis: 100%; /* Set width to cover the whole row */
+    background-color: #fff; /* White background for failed rules */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    margin-bottom: 3px; /* Reduce bottom margin to decrease gap between cards */
+    text-align: left;
+    color: #000;
+}
+
+.failed-rule h3 {
+    cursor: pointer; /* Add pointer cursor for clickable heading */
+    font-size: 20px;
+    padding: 10px;
+    color: #1f1e1e;
+    margin: 0;
+}
+
+.rule-details {
+    padding: 20px;
+}
+
+.condition-details h4{
+    margin-bottom: 20px;
+    font-family: Roboto, sans-serif;
+    color: #1f1e1e;
+}
+/* Add styles for the return button */
+.buttonn {
+    margin-left: 90%; /* Push the button to the right */
+    padding: 10px 20px; /* Add padding to the button */
+    background-color: #1d5283; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none; /* Remove button border */
+    border-radius: 5px; /* Add border radius */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.buttonn:hover {
+    background-color: #0056b3; /* Darken background color on hover */
+}

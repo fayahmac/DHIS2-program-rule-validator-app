@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Homeee from './components/Homeee'
 import Header from './components/Header'
 import ProgramRulesForm from './ProgramRulesForm'
+import ProgramRules from './ProgramRules'
 
 const MyApp = () => {
   return (
@@ -15,7 +16,7 @@ const MyApp = () => {
     
     <ProgramRulesForm/>
       <Routes>
-        <Route path="/program-rules" element={<ProgramRulesForm />} />
+        <Route path="/program-rules" element={<ProgramRules />} />
       </Routes>
 
       {/* <Routes>
