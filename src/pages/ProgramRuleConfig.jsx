@@ -29,8 +29,10 @@ const ProgramRuleConfig = () => {
   // Use effect to set program rules when data is fetched
   useEffect(() => {
     if (data && data.programRules) {
-      setProgramRules(data.programRules.programRules);
-      console.log('Fetched program rules (samples):', data.programRules.programRules.slice(0, 5));
+      // Sort the program rules by the created date in descending order
+      const sortedRules = data.programRules.programRules.sort((a, b) => new Date(b.created) - new Date(a.created));
+      setProgramRules(sortedRules);
+      console.log('Fetched and sorted program rules (samples):', sortedRules.slice(0, 5));
     }
   }, [data]);
 

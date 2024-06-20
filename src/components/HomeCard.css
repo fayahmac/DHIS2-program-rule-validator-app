@@ -13,6 +13,7 @@
     border-radius: 10px;
     margin-bottom: 6px;
     box-shadow: 10px 10px 20px rgba(252, 234, 234, 0.8);
+    font-size: small;
 }
 .plus-button{
     box-shadow: 10px 10px 20px rgba(94, 77, 77, 0.8);
@@ -24,10 +25,12 @@
     margin-bottom: 25px;
     border-radius: 10px;
     box-shadow: 10px 10px 20px rgba(252, 234, 234, 0.8);
+    font-size: small;
     
 }
 .cardlist0{
     margin-bottom: 25px;
     border-radius: 10px;
     box-shadow: 10px 10px 20px rgba(252, 234, 234, 0.8);
+    font-size: small;
 }
