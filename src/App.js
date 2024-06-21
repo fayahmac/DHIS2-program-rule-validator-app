@@ -8,10 +8,24 @@ import TroubleshootingEngine from './pages/TroubleshootingEngine';
 
 
 
+/**
+ * Description placeholder and routing component
+ *
+ * @returns {*}
+ */
+/**
+ * Description placeholder
+ *
+ * @returns {*}
+ */
 function App() {
   const contextPath = 'https://play.im.dhis2.org/stable-2-41-0'; 
-
+   /**
+   * Rendering the component
+   *
+   */
   return (
+    
     <HashRouter>
       <Routes>
         {/* Routing and rendering the home page component the dashboard view */}

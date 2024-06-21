@@ -1,7 +1,14 @@
 import React from 'react'
-import { BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle,BsSearch, BsJustify} from 'react-icons/bs'
+import {BsJustify} from 'react-icons/bs'
 
 
+/**
+ * header component
+ *
+ * @param {{ OpenSidebar: any; }} param0
+ * @param {*} param0.OpenSidebar
+ * @returns {*}
+ */
 function Header({OpenSidebar}) {
   return (
     //header container 

@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/ProgramRulesForm.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/ProgramRulesForm.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
 import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
 import { Link } from 'react-router-dom';
 import './ProgramRulesForm.css';
@@ -89,13 +117,13 @@ const ProgramRulesForm = () => {
     const { loading: loadingTrackedEntityAttributes, error: errorTrackedEntityAttributes, data: dataTrackedEntityAttributes } = useDataQuery(trackedEntityAttributeQuery);
 
     useEffect(() => {
-        if (!loadingDataElements && !errorDataElements && dataDataElements) {
+        if (!loadingDataElements &amp;&amp; !errorDataElements &amp;&amp; dataDataElements) {
             setDataElements(dataDataElements.dataElements.dataElements);
         }
     }, [loadingDataElements, errorDataElements, dataDataElements]);
 
     useEffect(() => {
-        if (!loadingTrackedEntityAttributes && !errorTrackedEntityAttributes && dataTrackedEntityAttributes) {
+        if (!loadingTrackedEntityAttributes &amp;&amp; !errorTrackedEntityAttributes &amp;&amp; dataTrackedEntityAttributes) {
             setTrackedEntityAttributes(dataTrackedEntityAttributes.trackedEntityAttributes.trackedEntityAttributes);
         }
     }, [loadingTrackedEntityAttributes, errorTrackedEntityAttributes, dataTrackedEntityAttributes]);
@@ -138,7 +166,7 @@ const ProgramRulesForm = () => {
     }, { lazy: true });
 
     useEffect(() => {
-        if (!loadingPrograms && !errorPrograms && dataPrograms) {
+        if (!loadingPrograms &amp;&amp; !errorPrograms &amp;&amp; dataPrograms) {
             setPrograms(dataPrograms.programs.programs);
         }
     }, [loadingPrograms, errorPrograms, dataPrograms]);
@@ -150,7 +178,7 @@ const ProgramRulesForm = () => {
     }, [programRule.program]);
 
     useEffect(() => {
-        if (!loadingVariables && !errorVariables && dataVariables) {
+        if (!loadingVariables &amp;&amp; !errorVariables &amp;&amp; dataVariables) {
             setVariables(dataVariables.variables.programRuleVariables);
         }
     }, [loadingVariables, errorVariables, dataVariables]);
@@ -167,13 +195,13 @@ const ProgramRulesForm = () => {
         if (condition.trim() === '') {
             setIsSyntaxCorrect(3); // Expression is empty
         } else {
-            const regex = /(\{.*?\})|(\(.*?\))|([=><])|(\w+)/g;
+            const regex = /(\{.*?\})|(\(.*?\))|([=>&lt;])|(\w+)/g;
             const matches = condition.match(regex);
 
             if (matches) {
                 let isCorrect = true;
                 for (let match of matches) {
-                    if (!/^(\{.*?\})|(\(.*?\))|([=><])|(\w+)$/.test(match)) {
+                    if (!/^(\{.*?\})|(\(.*?\))|([=>&lt;])|(\w+)$/.test(match)) {
                         isCorrect = false;
                         break;
                     }
@@ -408,7 +436,7 @@ const ProgramRulesForm = () => {
     /**
      * this function contain pre defined shortcuts that are used in definition of program rule conditions
      *
-     * @type {{ '+': string; '-': string; '*': string; '/': string; '%': string; '<': string; '>=': string; '<=': string; '==': string; '!=': string; NOT: string; AND: string; OR: string; }}
+     * @type {{ '+': string; '-': string; '*': string; '/': string; '%': string; '&lt;': string; '>=': string; '&lt;=': string; '==': string; '!=': string; NOT: string; AND: string; OR: string; }}
      */
     const operatorMapping = {
         '+': '+',
@@ -416,13 +444,13 @@ const ProgramRulesForm = () => {
         '*': '*',
         '/': '/',
         '%': '%',
-        '<': '<',
+        '&lt;': '&lt;',
         '>=': '>=',
-        '<=': '<=',
+        '&lt;=': '&lt;=',
         '==': '==',
         '!=': '!=',
         'NOT': '!',
-        'AND': '&&',
+        'AND': '&amp;&amp;',
         'OR': '||'
     };
 
@@ -449,179 +477,202 @@ const ProgramRulesForm = () => {
    *
    */
   return (
-        <form onSubmit={handleSubmit}>
-            <div className="form-container">
-                <h4 className='section1'><span className="circle">1</span> Enter program rule details</h4>
-                <div className="form-group">
-                    <label>Program(*)</label>
-                    <select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
-                        <option value="">Select Program</option>
+        &lt;form onSubmit={handleSubmit}>
+            &lt;div className="form-container">
+                &lt;h4 className='section1'>&lt;span className="circle">1&lt;/span> Enter program rule details&lt;/h4>
+                &lt;div className="form-group">
+                    &lt;label>Program(*)&lt;/label>
+                    &lt;select className="form-input" name="program" value={programRule.program} onChange={handleChange} placeholder="Program">
+                        &lt;option value="">Select Program&lt;/option>
                         {programs.map(program => (
-                            <option key={program.id} value={program.id}>{program.displayName}</option>
+                            &lt;option key={program.id} value={program.id}>{program.displayName}&lt;/option>
                         ))}
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label>Name(*)</label>
-                    <input className="form-input" type="text" name="name" value={programRule.name} onChange={handleChange} placeholder="Name" />
-                </div>
-                <div className="form-group">
-                    <label>Priority</label>
-                    <input className="form-input" type="text" name="priority" value={programRule.priority} onChange={handleChange} placeholder="Priority" />
-                </div>
-                <div className="form-group">
-                    <label>Description</label>
-                    <input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
-                </div>
-                <h4 className='section1'><span className="circle">2</span> Enter program rule expression</h4>
-                <label>Condition</label>
-                <div className="form-g">
-                    <textarea className="form-condition"
+                    &lt;/select>
+                &lt;/div>
+                &lt;div className="form-group">
+                    &lt;label>Name(*)&lt;/label>
+                    &lt;input className="form-input" type="text" name="name" value={programRule.name} onChange={handleChange} placeholder="Name" />
+                &lt;/div>
+                &lt;div className="form-group">
+                    &lt;label>Priority&lt;/label>
+                    &lt;input className="form-input" type="text" name="priority" value={programRule.priority} onChange={handleChange} placeholder="Priority" />
+                &lt;/div>
+                &lt;div className="form-group">
+                    &lt;label>Description&lt;/label>
+                    &lt;input className="form-input" type="text" name="description" value={programRule.description} onChange={handleChange} placeholder="Description" />
+                &lt;/div>
+                &lt;h4 className='section1'>&lt;span className="circle">2&lt;/span> Enter program rule expression&lt;/h4>
+                &lt;label>Condition&lt;/label>
+                &lt;div className="form-g">
+                    &lt;textarea className="form-condition"
                         value={programRule.condition}
                         onChange={handleChange}
                         placeholder="Enter condition here"
                         name="condition"
                         disabled={!programRule.program}
                     />
-                    <div className='form-option'>
-                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
-                            <option value="">Built-in Function</option>
-                            <option value="V{current_date}">V {'{current_date}'}</option>
-                            <option value="V{event_date}">V {'{event_date}'}</option>
-                            <option value="V{due_date}">V {'{due_date}'}</option>
-                            <option value="V{event_count}">V {'{event_count}'}</option>
-                            <option value="V{enrollment_date}">V {'{enrollment_date}'}</option>
-                            <option value="V{incident_date}">V {'{incident_date}'}</option>
-                            <option value="V{enrollment_id}">V {'{enrollment_id}'}</option>
-                            <option value="V{environment}">V {'{environment}'}</option>  
-                            <option value="V{event_id}">V {'{event_id}'}</option>
-                            <option value="V{orgunit_code}">V {'{orgunit_code}'}</option>
-                            <option value="V{program_stage_name}">V {'{program_stage_name}'}</option>
-                            <option value="V{program_stage_id}">V {'{program_stage_id}'}</option>
-                        </select>
-                        <select className="form-input" name="variable" onChange={handleChange} placeholder="Variable" disabled={!programRule.program}>
-                            <option value="">Variables</option>
+                    &lt;div className='form-option'>
+                        &lt;select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
+                            &lt;option value="">Built-in Function&lt;/option>
+                            &lt;option value="V{current_date}">V {'{current_date}'}&lt;/option>
+                            &lt;option value="V{event_date}">V {'{event_date}'}&lt;/option>
+                            &lt;option value="V{due_date}">V {'{due_date}'}&lt;/option>
+                            &lt;option value="V{event_count}">V {'{event_count}'}&lt;/option>
+                            &lt;option value="V{enrollment_date}">V {'{enrollment_date}'}&lt;/option>
+                            &lt;option value="V{incident_date}">V {'{incident_date}'}&lt;/option>
+                            &lt;option value="V{enrollment_id}">V {'{enrollment_id}'}&lt;/option>
+                            &lt;option value="V{environment}">V {'{environment}'}&lt;/option>  
+                            &lt;option value="V{event_id}">V {'{event_id}'}&lt;/option>
+                            &lt;option value="V{orgunit_code}">V {'{orgunit_code}'}&lt;/option>
+                            &lt;option value="V{program_stage_name}">V {'{program_stage_name}'}&lt;/option>
+                            &lt;option value="V{program_stage_id}">V {'{program_stage_id}'}&lt;/option>
+                        &lt;/select>
+                        &lt;select className="form-input" name="variable" onChange={handleChange} placeholder="Variable" disabled={!programRule.program}>
+                            &lt;option value="">Variables&lt;/option>
                             {variables.map(variable => (
-                                <option key={variable.id} value={variable.displayName}>{variable.displayName}</option>
+                                &lt;option key={variable.id} value={variable.displayName}>{variable.displayName}&lt;/option>
                             ))}
-                        </select>
-                        <select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
-                            <option value="">Function</option>
-                            <option value="d2:ceil (<number>)">d2:ceil {'(<number>)'}</option>
-                            <option value="d2:floor (<number>)">d2:floor {'(<number>)'}</option>
-                            <option value="d2:round (<number>)">d2:round {'(<number>)'}</option>
-                            <option value="d2:modulus (<number>,<number>)">d2:modulus {'(<number>,<number>)'}</option>
-                            <option value="d2:zing (<number>)">d2:zing {'(<number>)'}</option>
-                            <option value="d2:oizp (<number>)">d2:oizp {'(<number>)'}</option>
-                            <option value="d2:concatenate (<object>,<object>)">d2:concatenate {'(<object>,<object>)'}</option>
-                            <option value="d2:daysBetween (<date>,<date>)">d2:daysBetween {'(<date>,<date>)'}</option>  
-                            <option value="d2:weeksBetween (<date>,<date>)">d2:weeksBetween {'(<date>,<date>)'}</option>
-                            <option value="d2:monthsBetween (<date>,<date>)">d2:monthsBetween {'(<date>,<date>)'}</option>
-                            <option value="d2:yearsBetween (<date>,<date>)">d2:yearsBetween {'(<date>,<date>)'}</option>
-                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
-                            <option value="d2:validatePattern (<text>,<regex>)">d2:validatePattern {'(<text>,<regex>)'}</option>
-                            <option value="d2:addDays (<date>,<number>)">d2:addDays {'(<date>,<number>)'}</option>
-                            <option value="d2:countIfValue (<sourcefield>, <value>)">d2:countIfValue {'(<sourcefield>, <value>)'}</option>
-                            <option value="d2:countIfZeroPos (<sourcefield>)">d2:countIfZeroPos {'(<sourcefield>)'}</option>
-                            <option value="d2:hasValue (<sourcefield>)">d2:hasValue {'(<sourcefield>)'}</option>
-                            <option value="d2:zpvc (<object>,<object>)">d2:zpvc {'(<object>,<object>)'}</option>
-                            <option value="d2:validatePatterns (<text>,<regex)">d2:validatePatterns {'(<text>,<regex)'}</option>
-                            <option value="d2:left (<text>,<number>)">d2:left {'(<text>,<number>)'}</option>
-                            <option value="d2:right (<text>,<number>)">d2:right {'(<text>,<number>)'}</option>
-                            <option value="d2:substring (<text>,<number>,<number>)">d2:substring {'(<text>,<number>,<number>)'}</option>  
-                            <option value="d2:split (<text>,<text>,<number>)">d2:split {'(<text>,<text>,<number>)'}</option>
-                            <option value="d2:length (<text>)">d2:length {'(<text>)'}</option>
-                            <option value="d2:inOrgUnitGroup( <orgunit_group_code> )">d2:inOrgUnitGroup{'( <orgunit_group_code> )'}</option>
-                            <option value="d2:hasUserRole( <user_role> )">d2:hasUserRole{'( <user_role> )'}</option>
-                            <option value="d2:zScoreWFA( <ageInMonth>, <weight>, <gender> )">d2:zScoreWFA{'( <ageInMonth>, <weight>, <gender> )'}</option>  
-                            <option value="d2:zScoreHFA( <ageInMonth>, <height>, <gender> )">d2:zScoreHFA{'( <ageInMonth>, <height>, <gender> )'}</option>
-                            <option value="d2:zScoreWFH( <height>, <weight>, <gender> )">d2:zScoreWFH{'( <height>, <weight>, <gender> )'}</option>
-                            <option value="d2:extractDataMatrixValue( <key>, <value>)">d2:extractDataMatrixValue{'( <key>, <value>)'}</option>
-                        </select>
-                    </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  >
+                        &lt;/select>
+                        &lt;select className="form-input" value={selectedFunction} name="function" onChange={handleChange} disabled={!programRule.program}>
+                            &lt;option value="">Function&lt;/option>
+                            &lt;option value="d2:ceil (&lt;number>)">d2:ceil {'(&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:floor (&lt;number>)">d2:floor {'(&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:round (&lt;number>)">d2:round {'(&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:modulus (&lt;number>,&lt;number>)">d2:modulus {'(&lt;number>,&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:zing (&lt;number>)">d2:zing {'(&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:oizp (&lt;number>)">d2:oizp {'(&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:concatenate (&lt;object>,&lt;object>)">d2:concatenate {'(&lt;object>,&lt;object>)'}&lt;/option>
+                            &lt;option value="d2:daysBetween (&lt;date>,&lt;date>)">d2:daysBetween {'(&lt;date>,&lt;date>)'}&lt;/option>  
+                            &lt;option value="d2:weeksBetween (&lt;date>,&lt;date>)">d2:weeksBetween {'(&lt;date>,&lt;date>)'}&lt;/option>
+                            &lt;option value="d2:monthsBetween (&lt;date>,&lt;date>)">d2:monthsBetween {'(&lt;date>,&lt;date>)'}&lt;/option>
+                            &lt;option value="d2:yearsBetween (&lt;date>,&lt;date>)">d2:yearsBetween {'(&lt;date>,&lt;date>)'}&lt;/option>
+                            &lt;option value="d2:hasValue (&lt;sourcefield>)">d2:hasValue {'(&lt;sourcefield>)'}&lt;/option>
+                            &lt;option value="d2:validatePattern (&lt;text>,&lt;regex>)">d2:validatePattern {'(&lt;text>,&lt;regex>)'}&lt;/option>
+                            &lt;option value="d2:addDays (&lt;date>,&lt;number>)">d2:addDays {'(&lt;date>,&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:countIfValue (&lt;sourcefield>, &lt;value>)">d2:countIfValue {'(&lt;sourcefield>, &lt;value>)'}&lt;/option>
+                            &lt;option value="d2:countIfZeroPos (&lt;sourcefield>)">d2:countIfZeroPos {'(&lt;sourcefield>)'}&lt;/option>
+                            &lt;option value="d2:hasValue (&lt;sourcefield>)">d2:hasValue {'(&lt;sourcefield>)'}&lt;/option>
+                            &lt;option value="d2:zpvc (&lt;object>,&lt;object>)">d2:zpvc {'(&lt;object>,&lt;object>)'}&lt;/option>
+                            &lt;option value="d2:validatePatterns (&lt;text>,&lt;regex)">d2:validatePatterns {'(&lt;text>,&lt;regex)'}&lt;/option>
+                            &lt;option value="d2:left (&lt;text>,&lt;number>)">d2:left {'(&lt;text>,&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:right (&lt;text>,&lt;number>)">d2:right {'(&lt;text>,&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:substring (&lt;text>,&lt;number>,&lt;number>)">d2:substring {'(&lt;text>,&lt;number>,&lt;number>)'}&lt;/option>  
+                            &lt;option value="d2:split (&lt;text>,&lt;text>,&lt;number>)">d2:split {'(&lt;text>,&lt;text>,&lt;number>)'}&lt;/option>
+                            &lt;option value="d2:length (&lt;text>)">d2:length {'(&lt;text>)'}&lt;/option>
+                            &lt;option value="d2:inOrgUnitGroup( &lt;orgunit_group_code> )">d2:inOrgUnitGroup{'( &lt;orgunit_group_code> )'}&lt;/option>
+                            &lt;option value="d2:hasUserRole( &lt;user_role> )">d2:hasUserRole{'( &lt;user_role> )'}&lt;/option>
+                            &lt;option value="d2:zScoreWFA( &lt;ageInMonth>, &lt;weight>, &lt;gender> )">d2:zScoreWFA{'( &lt;ageInMonth>, &lt;weight>, &lt;gender> )'}&lt;/option>  
+                            &lt;option value="d2:zScoreHFA( &lt;ageInMonth>, &lt;height>, &lt;gender> )">d2:zScoreHFA{'( &lt;ageInMonth>, &lt;height>, &lt;gender> )'}&lt;/option>
+                            &lt;option value="d2:zScoreWFH( &lt;height>, &lt;weight>, &lt;gender> )">d2:zScoreWFH{'( &lt;height>, &lt;weight>, &lt;gender> )'}&lt;/option>
+                            &lt;option value="d2:extractDataMatrixValue( &lt;key>, &lt;value>)">d2:extractDataMatrixValue{'( &lt;key>, &lt;value>)'}&lt;/option>
+                        &lt;/select>
+                    &lt;/div>
+                &lt;/div>
+                &lt;div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}  >
                     {Object.keys(operatorMapping).map((displayLabel) => (
-                        <span
+                        &lt;span
                             key={displayLabel}
                             onClick={() => handleOperatorClick(operatorMapping[displayLabel])}
                             style={{ padding: '5px 10px', cursor: 'pointer', fontSize: '21px', borderRadius: '4px' }} 
                             disabled={!programRule.program}
                         >
                             {displayLabel}
-                        </span>
+                        &lt;/span>
                     ))}
-                    <p>{getSyntaxMessage()}</p>
-                </div>
-                <h4 className='section1'><span className="circle">3</span> Enter program rule action details</h4>
-                <div className="form-group">
-                <label>Action Type</label>
-                <select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action Type">
-                    <option value="">Select Action Type</option>
-                    <option value="SHOWWARNING">Show Warning</option>
-                    <option value="SHOWERROR">Show Error</option>
-                    <option value="MANDATORYFIELD">Make Field Mandatory</option>
-                    <option value="ASSIGN">Assign Value</option>
-                    <option value="HIDEFIELD">Hide Field</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label>Data Element</label>
-                <select className="form-input" name="dataElement" value={programRule.dataElement} onChange={handleChange} placeholder="Data Element">
-                    <option value="">Select Data Element</option>
+                    &lt;p>{getSyntaxMessage()}&lt;/p>
+                &lt;/div>
+                &lt;h4 className='section1'>&lt;span className="circle">3&lt;/span> Enter program rule action details&lt;/h4>
+                &lt;div className="form-group">
+                &lt;label>Action Type&lt;/label>
+                &lt;select className="form-input" name="actionType" value={programRule.actionType} onChange={handleChange} placeholder="Action Type">
+                    &lt;option value="">Select Action Type&lt;/option>
+                    &lt;option value="SHOWWARNING">Show Warning&lt;/option>
+                    &lt;option value="SHOWERROR">Show Error&lt;/option>
+                    &lt;option value="MANDATORYFIELD">Make Field Mandatory&lt;/option>
+                    &lt;option value="ASSIGN">Assign Value&lt;/option>
+                    &lt;option value="HIDEFIELD">Hide Field&lt;/option>
+                &lt;/select>
+            &lt;/div>
+            &lt;div className="form-group">
+                &lt;label>Data Element&lt;/label>
+                &lt;select className="form-input" name="dataElement" value={programRule.dataElement} onChange={handleChange} placeholder="Data Element">
+                    &lt;option value="">Select Data Element&lt;/option>
                     {dataElements.map(element => (
-                        <option key={element.id} value={element.id}>{element.displayName}</option>
+                        &lt;option key={element.id} value={element.id}>{element.displayName}&lt;/option>
                     ))}
-                </select>
-            </div>
-            <div className="form-group">
-                <label>Tracked Entity Attribute</label>
-                <select className="form-input" name="trackedEntity" value={programRule.trackedEntity} onChange={handleChange} placeholder="Tracked Entity">
-                    <option value="">Select Tracked Entity</option>
+                &lt;/select>
+            &lt;/div>
+            &lt;div className="form-group">
+                &lt;label>Tracked Entity Attribute&lt;/label>
+                &lt;select className="form-input" name="trackedEntity" value={programRule.trackedEntity} onChange={handleChange} placeholder="Tracked Entity">
+                    &lt;option value="">Select Tracked Entity&lt;/option>
                     {trackedEntityAttributes.map(attribute => (
-                        <option key={attribute.id} value={attribute.id}>{attribute.displayName}</option>
+                        &lt;option key={attribute.id} value={attribute.id}>{attribute.displayName}&lt;/option>
                     ))}
-                    </select>
-                    </div>
-                    <div className="form-group">
-                    <label>static text</label>
-                    <input className="form-input" type="text" name="actionContent" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
-                   </div>
-                    <div className="form-group">
-                    <label>Expression to evaluate and display after static text</label>
-                    <input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
-                </div>
+                    &lt;/select>
+                    &lt;/div>
+                    &lt;div className="form-group">
+                    &lt;label>static text&lt;/label>
+                    &lt;input className="form-input" type="text" name="actionContent" value={programRule.actionContent} onChange={handleChange} placeholder="static text" />
+                   &lt;/div>
+                    &lt;div className="form-group">
+                    &lt;label>Expression to evaluate and display after static text&lt;/label>
+                    &lt;input className="form-input" type="text" name="actionData" value={programRule.actionData} onChange={handleChange} placeholder="Action Data" />
+                &lt;/div>
             
-                <div className="form-button">
-                    <button className="form-buttonsave" type="submit" disabled={mutationLoading}>
+                &lt;div className="form-button">
+                    &lt;button className="form-buttonsave" type="submit" disabled={mutationLoading}>
                         {mutationLoading ? 'Saving...' : 'SAVE'}
-                    </button>
-                    <button className="form-buttoncancel"> <Link to="/" style={{ textDecoration: 'none' }}>CANCEL</Link></button>
-                </div>
-            </div>
-            <Dialog
+                    &lt;/button>
+                    &lt;button className="form-buttoncancel"> &lt;Link to="/" style={{ textDecoration: 'none' }}>CANCEL&lt;/Link>&lt;/button>
+                &lt;/div>
+            &lt;/div>
+            &lt;Dialog
                 fullScreen={fullScreen}
                 open={isDialogOpen}
                 onClose={handleDialogClose}
                 aria-labelledby="responsive-dialog-title"
             >
-                <DialogTitle id="responsive-dialog-title">{"Program rule validation"}</DialogTitle>
-                <DialogContent> 
-                    <DialogContentText>
+                &lt;DialogTitle id="responsive-dialog-title">{"Program rule validation"}&lt;/DialogTitle>
+                &lt;DialogContent> 
+                    &lt;DialogContentText>
                         The Rule successfully created: Run validation!
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleDialogClose} color="primary">
+                    &lt;/DialogContentText>
+                &lt;/DialogContent>
+                &lt;DialogActions>
+                    &lt;Button onClick={handleDialogClose} color="primary">
                         Cancel
-                    </Button>
-                    <Button onClick={handleValidation} color="primary" autoFocus>
-                    <Link to="/configuration-engine" style={{ textDecoration: 'none' }}>Validate</Link>
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </form>
+                    &lt;/Button>
+                    &lt;Button onClick={handleValidation} color="primary" autoFocus>
+                    &lt;Link to="/configuration-engine" style={{ textDecoration: 'none' }}>Validate&lt;/Link>
+                    &lt;/Button>
+                &lt;/DialogActions>
+            &lt;/Dialog>
+        &lt;/form>
     );
 };
 
 export default ProgramRulesForm;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#HomeCard">HomeCard</a></li><li><a href="global.html#ProgramRuleConfig">ProgramRuleConfig</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#TroubleshootingEngine">TroubleshootingEngine</a></li><li><a href="global.html#programRulesQuery">programRulesQuery</a></li><li><a href="global.html#query">query</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri Jun 21 2024 16:42:51 GMT+0200 (Central Africa Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

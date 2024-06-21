@@ -1,8 +1,12 @@
 import React from 'react'
-import {BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill, BsListCheck}from 'react-icons/bs'
-import { FaPlus } from 'react-icons/fa'
 import HomeCard from './HomeCard'
 
+
+/**
+ * Home component
+ *
+ * @returns {*}
+ */
 function Home() {
   return (
     // home container

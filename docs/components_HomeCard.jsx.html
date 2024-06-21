@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/HomeCard.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/HomeCard.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import { useDataQuery } from '@dhis2/app-runtime';
+import { BsFillArchiveFill, BsListCheck, BsTools } from 'react-icons/bs';
+import { FiPlus } from 'react-icons/fi';
+import { FaCheck, FaCheckDouble, FaExchangeAlt, FaExclamation, FaGlobe } from 'react-icons/fa';
+import './HomeCard.css'; 
+import { Link } from 'react-router-dom';
+
+
+/**
+ * this function fetches the program Rules from dhis2 instance
+ *
+ * @type {{ programRules: { resource: string; params: { fields: {}; }; }; }}
+ */
+const programRulesQuery = {
+    // the parameter graphQl to fetch program rules from dhis2 instances by Id
+    programRules: {
+        resource: 'programRules',
+        params: {
+            fields: ['id', 'displayName', 'condition'],
+        },
+    },
+};
+
+
+/**
+ * the HomeCard components that design and implement the cards that are displayed on the dashboard
+ *
+ * @returns {*}
+ */
+const HomeCard = () => {
+     
+    /**
+     * fetching program rules from the instance using useDataQuery provided by dhis2 app-runtime
+     *
+     * @type {*}
+     */
+    const [programRules, setProgramRules] = useState([]);
+    const [totalProgramRules, setTotalProgramRules] = useState(0);
+    const { loading, error, data } = useDataQuery(programRulesQuery);
+
+    useEffect(() => {
+        
+         /**
+         * //function to catch errors in fetching program rules, counting all rules available and filter the first 3 program rules before displaying them 
+         *
+         */
+        if (!loading &amp;&amp; !error &amp;&amp; data.programRules &amp;&amp; Array.isArray(data.programRules.programRules)) {
+            const limitedProgramRules = data.programRules.programRules.slice(0, 3);
+            setProgramRules(limitedProgramRules);
+            setTotalProgramRules(data.programRules.programRules.length);
+        }
+    }, [loading, error, data]);
+
+         /**
+         * displaying loading when the page is opening to load the data from the instance
+         *
+         */
+    if (loading) {
+        return &lt;span>Loading...&lt;/span>;
+    }
+    
+        /**
+         * displaying catched errors during data loading from the instance
+         *
+         */
+    if (error) {
+        return &lt;span>Error: {error.message}&lt;/span>;
+    }
+   
+        /**
+         * displaying a message to show when no program rule was found
+         *
+         */
+    if (!data.programRules || !Array.isArray(data.programRules.programRules)) {
+        return &lt;span>No program Rules found&lt;/span>;
+    }
+    
+         /**
+         * rendering the components and the card view design
+         *
+         */
+    return (
+        // main cards container
+        &lt;main className='main-container'>
+            &lt;div className='main-title'>
+                &lt;h3>DASHBOARD OVERVIEW&lt;/h3>
+            &lt;/div>
+            &lt;div className="cardview">
+                {/* First row of the cards*/}
+                &lt;div className="row">
+                 {/* home first card in the row and its inside card with routing link */}
+                    &lt;div className="card blue">
+                        &lt;h3>&lt;BsFillArchiveFill className='icon'/> Program Rules Manager&lt;/h3> 
+                        &lt;Link to="/program-rules" style={{ textDecoration: 'none' }}>
+                        {/* displaying fetcheng program rule data on the card*/}
+                            {programRules.map(programRule => (
+                                &lt;div key={programRule.id} className="cardlist">
+                                    {programRule.displayName}
+                                &lt;/div>
+                            ))}
+                            {/* card button */}
+                            &lt;button className='plus-button'>
+                                &lt;FiPlus className='icon-plus'/>
+                            &lt;/button>
+                        &lt;/Link>
+                    &lt;/div>
+                    {/* home second card in the row and its inside card with routing link */}
+                    &lt;div className="card green">
+                        &lt;h3>&lt;BsListCheck className='icon'/> Configure Rule&lt;/h3> 
+                        &lt;Link to="/Config-rules" style={{ textDecoration: 'none' }}>
+                            &lt;div className="cardlist1">
+                            {/* displaying fetcheng program rule counted in the card*/}
+                                {totalProgramRules} Available Program Rules &lt;FaCheckDouble className='qoute'/>
+                            &lt;/div>
+                            &lt;div className="cardlist1">
+                                &lt;FaExclamation className='exclaim'/>
+                            &lt;/div>
+                            {/* button on the card */}
+                            &lt;button className='plus-button'>
+                            &lt;FaCheck className='exclaim'/>
+                            &lt;/button>
+                        &lt;/Link>
+                    &lt;/div>
+                    &lt;div className="card red">
+                    &lt;h3>&lt;BsTools className='icon'/> Configuration Engine&lt;/h3> 
+                    &lt;Link to="/configuration-engine" style={{ textDecoration: 'none' }}>
+                    {/* card displaying the inside the main card of configuration engine */}
+                    &lt;div className="cardlist0">
+                    &lt;BsListCheck className='icon'/> Program Rule validation
+                    &lt;/div>
+                    &lt;div className="cardlist0">
+                    &lt;FaGlobe className='icon'/> Language
+                    &lt;/div>
+                    {/* button inside the configuration engine */}
+                        &lt;button className='plus-button'>
+                            &lt;FaExchangeAlt className='icon-plus'/>
+                        &lt;/button>
+                    &lt;/Link>
+                &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/main>
+    );
+}
+
+export default HomeCard;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#HomeCard">HomeCard</a></li><li><a href="global.html#ProgramRuleConfig">ProgramRuleConfig</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#TroubleshootingEngine">TroubleshootingEngine</a></li><li><a href="global.html#programRulesQuery">programRulesQuery</a></li><li><a href="global.html#query">query</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri Jun 21 2024 16:42:51 GMT+0200 (Central Africa Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

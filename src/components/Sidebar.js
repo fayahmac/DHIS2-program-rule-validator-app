@@ -1,9 +1,16 @@
 import React from 'react'
-import {BsTools, BsFillBellFill, BsFillArchiveFill, BsPeopleFill, 
-    BsListCheck, BsFillGearFill, BsAppIndicator}from 'react-icons/bs'
+import {BsTools, BsFillArchiveFill,BsListCheck, BsAppIndicator}from 'react-icons/bs'
 import {Link } from 'react-router-dom'
 
 
+/**
+ * Description placeholder and side bard component definition
+ *
+ * @param {{ openSidebarToggle: any; OpenSidebar: any; }} param0
+ * @param {*} param0.openSidebarToggle
+ * @param {*} param0.OpenSidebar
+ * @returns {*}
+ */
 function Sidebar({openSidebarToggle, OpenSidebar}) {
   return (
     // sidebar main container 

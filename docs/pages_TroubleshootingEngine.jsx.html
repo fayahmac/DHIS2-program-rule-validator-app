@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/TroubleshootingEngine.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/TroubleshootingEngine.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
 import { BsListCheck } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
@@ -33,7 +61,7 @@ class RuleActionHideOption {
     this.option = option;
   }
   needsContent() {
-    return !!this.field && !!this.option;
+    return !!this.field &amp;&amp; !!this.option;
   }
 }
 
@@ -48,7 +76,7 @@ class RuleActionHideOptionGroup {
     this.optionGroup = optionGroup;
   }
   needsContent() {
-    return !!this.field && !!this.optionGroup;
+    return !!this.field &amp;&amp; !!this.optionGroup;
   }
 }
 
@@ -162,9 +190,9 @@ const TroubleshootingEngine = ({ contextPath }) => {
     if (queryError) {
       setError(queryError.message);
       setLoading(false);
-    } else if (!queryLoading && data) {
+    } else if (!queryLoading &amp;&amp; data) {
       setLoading(false);
-      if (data.programRules && data.programRules.programRules) {
+      if (data.programRules &amp;&amp; data.programRules.programRules) {
         const sortedRules = data.programRules.programRules.sort((a, b) => new Date(b.created) - new Date(a.created));
         setFailedRules(sortedRules);
         setPreviousData(data);
@@ -237,7 +265,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
        * it updates the state
        * @type {boolean}
        */
-      const isValid = !ruleValidationItem.conditionError && (!ruleValidationItem.actionsError || ruleValidationItem.actionsError.length === 0);
+      const isValid = !ruleValidationItem.conditionError &amp;&amp; (!ruleValidationItem.actionsError || ruleValidationItem.actionsError.length === 0);
       ruleValidationItem.isValid = isValid;
 
       setValidationResults((prevState) => ({
@@ -397,12 +425,12 @@ const TroubleshootingEngine = ({ contextPath }) => {
       });
 
       // Check for numeric-only conditions
-      const numericOnlyConditionRegex = /^[\d\s=<>!&|]+$/;
+      const numericOnlyConditionRegex = /^[\d\s=&lt;>!&amp;|]+$/;
       if (numericOnlyConditionRegex.test(replacedCondition)) {
         return 'Condition is invalid: numeric-only comparisons are not allowed';
       }
       // Define the DHIS2 functions
-      const d2HasValue = (value) => value !== null && value !== undefined && value !== '';
+      const d2HasValue = (value) => value !== null &amp;&amp; value !== undefined &amp;&amp; value !== '';
       const d2YearsBetween = (startDate, endDate) => {
         if (!startDate || !endDate) return false;
         return differenceInYears(new Date(endDate), new Date(startDate));
@@ -456,7 +484,7 @@ const TroubleshootingEngine = ({ contextPath }) => {
    * @returns {string}
    */
   const evaluateAction = (ruleAction, valueMap) => {
-    if (ruleAction.needsContent && ruleAction.needsContent()) {
+    if (ruleAction.needsContent &amp;&amp; ruleAction.needsContent()) {
       const actionConditionResult = processRuleCondition(ruleAction.data, valueMap);
       if (actionConditionResult) {
         return actionConditionResult;
@@ -475,25 +503,25 @@ const TroubleshootingEngine = ({ contextPath }) => {
    * @returns {("Missing field" | "Missing field or option" | "Missing field or option group" | "Missing program stage" | "Missing program stage section" | "Missing option group")}
    */
   const checkActionVariables = (ruleAction) => {
-    if (ruleAction instanceof RuleActionHideField && !ruleAction.field) {
+    if (ruleAction instanceof RuleActionHideField &amp;&amp; !ruleAction.field) {
       return 'Missing field';
     }
-    if (ruleAction instanceof RuleActionHideOption && (!ruleAction.field || !ruleAction.option)) {
+    if (ruleAction instanceof RuleActionHideOption &amp;&amp; (!ruleAction.field || !ruleAction.option)) {
       return 'Missing field or option';
     }
-    if (ruleAction instanceof RuleActionHideOptionGroup && (!ruleAction.field || !ruleAction.optionGroup)) {
+    if (ruleAction instanceof RuleActionHideOptionGroup &amp;&amp; (!ruleAction.field || !ruleAction.optionGroup)) {
       return 'Missing field or option group';
     }
-    if (ruleAction instanceof RuleActionHideProgramStage && !ruleAction.programStage) {
+    if (ruleAction instanceof RuleActionHideProgramStage &amp;&amp; !ruleAction.programStage) {
       return 'Missing program stage';
     }
-    if (ruleAction instanceof RuleActionHideSection && !ruleAction.programStageSection) {
+    if (ruleAction instanceof RuleActionHideSection &amp;&amp; !ruleAction.programStageSection) {
       return 'Missing program stage section';
     }
-    if (ruleAction instanceof RuleActionSetMandatoryField && !ruleAction.field) {
+    if (ruleAction instanceof RuleActionSetMandatoryField &amp;&amp; !ruleAction.field) {
       return 'Missing field';
     }
-    if (ruleAction instanceof RuleActionShowOptionGroup && !ruleAction.optionGroup) {
+    if (ruleAction instanceof RuleActionShowOptionGroup &amp;&amp; !ruleAction.optionGroup) {
       return 'Missing option group';
     }
     return null;
@@ -516,55 +544,77 @@ const TroubleshootingEngine = ({ contextPath }) => {
    *
    */
   return (
-    <div className="troubleshooting-container">
-      <div className="card-bar">
-        <div className="validation-bar">
-          <BsListCheck className="iconn" />
-          <div className="validation-content">
-            <h2>Program Rule Validation</h2>
-            <p>This action will check all the rules configured and display bad configurations if any</p>
-          </div>
-        </div>
-      </div>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {!loading && failedRules.length === 0 && <p>No rules found.</p>}
-      {!loading && failedRules.length > 0 && failedRules.map((rule, index) => (
-        <div key={index} className="card-bar">
-          <div className="failed-rules-list">
-            <div className="failed-rule">
-              <h3 onClick={() => toggleExpandedRule(index, rule)}>{rule.displayName}</h3>
-              {expandedRule === index && (
-                <div className="rule-details">
-                  <ul>
+    &lt;div className="troubleshooting-container">
+      &lt;div className="card-bar">
+        &lt;div className="validation-bar">
+          &lt;BsListCheck className="iconn" />
+          &lt;div className="validation-content">
+            &lt;h2>Program Rule Validation&lt;/h2>
+            &lt;p>This action will check all the rules configured and display bad configurations if any&lt;/p>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+      {loading &amp;&amp; &lt;p>Loading...&lt;/p>}
+      {error &amp;&amp; &lt;p>Error: {error}&lt;/p>}
+      {!loading &amp;&amp; failedRules.length === 0 &amp;&amp; &lt;p>No rules found.&lt;/p>}
+      {!loading &amp;&amp; failedRules.length > 0 &amp;&amp; failedRules.map((rule, index) => (
+        &lt;div key={index} className="card-bar">
+          &lt;div className="failed-rules-list">
+            &lt;div className="failed-rule">
+              &lt;h3 onClick={() => toggleExpandedRule(index, rule)}>{rule.displayName}&lt;/h3>
+              {expandedRule === index &amp;&amp; (
+                &lt;div className="rule-details">
+                  &lt;ul>
                     {Array.isArray(rule.condition) ? (
                       rule.condition.map((condition, idx) => (
-                        <li key={idx}>{condition}</li>
+                        &lt;li key={idx}>{condition}&lt;/li>
                       ))
                     ) : (
-                      <li>{rule.condition}</li>
+                      &lt;li>{rule.condition}&lt;/li>
                     )}
-                  </ul>
-                  <h4>Validation Results:</h4>
-                  {validationResults[rule.id] && validationResults[rule.id].isValid === false ? (
-                    <div className="validation-error">
-                      <p>{validationResults[rule.id].conditionError}</p>
-                      {validationResults[rule.id].actionsError && validationResults[rule.id].actionsError.map((error, idx) => (
-                        <p key={idx}>{error}</p>
+                  &lt;/ul>
+                  &lt;h4>Validation Results:&lt;/h4>
+                  {validationResults[rule.id] &amp;&amp; validationResults[rule.id].isValid === false ? (
+                    &lt;div className="validation-error">
+                      &lt;p>{validationResults[rule.id].conditionError}&lt;/p>
+                      {validationResults[rule.id].actionsError &amp;&amp; validationResults[rule.id].actionsError.map((error, idx) => (
+                        &lt;p key={idx}>{error}&lt;/p>
                       ))}
-                    </div>
+                    &lt;/div>
                   ) : (
-                    <p>{validationResults[rule.id]?.isValid ? 'Rule will trigger the action.' : 'No validation errors found.'}</p>
+                    &lt;p>{validationResults[rule.id]?.isValid ? 'Rule will trigger the action.' : 'No validation errors found.'}&lt;/p>
                   )}
-                </div>
+                &lt;/div>
               )}
-            </div>
-          </div>
-        </div>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
       ))}
-      <button className="buttonn"><Link to="/" style={{ textDecoration: 'none', color:'white', }}>BACK</Link></button>
-    </div>
+      &lt;button className="buttonn">&lt;Link to="/" style={{ textDecoration: 'none', color:'white', }}>BACK&lt;/Link>&lt;/button>
+    &lt;/div>
   );
 };
 
-export default TroubleshootingEngine;
+export default TroubleshootingEngine;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#HomeCard">HomeCard</a></li><li><a href="global.html#ProgramRuleConfig">ProgramRuleConfig</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#TroubleshootingEngine">TroubleshootingEngine</a></li><li><a href="global.html#programRulesQuery">programRulesQuery</a></li><li><a href="global.html#query">query</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri Jun 21 2024 16:42:51 GMT+0200 (Central Africa Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

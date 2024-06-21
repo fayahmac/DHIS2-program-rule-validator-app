@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
-import { BsFillArchiveFill, BsListCheck, BsFillBellFill, BsTools, BsGear, BsFillPeopleFill } from 'react-icons/bs';
+import { BsFillArchiveFill, BsListCheck, BsTools } from 'react-icons/bs';
 import { FiPlus } from 'react-icons/fi';
-import { FaAd, FaBackward, FaBeer, FaCheck, FaCheckDouble, FaCut, FaExchangeAlt, FaExclamation, FaForward, FaGlobe, FaHandPointRight } from 'react-icons/fa';
+import { FaCheck, FaCheckDouble, FaExchangeAlt, FaExclamation, FaGlobe } from 'react-icons/fa';
 import './HomeCard.css'; 
 import { Link } from 'react-router-dom';
 
+
+/**
+ * this function fetches the program Rules from dhis2 instance
+ *
+ * @type {{ programRules: { resource: string; params: { fields: {}; }; }; }}
+ */
 const programRulesQuery = {
     // the parameter graphQl to fetch program rules from dhis2 instances by Id
     programRules: {
@@ -16,33 +22,64 @@ const programRulesQuery = {
     },
 };
 
+
+/**
+ * the HomeCard components that design and implement the cards that are displayed on the dashboard
+ *
+ * @returns {*}
+ */
 const HomeCard = () => {
-    // fetching program rules from the instance using useDataQuery provided by dhis2 app-runtime
+     
+    /**
+     * fetching program rules from the instance using useDataQuery provided by dhis2 app-runtime
+     *
+     * @type {*}
+     */
     const [programRules, setProgramRules] = useState([]);
     const [totalProgramRules, setTotalProgramRules] = useState(0);
     const { loading, error, data } = useDataQuery(programRulesQuery);
 
     useEffect(() => {
-        //function to catch errors in fetching program rules, counting all rules available and filter the first 3 program rules before displaying them 
+        
+         /**
+         * //function to catch errors in fetching program rules, counting all rules available and filter the first 3 program rules before displaying them 
+         *
+         */
         if (!loading && !error && data.programRules && Array.isArray(data.programRules.programRules)) {
             const limitedProgramRules = data.programRules.programRules.slice(0, 3);
             setProgramRules(limitedProgramRules);
             setTotalProgramRules(data.programRules.programRules.length);
         }
     }, [loading, error, data]);
-    // displaying loading when the page is opening to load the data from the instance
+
+         /**
+         * displaying loading when the page is opening to load the data from the instance
+         *
+         */
     if (loading) {
         return <span>Loading...</span>;
     }
-    // displaying catched errors during data loading from the instance
+    
+        /**
+         * displaying catched errors during data loading from the instance
+         *
+         */
     if (error) {
         return <span>Error: {error.message}</span>;
     }
-    // displaying a message to show when no program rule was found
+   
+        /**
+         * displaying a message to show when no program rule was found
+         *
+         */
     if (!data.programRules || !Array.isArray(data.programRules.programRules)) {
         return <span>No program Rules found</span>;
     }
-
+    
+         /**
+         * rendering the components and the card view design
+         *
+         */
     return (
         // main cards container
         <main className='main-container'>

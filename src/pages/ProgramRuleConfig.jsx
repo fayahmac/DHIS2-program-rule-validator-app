@@ -3,10 +3,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDataQuery, useDataMutation } from '@dhis2/app-runtime';
 import './ProgramRuleConfig.css';
 
+
+/**
+ * this function defines and implements the whole logic behind the program rule deletions
+ *
+ * @returns {*}
+ */
 const ProgramRuleConfig = () => {
   const navigate = useNavigate();
 
-  // Define the query to fetch multiple data elements
+  
+  /**
+   * this function Define the query to fetch multiple data elements
+   *
+   * @type {{ programRules: { resource: string; params: { fields: string; }; }; }}
+   */
   const query = {
     programRules: {
       resource: 'programRules',
@@ -14,29 +25,58 @@ const ProgramRuleConfig = () => {
     },
   };
 
-  // Define the delete mutation
+  
+  /**
+   * this function Define the delete mutation
+   *
+   * @type {{ resource: string; type: string; id: ({ id }: { id: any; }) => any; }}
+   */
   const deleteMutation = {
     resource: 'programRules',
     type: 'delete',
     id: ({ id }) => id,
   };
 
-  // Initialize state for fetched data
+  
+  /**
+   * this functions Initialize state for fetched data
+   *
+   * @type {*}
+   */
   const [programRules, setProgramRules] = useState([]);
   const { data, loading, error } = useDataQuery(query);
   const [deleteProgramRule] = useDataMutation(deleteMutation);
-
-  // Use effect to set program rules when data is fetched
+  
+  
+   
+  /**
+   * Use effect to set program rules when data is fetched
+   *
+   * @type {*}
+   */
   useEffect(() => {
     if (data && data.programRules) {
-      // Sort the program rules by the created date in descending order
+      
+       /**
+       *  Sort the program rules by the created date in descending order
+       *
+       * @type {*}
+       */
       const sortedRules = data.programRules.programRules.sort((a, b) => new Date(b.created) - new Date(a.created));
       setProgramRules(sortedRules);
       console.log('Fetched and sorted program rules (samples):', sortedRules.slice(0, 5));
     }
   }, [data]);
 
-  // Handle delete click
+  
+  
+  /**
+   * this function Handles delete button click
+   *
+   * @async
+   * @param {*} rule
+   * @returns {*}
+   */
   const handleDeleteClick = async (rule) => {
     try {
       await deleteProgramRule({ id: rule.id });
@@ -47,13 +87,11 @@ const ProgramRuleConfig = () => {
     }
   };
 
-  // Handle edit click
-  const handleEditClick = (rule) => {
-    // Navigate to the edit page with the rule ID
-    navigate(`/edit-rules/${rule.id}`);
-  };
-
-  // Render the component
+   
+   /**
+   * Rendering the component
+   *
+   */
   return (
     <div className="program-rule-validator">
       <h2>PROGRAM RULE CONFIGURATION</h2>
@@ -77,7 +115,7 @@ const ProgramRuleConfig = () => {
           ))}
         </ul>
       )}
-      <button className='buttonn'><Link to="/" style={{ textDecoration: 'none' }}>HOME</Link></button>
+      <button className='buttonn'><Link to="/" style={{ textDecoration: 'none', color:'white', }}>HOME</Link></button>
     </div>
   );
 };
